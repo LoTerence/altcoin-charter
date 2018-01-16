@@ -1,10 +1,9 @@
-# React/Redux Express Starter Pack
+# Altcoin Charter
 
-> Create full stack apps with React/Redux and Express. Run your client and server with a single command
+> See the histories of cryptocurrencies you saved
 
-### Version Without Redux
-This version includes Redux
-[Click Here For the Version WITHOUT Redux](https://github.com/bradtraversy/react_express_starter) 
+> Built with React + Redux front end and Nodejs, express, mongodb backend
+> Still in production
 
 ## Quick Start
 
@@ -31,7 +30,7 @@ npm run client
 
 ### Authors
 
-Brad Traversy & Gregory Assasie
+Terence Lo
 
 ### Version
 
