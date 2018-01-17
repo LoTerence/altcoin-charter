@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import logo from './logo.svg'
 import './App.css'
-import store from './store'
-import Customers from './components/Customer/customers'
+import store from './_store'
+import Customers from './_components/Customer/customers'
 
 class App extends Component {
 
@@ -13,7 +13,7 @@ class App extends Component {
         <div className="App">
           <header className="App-header">
             <img src={ logo } className="App-logo" alt="logo"/>
-            <h1 className="App-title">React/Redux Express Starter</h1>
+            <h1 className="App-title">Altcoin Charter</h1>
           </header>
           <Customers/>
         </div>
