@@ -3,6 +3,7 @@
 > See the histories of cryptocurrencies you saved
 
 > Built with React + Redux front end and Nodejs, express, mongodb backend
+
 > Still in production
 
 ## Quick Start
