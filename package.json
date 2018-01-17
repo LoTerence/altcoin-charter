@@ -16,6 +16,13 @@
   "dependencies": {
     "concurrently": "^3.5.1",
     "express": "^4.16.2",
-    "nodemon": "^1.14.7"
+    "mongoose": "^4.13.9",
+    "nodemon": "^1.14.7",
+    "bcrypt": "*",
+    "body-parser": "*",
+    "cors": "2.8.4",
+    "jsonwebtoken": "*",
+    "passport": "*",
+    "passport-jwt": "*"
   }
 }
