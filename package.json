@@ -14,14 +14,14 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "*",
     "concurrently": "^3.5.1",
+    "cors": "2.8.4",
     "express": "^4.16.2",
+    "jsonwebtoken": "*",
     "mongoose": "^4.13.9",
     "nodemon": "^1.14.7",
-    "bcrypt": "*",
-    "body-parser": "*",
-    "cors": "2.8.4",
-    "jsonwebtoken": "*",
     "passport": "*",
     "passport-jwt": "*"
   }

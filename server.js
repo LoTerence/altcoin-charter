@@ -25,19 +25,6 @@ const app = express();
 
 const users = require('./routes/users');
 
-
-/* 
-app.get('/api/customers', (req, res) => {
-  const customers = [
-    {id: 1, firstName: 'John', lastName: 'Doe'},
-    {id: 2, firstName: 'Brad', lastName: 'Traversy'},
-    {id: 3, firstName: 'Mary', lastName: 'Swanson'},
-  ];
-
-  res.json(customers);
-}); 
-*/
-
 //PORT Number
 const port = 5000;
 
@@ -49,6 +36,11 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 // Body Parser Middleware
 app.use(bodyParser.json());
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport')(passport);  // authentication strategy
 
 app.use('/users',users);
 
