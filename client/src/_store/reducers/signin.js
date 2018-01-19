@@ -13,3 +13,8 @@ const signInReducer = (state={}, action) => {
 }
 
 export default signInReducer;
+
+/*
+TODO:
+revise this file so that unauthenticated doest return action payload because it doesnt always have an action.. figure it out
+*/

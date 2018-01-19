@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 
 export class Signout extends Component {
 
-    handleSignout(){
-        this.props.signOutAction;
-    }
+  handleSignout = () => {
+    this.props.signOutAction;
+  }
 
   render() {
     return (
       <div>
-        <button onClick={handleSignout()} > Sign Out </button>
+        <button onClick={this.handleSignout()} > Sign Out </button>
       </div>
     );
   }

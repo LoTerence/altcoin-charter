@@ -20,7 +20,7 @@ class Navbar extends Component {
     return (
       <nav className="navbar">
         <div className="container">
-            <Link to="/"><span className="brand">Auth-app</span></Link>
+            <Link to="/"><span className="brand">Go Home</span></Link>
             <ul>
                 {this.navbarLinks()}
             </ul>
