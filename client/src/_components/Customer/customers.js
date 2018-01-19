@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {connect } from 'react-redux';
-import {getCustomers} from '../../store/actions/customer'
+import {getCustomers} from '../../_store/actions/customer'
 import './customers.css';
 
 class Customers extends Component {

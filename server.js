@@ -25,6 +25,17 @@ const app = express();
 
 const users = require('./routes/users');
 
+// handle get requests to '/api/customers'
+app.get('/api/customers', (req, res) => {
+  const customers = [
+    {id: 1, firstName: 'John', lastName: 'Doe'},
+    {id: 2, firstName: 'Brad', lastName: 'Traversy'},
+    {id: 3, firstName: 'Mary', lastName: 'Swanson'},
+  ];
+
+  res.json(customers);
+});
+
 //PORT Number
 const port = 5000;
 
