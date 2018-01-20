@@ -11,7 +11,7 @@ class Signout extends Component {
   render(){
     return(
       <div>
-      good bye
+      <h1>You have been logged out</h1>
       </div>
     )
   }

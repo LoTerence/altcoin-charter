@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import store from './_store'
-//import { BrowserRouter as Router, Route } from 'react-router-dom'; //replaced with next line, but next line could be outdated? Need to read documentation
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Homepage from './_components/homepage';

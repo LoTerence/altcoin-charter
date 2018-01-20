@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 /*
@@ -14,21 +13,15 @@ let bool = true;
 
 export default function (ComposedComponent) {
     class Authentication extends Component{
- /*       static contextTypes = {
-            router: PropTypes.object
-        }            */
 
-    
         componentWillMount(){
             if(!this.props.authenticated){
-                //this.context.router.push('/signin')
                 bool=false;
             }
         }
     
         componentWillUpdate(nextProps){
             if(!nextProps.authenticated){
-                //this.context.router.push('/signin')
                 bool=false;
             }
         }
@@ -49,22 +42,3 @@ export default function (ComposedComponent) {
     return connect(mapStateToProps)(Authentication);
     
 }
-
-
-
-
-
-/*
-
-class PrivateRoute extends Component{
-    render() {
-        <Route {...this.props} >
-        </Route> 
-    }
-}
-
-function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
-}
-
-export default connect(mapStateToProps)(PrivateRoute); */
