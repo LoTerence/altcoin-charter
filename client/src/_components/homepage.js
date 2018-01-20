@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import Customers from './Customer/customers'
+import Customers from './Customer/customers';
+import Header from './universal/header';
 
-class Secretpage extends Component {
+class HomePage extends Component {
 
     render() {
         return(
             <div >
-                <header >
-                    <h1>homepage</h1>
-                </header>
+                <Header />
                 <Customers/>
             </div>
         );
     }
 }
 
-export default Secretpage;
+export default HomePage;

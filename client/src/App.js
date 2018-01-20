@@ -8,7 +8,6 @@ import Homepage from './_components/homepage';
 import Signin from './_components/auth/signin';
 import Signout from './_components/auth/signout';
 import Signup from './_components/auth/signup';
-//import SecretPage from './_components/Customer/secretpage'; //replaced with Feature
 import Feature from "./_components/feature"; //TODO create feature component
 import RequireAuth from './_components/auth/require_auth';
 
