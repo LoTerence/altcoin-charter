@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+//import { browserHistory } from 'react-router-dom'; //outdated
 import {
     AUTH_USER,
     UNAUTH_USER,
@@ -7,7 +7,7 @@ import {
     FETCH_MESSAGE
   } from './constants';
 
-export function signInAction({ email, password }) {
+export function signInAction(history, { email, password }) {
     return async (dispatch) => {
       //  try {
       //  const res = await axios.post('/users/authenticate', { email, password });
@@ -21,7 +21,7 @@ export function signInAction({ email, password }) {
                     // - Save the JWT token
                     localStorage.setItem('token', res.data.token);
                     // - redirect to the route '/feature'
-                    browserHistory.push('/feature');
+                    history.push('/feature');
                 } else {
                     dispatch(authError(res.data.msg));
                 }
@@ -34,14 +34,14 @@ export function signInAction({ email, password }) {
     };
 }
 
-export function signUpAction({ email, password }) {
+export function signUpAction(history, { email, password }) {
     //same process as signInAction
     return async (dispatch) => {
         axios.post('/users/register', { email,password })
             .then( res => {
                 dispatch({ type: AUTH_USER });
                 localStorage.setItem('token', res.data.token);
-                browserHistory.push('/feature');
+                history.push('/feature');
             })
             .catch( res => {
                 dispatch(authError('Email already registered.'));

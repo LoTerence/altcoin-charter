@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { signUpAction } from '../../_store/actions/auth';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 const renderInput=field=>{
     const {meta: {touched,error}}=field;
@@ -90,9 +91,15 @@ function mapStateToProps(state) {
     return { errorMessage: state.auth.error };
 }
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+      signUpAction: (data) => dispatch(signUpAction(ownProps.history, data))
+    }
+};
+
 const reduxFormSignup = reduxForm({
     validate,
     form:'signup'
 })(Signup);
 
-export default connect(mapStateToProps, {signUpAction})(reduxFormSignup);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(reduxFormSignup));

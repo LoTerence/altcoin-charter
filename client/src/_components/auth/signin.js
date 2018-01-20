@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, Form } from 'redux-form';
 import { signInAction } from '../../_store/actions/auth';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 const renderInput = field => {
     const { input, type } = field;
@@ -58,8 +59,14 @@ function mapStateToProps(state) {
      };
 }
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+      signInAction: (data) => dispatch(signInAction(ownProps.history, data))
+    }
+};
+
 const reduxFormSignin = reduxForm({
     form:'signin'
 })(Signin);
 
-export default connect(mapStateToProps, {signInAction})(reduxFormSignin);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(reduxFormSignin));

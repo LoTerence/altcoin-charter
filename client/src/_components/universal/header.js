@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
 
@@ -9,8 +9,8 @@ class Header extends Component {
             return <li className='nav-item'> <Link className="nav-link" to='/signout'>Sign Out </Link></li>;
         } else {
             return [
-                <li className='nav-item'><Link className='nav-link' to='/signin'> Sign in </Link></li>,
-                <li className='nav-item'><Link className="nav-link" to="/signup"> Sign up</Link></li>
+                <li key ="0" className='nav-item'><Link className='nav-link' to='/signin'> Sign in </Link></li>,
+                <li key ="1" className='nav-item'><Link className="nav-link" to="/signup"> Sign up</Link></li>
             ];
         }
     }
