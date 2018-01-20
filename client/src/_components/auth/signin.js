@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { signInAction } from '../../_store/actions/signin';
+import { Field, reduxForm, Form } from 'redux-form';
+import { signInAction } from '../../_store/actions/auth';
 import { connect } from 'react-redux';
 
+const renderInput = field => {
+    const { input, type } = field;
+    return (
+        <div>
+            <input {...input} type={type} className="form-control" />
+        </div>
+    );
+}
+
 class Signin extends Component {
-    submit = (values) => {
-        this.props.signInAction(values, this.props.history);
+    handleFormSubmit ({ email, password }) {
+        console.log(email,password); //TODO delete this line after you finish testing
+        this.props.signInAction({email, password});
     }
 
-    errorMessage() {
-        if ( this.props.msg ) {
+    renderAlert() {
+        const { errorMessage } = this.props;
+        if ( errorMessage ) {
             return (
-                <div className="info-red">
-                    {this.props.msg}
+                <div className="alert alert-danger">
+                    <strong>Oops!</strong>{errorMessage}
                 </div>
             );
         }
@@ -20,25 +31,30 @@ class Signin extends Component {
 
     render() {
         const { handleSubmit } = this.props;
+
         return (
-            <div className="form">
-                <div className="container">
-                    <h2>Sign in</h2>
-                    <form onSubmit={ handleSubmit(this.submit) }>
-                        <Field name="email" component="input" type="text" placeholder="Email" />
-                        <Field name="password" component="input" type="password" placeholder="Password" />
-                        <button type="submit" className="blue">Sign in</button>
-                    </form>
-                    {this.errorMessage()}
+            <Form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                <h1>Sign into Altcoin Charter</h1>
+                <div className="form-group">
+                    <label>Email:</label>
+                    <Field name="email"
+                        type="email" component={renderInput} />
                 </div>
-            </div>
+                <div className="form-group">
+                    <label>Password:</label>
+                    <Field name="password"
+                        type="password" component={renderInput} />
+                </div>
+                {this.renderAlert()}
+                <button action="submit" className="btn btn-primary">Sign in</button>
+            </Form>
         );
     }
 }
 
 function mapStateToProps(state) {
     return { 
-        msg: state.signin.msg
+        errorMessage: state.auth.error
      };
 }
 

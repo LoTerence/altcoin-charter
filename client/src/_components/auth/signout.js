@@ -1,27 +1,20 @@
 import React, { Component } from 'react'
-import { signOutAction } from '../../_store/actions/signin';
+import { signOutAction } from '../../_store/actions/auth';
 import { connect } from 'react-redux';
 
-export class Signout extends Component {
+class Signout extends Component {
 
-  handleSignout = () => {
-    this.props.signOutAction;
+  componentWillMount(){
+    this.props.signOutAction();
   }
 
-  render() {
-    return (
+  render(){
+    return(
       <div>
-        <button onClick={this.handleSignout()} > Sign Out </button>
+      good bye
       </div>
-    );
+    )
   }
 }
 
-function mapStateToProps(state) {
-    return { 
-       // msg: state.signin.msg
-     };
-}
-
-
-export default connect(mapStateToProps, {signOutAction})(Signout);
+export default connect(null, {signOutAction})(Signout);
