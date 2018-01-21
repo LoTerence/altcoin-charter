@@ -3,6 +3,7 @@ import { Field, reduxForm, Form } from 'redux-form';
 import { signInAction } from '../../_store/actions/auth';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const renderInput = field => {
     const { input, type } = field;
@@ -15,7 +16,6 @@ const renderInput = field => {
 
 class Signin extends Component {
     handleFormSubmit ({ email, password }) {
-        console.log(email,password); //TODO delete this line after you finish testing
         this.props.signInAction({email, password});
     }
 
@@ -34,21 +34,24 @@ class Signin extends Component {
         const { handleSubmit } = this.props;
 
         return (
-            <Form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                <h1>Sign into Altcoin Charter</h1>
-                <div className="form-group">
-                    <label>Email:</label>
-                    <Field name="email"
-                        type="email" component={renderInput} />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <Field name="password"
-                        type="password" component={renderInput} />
-                </div>
-                {this.renderAlert()}
-                <button action="submit" className="btn btn-primary">Sign in</button>
-            </Form>
+            <div className="col-md-8 col-md-offset-2">
+                <Form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                    <h2>Sign into Altcoin Charter</h2>
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <Field name="email"
+                            type="email" component={renderInput} />
+                    </div>
+                    <div className="form-group">
+                        <label>Password:</label>
+                        <Field name="password"
+                            type="password" component={renderInput} />
+                    </div>
+                    {this.renderAlert()}
+                    <button action="submit" className="btn btn-primary">Sign in</button>
+                </Form>
+                <h4>Dont have an account? Click <Link className="nav-link" to="/signup">here</Link> to sign up!</h4>
+            </div>
         );
     }
 }

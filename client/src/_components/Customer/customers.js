@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import {connect } from 'react-redux';
-import {getCustomers} from '../../_store/actions/customer'
-import './customers.css';
+import {getCustomers} from '../../_store/actions/customer';
 
 class Customers extends Component {
 
@@ -36,10 +35,10 @@ class Customers extends Component {
 
 const mapStateToProps = (state) => ({
   customers: state.customers
-})
+});
 
 const dispatchToProps = (dispatch) => ({
    getCustomers: () => dispatch(getCustomers())
-})
+});
 
 export default connect(mapStateToProps, dispatchToProps)(Customers);

@@ -33,34 +33,37 @@ class Signup extends Component {
     render() {
         const { handleSubmit } = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                <fieldset className="form-group">
-                    <label>Email:</label>
-                    <Field
-                    name="email"
-                    component={renderInput}
-                    type="email"
-                    />
-                </fieldset>
-                <fieldset className="form-group">
-                    <label>Password:</label>
-                    <Field
-                    name="password"
-                    component={renderInput}
-                    type="password"
-                    />
-                </fieldset>
-                <fieldset className="form-group">
-                    <label>Confirm Password:</label>
-                    <Field
-                    name="passwordConfirm"
-                    component={renderInput}
-                    type="password"
-                    />
-                </fieldset>
-                {this.renderAlert()}
-                <button action="submit" className="btn btn-primary">Sign Up</button>
-            </form>
+            <div className="col-md-8 col-md-offset-2">
+            <h2>Sign up for Altcoin Charter to save a personal watchlist!</h2>
+                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                    <fieldset className="form-group">
+                        <label>Email:</label>
+                        <Field
+                        name="email"
+                        component={renderInput}
+                        type="email"
+                        />
+                    </fieldset>
+                    <fieldset className="form-group">
+                        <label>Password:</label>
+                        <Field
+                        name="password"
+                        component={renderInput}
+                        type="password"
+                        />
+                    </fieldset>
+                    <fieldset className="form-group">
+                        <label>Confirm Password:</label>
+                        <Field
+                        name="passwordConfirm"
+                        component={renderInput}
+                        type="password"
+                        />
+                    </fieldset>
+                    {this.renderAlert()}
+                    <button action="submit" className="btn btn-primary">Sign Up</button>
+                </form>
+            </div>
         );
     }
 }

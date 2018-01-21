@@ -24,7 +24,7 @@ class HomePage extends Component {
                     <Route path="/signout" component={Signout} />
                     <Route path="/feature" component={RequireAuth(Feature)} />
                 </Switch>
-
+                
             </div>
         );
     }
