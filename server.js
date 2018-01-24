@@ -23,8 +23,6 @@ mongoose.connection.on('error', (err) => {
 // Instantiate express server
 const app = express();
 
-const users = require('./routes/users');
-
 // handle get requests to '/api/customers'
 app.get('/api/customers', (req, res) => {
   const customers = [
@@ -53,7 +51,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport')(passport);  // authentication strategy
 
+// Make a route for '/users' connected to users
+const users = require('./routes/users');
 app.use('/users',users);
+
+//Make a route for '/coins_unauth' connected to unauthorized users list of altcoins
+const coins_unauth = require('./routes/coins_unauth');
+app.use('/coins_unauth',coins_unauth);
 
 // Index Route
 app.get('/', (req, res) => {

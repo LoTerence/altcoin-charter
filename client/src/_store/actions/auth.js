@@ -39,9 +39,13 @@ export function signUpAction(history, { email, password }) {
     return async (dispatch) => {
         axios.post('/users/register', { email,password })
             .then( res => {
-                dispatch({ type: AUTH_USER });
-                localStorage.setItem('token', res.data.token);
-                history.push('/feature');
+                if(res.data.success){
+                    dispatch({ type: AUTH_USER });
+                    localStorage.setItem('token', res.data.token);
+                    history.push('/feature');
+                }else {
+                    dispatch(authError(res.data.msg))
+                }
             })
             .catch( res => {
                 dispatch(authError('Email already registered.'));

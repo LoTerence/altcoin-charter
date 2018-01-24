@@ -7,7 +7,7 @@ const authReducer = (state={}, action) => {
         case UNAUTH_USER:
             return { ...state, authenticated:false };  
         case AUTH_ERROR:
-            return { ...state, error:action.payload };
+            return { ...state, authenticated:false, error:action.payload };
         case FETCH_MESSAGE:
             return { ...state, message:action.payload};
         default:
