@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Customers from './Customer/customers';
+import Charter from './charter/charter';
 import Header from './universal/header';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -18,7 +19,7 @@ class HomePage extends Component {
                 <Header />
 
                 <Switch>
-                    <Route exact path="/" component = {Customers} />
+                    <Route exact path="/" component = {Charter} />
                     <Route path="/signin" component={Signin} />
                     <Route path="/signup" component={Signup} />
                     <Route path="/signout" component={Signout} />
