@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
+const uniqueValidator = require('mongoose-unique-validator');
 
 // Coin Schema
 const CoinSchema = mongoose.Schema({
     Id: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     Name: {
         type: String,
@@ -13,13 +15,16 @@ const CoinSchema = mongoose.Schema({
     },
     Symbol: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     CoinName: {
         type: String,
         required: true
     },
 });
+
+CoinSchema.plugin(uniqueValidator);
 
 const Coin = module.exports = mongoose.model('Coin', CoinSchema);
 

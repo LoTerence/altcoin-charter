@@ -3,13 +3,50 @@
 const express = require('express');
 const router = express.Router();
 const config = require('../config/database');
-const coin = require('../models/coin');
+const Coin = require('../models/coin');
 
-// get list of all the coins from collection
+// get array of all the coins from collection 
+router.get('/coinList', (req,res) => {
+    Coin.find({},(err, coins) => {
+        if(err) throw err;
+
+        let coinArr = [];
+
+        coins.forEach( (coin)=>{
+            coinArr.push( coin );
+        });
+
+        res.send(coinArr);
+    })
+})
 
 // add coin to collection
+router.post('/addCoin', (req,res,next) => {
+    let newCoin = new Coin({
+        Id: req.body.Id,
+        Name: req.body.Name,
+        Symbol: req.body.Symbol,
+        CoinName: req.body.CoinName,
+    });
+
+    Coin.addCoin(newCoin, (err, coin) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json({success:true, msg:'Coin added'});
+        }
+    });
+});
 
 // delete coin from collection
-
+router.delete('/coinList/:coin_symbol', (req, res) => {
+    Coin.deleteCoinBySymbol(req.params.coin_symbol, (err, coin) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.json({ msg: "Successfully deleted coin" });
+        }
+    });
+});
 
 module.exports = router;

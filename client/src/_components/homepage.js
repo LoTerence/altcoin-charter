@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Customers from './Customer/customers';
 import Charter from './charter/charter';
 import Header from './universal/header';
 

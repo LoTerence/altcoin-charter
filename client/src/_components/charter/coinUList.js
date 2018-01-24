@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { getCoins } from '../../_store/actions/coinList'; 
 import CoinLi from './coinLi';
 
+// TODO: add addCoin action
+
 class CoinUList extends Component {
 
   static propTypes = {
