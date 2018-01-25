@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCoins } from '../../_store/actions/coinList'; 
 import CoinLi from './coinLi';
+import CoinAdder from './coinAdder';
 
 // TODO: add addCoin action
 
@@ -29,6 +30,8 @@ class CoinUList extends Component {
         {this.props.coins.map(coin =>
           <CoinLi key={coin.Id} coin={coin} />
         )}
+
+        <CoinAdder />
       </div>
     )
   }

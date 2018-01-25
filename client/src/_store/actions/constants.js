@@ -9,3 +9,4 @@ export const FETCH_MESSAGE = 'fetch_message';
 
 // coin list consts
 export const GET_COINS = "get_coins";
+export const ADD_COIN = "add_coin";

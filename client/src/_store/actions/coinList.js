@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { GET_COINS } from './constants';
+import { 
+    GET_COINS,
+    ADD_COIN
+ } from './constants';
 
 /* 
 credits- API data is from cryptocompare.com
@@ -20,3 +23,7 @@ export const getCoins = () => {
     };
 }
   
+//check if symbol matches with an altcoin, then add that coin to coinlist
+export const addCoin = (newCoinSymbol) => {
+
+}

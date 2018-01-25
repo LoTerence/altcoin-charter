@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // TODO add onclick action
 // TODO add onhover action
 // TODO add 'x' on top right corner and remover action
-// TODO use custom css to make it more intuitive
+// TODO use custom css to make it better looking
 
 class CoinLi extends Component {
   static propTypes = {
