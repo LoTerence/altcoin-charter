@@ -23,7 +23,7 @@ class CoinLi extends Component {
   }
 }
 
-/*  //probably wont need this
+/*  //probably wont need redux
 const mapStateToProps = (state) => ({
   
 });

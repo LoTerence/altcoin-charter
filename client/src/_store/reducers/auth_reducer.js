@@ -1,4 +1,9 @@
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_MESSAGE } from '../actions/constants';
+import { 
+    AUTH_USER, 
+    UNAUTH_USER, 
+    AUTH_ERROR, 
+    FETCH_MESSAGE 
+} from '../actions/constants';
 
 const authReducer = (state={}, action) => {
     switch(action.type) {
