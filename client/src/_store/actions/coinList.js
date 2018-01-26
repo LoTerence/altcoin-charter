@@ -2,7 +2,8 @@ import axios from 'axios';
 import { 
     GET_COINS,
     ADD_COIN,
-    COIN_ERR
+    COIN_ERR,
+    DEL_COIN
  } from './constants';
 
 /* 
@@ -10,7 +11,7 @@ credits- API data is from cryptocompare.com
  https://min-api.cryptocompare.com/
 */
 
-// action creator that sends a list of coins from db to reducer/state
+// GET COINS -- action creator that sends a list of coins from db to reducer/state
 export const getCoins = () => {
     return (dispatch) => {
         axios.get('/coins_unauth/coinList')
@@ -23,11 +24,9 @@ export const getCoins = () => {
     };
 }
   
-//check if symbol matches with an altcoin, then add that coin to coinlist
+// ADD COIN method
 //TODO(if you want) add by coinname as well as symbol
-// this action is really slow, maybe find a way to make it faster?
 export const addCoin = (newCoinSymbol) => {
-    console.log(newCoinSymbol.symbol);
     const sym = (newCoinSymbol.symbol).toUpperCase();         //convert newCoinSymbol param to uppercase string 
 
     return async(dispatch) => {
@@ -44,19 +43,19 @@ export const addCoin = (newCoinSymbol) => {
                             CoinName: res.data.Data[sym].CoinName,
                         }
                      ).then((res2)=>{
-                        console.log(res2);
+                        console.log("adding coin: " + sym);
+                        
+                        axios.get('/coins_unauth/coinList')                 //dispatch the new coinlist 
+                            .then((res3)=> {
+                                dispatch({
+                                    type: ADD_COIN,
+                                    payload: res3.data
+                                })
+                            }) 
+
                      }).catch((err)=>{
                         console.log('error in posting to coins_unauth in addcoin method: ')
                      });
-
-                    axios.get('/coins_unauth/coinList')                 //dispatch the new coinlist 
-                        .then((res3)=> {
-                            console.log('asdfasdf')
-                            dispatch({
-                                type: ADD_COIN,
-                                payload: res3.data
-                            })
-                        }) 
 
                 }else{        //if symbol doesnt exist, dispatch an error message
                     dispatch(coinError('A coin with that symbol does not exist'));
@@ -78,3 +77,26 @@ function coinError(error) {
 }
 
 // DELETE COIN 
+export function deleteCoin(coin){
+    const sym = coin.Symbol;
+    console.log("deleting coin: " +sym);
+    return async(dispatch) => {
+        axios.delete('/coins_unauth/coinList/'+sym)
+            .then((res)=>{
+
+                axios.get('/coins_unauth/coinList')                 //dispatch the new coinlist 
+                    .then((res2)=> {
+                        console.log(sym+" coin deleted")
+                        dispatch({
+                            type: DEL_COIN,
+                            payload: res2.data
+                        })
+                    }) 
+
+            })
+            .catch((err)=>{
+                console.log(err)
+                coinError('There was an error in deleting from coins_unauth in deletecoin action');
+            });
+    }
+}

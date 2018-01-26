@@ -11,3 +11,4 @@ export const FETCH_MESSAGE = 'fetch_message';
 export const GET_COINS = "get_coins";
 export const ADD_COIN = "add_coin";
 export const COIN_ERR = "coin_err";
+export const DEL_COIN = "del_coin";
