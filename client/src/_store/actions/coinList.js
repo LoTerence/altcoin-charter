@@ -62,7 +62,7 @@ export const addCoin = (newCoinSymbol) => {
                 }
             })
             .catch( (err) => {
-                console.log('error in addCoin method api call to cryptocompare.com ' +err);
+                console.log('error in addCoin method api call to cryptocompare.com ');
                 dispatch(coinError('err'));
             });
     }

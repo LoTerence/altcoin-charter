@@ -7,8 +7,6 @@ import { getCoins } from '../../_store/actions/coinList';
 import CoinLi from './coinLi';
 import CoinAdder from './coinAdder';
 
-// TODO: make it so when a coin is deleted, coinUList re renders the list of coins
-
 class CoinUList extends Component {
 
   static propTypes = {
