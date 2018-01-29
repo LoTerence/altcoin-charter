@@ -2,7 +2,8 @@ import {
     GET_COINS,
     ADD_COIN,
     COIN_ERR,
-    DEL_COIN
+    DEL_COIN,
+    SET_ACTIVE_COIN
 } from '../actions/constants';
 
 const coinListReducer = (state={}, action) => {
@@ -15,6 +16,8 @@ const coinListReducer = (state={}, action) => {
             return { ...state, error:action.payload };
         case DEL_COIN:
             return { ...state, coins:action.payload, error: ''};
+        case SET_ACTIVE_COIN:
+            return { ...state, activeCoin: action.payload };
         default:
             return state;
     }

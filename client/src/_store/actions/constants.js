@@ -12,7 +12,9 @@ export const GET_COINS = "get_coins";
 export const ADD_COIN = "add_coin";
 export const COIN_ERR = "coin_err";
 export const DEL_COIN = "del_coin";
+export const SET_ACTIVE_COIN = "set_active_coin";
 
 // Historical Data consts
 export const GET_HIST_DATA = "get_hist_data";
 export const HIST_DATA_ERR = "hist_data_err";
+export const GET_COIN_DATA = "get_coin_data";

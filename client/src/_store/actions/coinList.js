@@ -3,7 +3,8 @@ import {
     GET_COINS,
     ADD_COIN,
     COIN_ERR,
-    DEL_COIN
+    DEL_COIN,
+    SET_ACTIVE_COIN
  } from './constants';
 
 /* 
@@ -99,4 +100,13 @@ export function deleteCoin(coin){
                 coinError('There was an error in deleting from coins_unauth in deletecoin action');
             });
     }
+}
+
+// SET ACTIVE COIN - action that sets the coin parameter to the applications active coin-the coin that the app will display info about
+export function setActiveCoin(coin){
+    console.log(' coin selected: ' + coin.Name)
+    return {
+        type: SET_ACTIVE_COIN,
+        payload: coin
+    };
 }
