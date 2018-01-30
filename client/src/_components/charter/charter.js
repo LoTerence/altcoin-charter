@@ -3,6 +3,7 @@ import CoinUList from './coinUList';
 import PriceChart from './priceChart';
 import CoinInfo from './coinInfo';
 import TimeFrameList from './timeFrameList';
+import CoinNameInfo from './coinNameInfo';
 
 // Charter will be the container for the charter app
 export class Charter extends Component {
@@ -11,7 +12,7 @@ export class Charter extends Component {
     return (
       <div>
         <div>
-          <h1>Chart</h1>
+          <CoinNameInfo></CoinNameInfo>
           <TimeFrameList />
           <PriceChart />
           <br/>
@@ -19,10 +20,8 @@ export class Charter extends Component {
           <CoinInfo />
         </div>
         <br/>
-        <br/>
-        <br/>
         <CoinUList />
-
+        <br/>
       </div>
     )
   }

@@ -17,35 +17,35 @@ import {
 export const getHistData = (coin, timeframe) => {
     console.log("The timeframe in getHIstdata function: "+timeframe);
     console.log("The coin in getHIstdata function: "+coin.Name);
+
+    var histo;
+    switch (timeframe){
+        case "1hour":
+            histo={timeUnit:"histominute", limit:60};
+            break;
+        case "12hours":
+            histo={timeUnit:"histominute", limit:720};
+            break;
+        case "1day":
+            histo={timeUnit:"histominute", limit:1440};
+            break;
+        case "1week":
+            histo={timeUnit:"histohour", limit:168};
+            break;
+        case "1month":
+            histo={timeUnit:"histoday", limit:31};
+            break;
+        case "3months":
+            histo={timeUnit:"histoday", limit:92};
+            break;
+        case "1year":
+            histo={timeUnit:"histoday", limit:365};
+            break;
+        default:
+            console.log('error in getHistData function in actions/histData timeframe cases');
+    }
+
     return (dispatch) => {
-
-        var histo;
-        switch (timeframe){
-            case "1hour":
-                histo={timeUnit:"histominute", limit:60};
-                break;
-            case "12hours":
-                histo={timeUnit:"histominute", limit:720};
-                break;
-            case "1day":
-                histo={timeUnit:"histominute", limit:1440};
-                break;
-            case "1week":
-                histo={timeUnit:"histohour", limit:168};
-                break;
-            case "1month":
-                histo={timeUnit:"histoday", limit:31};
-                break;
-            case "3months":
-                histo={timeUnit:"histoday", limit:92};
-                break;
-            case "1year":
-                histo={timeUnit:"histoday", limit:365};
-                break;
-            default:
-                console.log('error in getHistData function in actions/histData timeframe cases');
-        }
-
         axios.get('https://min-api.cryptocompare.com/data/'+histo.timeUnit+'?fsym='+coin.Name+'&tsym=USD&limit='+histo.limit)
             .then((res)=> {
 
@@ -53,7 +53,7 @@ export const getHistData = (coin, timeframe) => {
                 let histData =[];              
                 //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
                 for(let i=0; i<res.data.Data.length; i++){
-                    let date = new Date(res.data.Data[i].time);
+                    let date = new Date(res.data.Data[i].time*1000);
                     let coord = {
                         x: date,
                         y: res.data.Data[i].close

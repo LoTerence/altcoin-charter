@@ -9,8 +9,6 @@ import { connect } from 'react-redux';
 import { setActiveTimeframe, getHistData } from '../../_store/actions/histData';
 
 //TODO: change colors of buttons when a new active timeframe is selected
-//TODO: onclick event gets new coin historical data
-//TODO: set default active timeframe to day
 
 export class TimeFrameList extends Component {
   static propTypes = {

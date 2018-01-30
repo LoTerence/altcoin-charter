@@ -21,9 +21,9 @@ class CoinInfo extends Component {
             return <p>Select a coin in the list below to see its data</p>;
         }
         return (
-            <div>
+            <div className="container">
                 <div className="col-md-4">
-                    <p>{this.props.coinData.currentPrice}</p>
+                    <h1>{this.props.coinData.currentPrice}</h1>
                     <p>{this.props.coinData.pctChange}%</p>
                 </div>
                 <div className="col-md-8">

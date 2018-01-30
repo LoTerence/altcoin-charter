@@ -6,15 +6,29 @@ This component uses Uber's react-vis library for data visualization / programmin
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
-//import { getHistData } from '../../_store/actions/histData';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries, Crosshair } from 'react-vis';
 
-//TODO: onhover that shows the coin price for the time where the mouse is hovering over
-//TODO: rerender this chart with new information each time the active coin or active time period changes
-// TODO: fix the x axis so that it displays month and year instead of hour for when the data goes back a year
-// Maybe change data visualization tech to D3 instead of react-vis now that I see its flaws...
+// Converts a time obj to a string
+function timeToStr(timeObj) {
+  let d = new Date(timeObj);
+  // Minutes part from the timestamp
+  var minutes = "0" + d.getMinutes();
+  // Seconds part from the timestamp
+  var weekdays = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
+  var weekday = weekdays[d.getDay()];
+  return weekday+', '+d.getMonth()+1 +'/'+d.getDate()+' '+d.getHours()+':'+minutes.substr(-2);
+}
 
+// PriceChart Component
 class PriceChart extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      crosshairValues: [{x:0, y:0}]
+    };
+  }
+
   static propTypes = {
     histData: PropTypes.array
   }
@@ -32,12 +46,23 @@ class PriceChart extends Component {
         <XYPlot
           width={1000}
           height={400}
-          xType={'time'}>
+          xType={'time'}
+          onMouseLeave={() => this.setState({crosshairValues: [{x:0, y:0}]})}
+          >
           <HorizontalGridLines />
-          <LineSeries
-            data={this.props.histData}/>
+          <LineSeries 
+            data={this.props.histData}
+            onNearestX={(datapoint, {index}) =>
+          	  this.setState({crosshairValues: [ {x:this.props.histData[index].x , y:this.props.histData[index].y} ] }) } 
+            />
           <XAxis />
           <YAxis />
+          <Crosshair values={this.state.crosshairValues}>
+            <div style={{background: 'black'}}>
+              <p>{timeToStr(this.state.crosshairValues[0].x)}</p>
+              <p>Price: ${this.state.crosshairValues[0].y}</p>
+            </div>
+          </Crosshair>
         </XYPlot>
       </div>
     );
@@ -50,7 +75,6 @@ const mapStateToProps = (state) => ({
 /*
 const mapDispatchToProps = (dispatch) => {
   return {
-    getHistData: () => dispatch(getHistData())
   };
 }; */
 

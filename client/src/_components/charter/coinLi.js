@@ -27,7 +27,6 @@ class CoinLi extends Component {
   }
 
   render() {
-    console.log("coinLi's prop activeTimeframe: "+ this.props.activeTimeframe);
     return (
       <div className="col-md-4 col-sm-6 panel panel-info">
         <span className="glyphicon glyphicon-remove pull-right" onClick={this.handleDeleteCoin.bind(this)}></span>
