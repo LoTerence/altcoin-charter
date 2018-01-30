@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteCoin, setActiveCoin } from '../../_store/actions/coinList';
-import { getCoinData } from '../../_store/actions/histData';
+import { getCoinData, getHistData } from '../../_store/actions/histData';
 
 // TODO add onclick action for changing color
 // optional-TODO add onhover action
@@ -12,7 +12,8 @@ import { getCoinData } from '../../_store/actions/histData';
 class CoinLi extends Component {
 
   static propTypes = {
-    coin: PropTypes.object.isRequired
+    coin: PropTypes.object.isRequired,
+    activeTimeframe: PropTypes.string.isRequired
   }
 
   handleDeleteCoin() {
@@ -22,9 +23,11 @@ class CoinLi extends Component {
   handleSetActiveCoin() {
     this.props.setActiveCoin();
     this.props.getCoinData();
+    this.props.getHistData(this.props.activeTimeframe);
   }
 
   render() {
+    console.log("coinLi's prop activeTimeframe: "+ this.props.activeTimeframe);
     return (
       <div className="col-md-4 col-sm-6 panel panel-info">
         <span className="glyphicon glyphicon-remove pull-right" onClick={this.handleDeleteCoin.bind(this)}></span>
@@ -37,18 +40,18 @@ class CoinLi extends Component {
   }
 }
 
-/* 
+
 const mapStateToProps = (state) => ({
-  
+  activeTimeframe: state.histData.activeTimeframe
 });
-*/
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return{
     deleteCoin: () => dispatch(deleteCoin(ownProps.coin)),
     setActiveCoin: () => dispatch(setActiveCoin(ownProps.coin)),
-    getCoinData: () => dispatch(getCoinData(ownProps.coin))
+    getCoinData: () => dispatch(getCoinData(ownProps.coin)),
+    getHistData: (tf) => dispatch(getHistData(ownProps.coin, tf))
   };
 };
 
-export default connect(null, mapDispatchToProps)(CoinLi);
+export default connect(mapStateToProps, mapDispatchToProps)(CoinLi);

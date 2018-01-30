@@ -18,3 +18,4 @@ export const SET_ACTIVE_COIN = "set_active_coin";
 export const GET_HIST_DATA = "get_hist_data";
 export const HIST_DATA_ERR = "hist_data_err";
 export const GET_COIN_DATA = "get_coin_data";
+export const SET_TIMEFRAME = "set_timeframe"

@@ -8,36 +8,68 @@ import axios from 'axios';
 import {
     GET_HIST_DATA,
     HIST_DATA_ERR,
-    GET_COIN_DATA
+    GET_COIN_DATA,
+    SET_TIMEFRAME,
 } from './constants';
 
+// set parameters for getHistData function so that it takes in coin and timeframe
 // GET historical data: dispatches an array of objects with x and y coordinates
-export const getHistData = () => {
+export const getHistData = (coin, timeframe) => {
+    console.log("The timeframe in getHIstdata function: "+timeframe);
+    console.log("The coin in getHIstdata function: "+coin.Name);
     return (dispatch) => {
-        axios.get('https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=365')
-        .then((res)=> {
 
-            //array that will hold the historical data/payload/xy coordinates
-            let histData =[];              
-            //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
-            for(let i=0; i<res.data.Data.length; i++){
-                let date = new Date(res.data.Data[i].time);
-                let coord = {
-                    x: date,
-                    y: res.data.Data[i].close
-                };
-                histData.push(coord);
-            }
+        var histo;
+        switch (timeframe){
+            case "1hour":
+                histo={timeUnit:"histominute", limit:60};
+                break;
+            case "12hours":
+                histo={timeUnit:"histominute", limit:720};
+                break;
+            case "1day":
+                histo={timeUnit:"histominute", limit:1440};
+                break;
+            case "1week":
+                histo={timeUnit:"histohour", limit:168};
+                break;
+            case "1month":
+                histo={timeUnit:"histoday", limit:31};
+                break;
+            case "3months":
+                histo={timeUnit:"histoday", limit:92};
+                break;
+            case "1year":
+                histo={timeUnit:"histoday", limit:365};
+                break;
+            default:
+                console.log('error in getHistData function in actions/histData timeframe cases');
+        }
 
-            dispatch({
-                type: GET_HIST_DATA,
-                payload: histData
+        axios.get('https://min-api.cryptocompare.com/data/'+histo.timeUnit+'?fsym='+coin.Name+'&tsym=USD&limit='+histo.limit)
+            .then((res)=> {
+
+                //array that will hold the historical data/payload/xy coordinates
+                let histData =[];              
+                //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
+                for(let i=0; i<res.data.Data.length; i++){
+                    let date = new Date(res.data.Data[i].time);
+                    let coord = {
+                        x: date,
+                        y: res.data.Data[i].close
+                    };
+                    histData.push(coord);
+                }
+
+                dispatch({
+                    type: GET_HIST_DATA,
+                    payload: histData
+                });
+            })
+            .catch( (err) => {
+                console.log('error in getHistData method api call to cryptocompare.com \n'+err);
+                dispatch(histDataError('err'));
             });
-        })
-        .catch( (err) => {
-            console.log('error in getHistData method api call to cryptocompare.com \n'+err);
-            dispatch(histDataError('err'));
-        });
     };
 }
 
@@ -76,4 +108,14 @@ export function getCoinData(coin){
             dispatch(histDataError('err'));
         });
     }
+}
+
+// setActiveTimeframe(timeframe)  => an action creator that takes a string that represents a time frame (1day, 1week, 1month, 3months, 1year...) 
+//     and sets it as the active time frame
+export function setActiveTimeframe(timeframe) {
+    console.log('Active timeframe has been set to: ' + timeframe)
+    return {
+        type: SET_TIMEFRAME,
+        payload: timeframe
+    };
 }

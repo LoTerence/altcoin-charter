@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
-import { getHistData } from '../../_store/actions/histData';
+//import { getHistData } from '../../_store/actions/histData';
 
 //TODO: onhover that shows the coin price for the time where the mouse is hovering over
 //TODO: rerender this chart with new information each time the active coin or active time period changes
@@ -16,19 +16,17 @@ import { getHistData } from '../../_store/actions/histData';
 
 class PriceChart extends Component {
   static propTypes = {
-    getHistData: PropTypes.func.isRequired,
-    histData: PropTypes.array.isRequired
-  }
-
-  static defaultProps = {
-    histData: []
-  }
-
-  componentWillMount() {
-    this.props.getHistData();
+    histData: PropTypes.array
   }
 
   render() {
+    if(!this.props.histData){
+      return (
+        <div width={1000} height={400}>
+          <p>Please select a coin from the list below</p>
+        </div>
+      )
+    }
     return (
       <div>
         <XYPlot
@@ -47,13 +45,13 @@ class PriceChart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  histData: state.histData.data
+  histData: state.histData.histData
 });
-
+/*
 const mapDispatchToProps = (dispatch) => {
   return {
     getHistData: () => dispatch(getHistData())
   };
-};
+}; */
 
-export default connect(mapStateToProps, mapDispatchToProps)(PriceChart);
+export default connect(mapStateToProps)(PriceChart);

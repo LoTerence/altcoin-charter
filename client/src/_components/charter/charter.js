@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CoinUList from './coinUList';
 import PriceChart from './priceChart';
 import CoinInfo from './coinInfo';
+import TimeFrameList from './timeFrameList';
 
 // Charter will be the container for the charter app
 export class Charter extends Component {
@@ -11,7 +12,7 @@ export class Charter extends Component {
       <div>
         <div>
           <h1>Chart</h1>
-          <p>create buttons here for selecting a time period (day, week, month, 3months, year)</p>
+          <TimeFrameList />
           <PriceChart />
           <br/>
           <br/>
