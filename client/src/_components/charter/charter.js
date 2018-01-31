@@ -21,7 +21,7 @@ export class Charter extends Component {
         <br/>
         <br/>
       </div>
-    )
+    );
   }
 }
 

@@ -17,20 +17,25 @@ export default function (ComposedComponent) {
         componentWillMount(){
             if(!this.props.authenticated){
                 bool=false;
+            } else {
+                bool =true;
             }
         }
     
-        componentWillUpdate(nextProps){
+    /*    componentWillUpdate(nextProps){
+            bool = true;
+            console.log('require_auth component was updated');
             if(!nextProps.authenticated){
                 bool=false;
+                console.log('bool is false again');
             }
-        }
+        } */
     
         render(){
             if (bool){
-                return <ComposedComponent {...this.props}/>
+                return <ComposedComponent {...this.props}/>;
             }else {
-                return <Redirect to='/signin' />
+                return <Redirect to='/signin' />;
             }
         }
     }

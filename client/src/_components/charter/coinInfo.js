@@ -42,7 +42,7 @@ class CoinInfo extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    activeCoin: state.coinList.activeCoin,
+    activeCoin: state.histData.activeCoin,
     coinData: state.histData.coinData
 });
 

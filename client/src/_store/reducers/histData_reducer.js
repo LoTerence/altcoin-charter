@@ -2,7 +2,8 @@ import {
     GET_HIST_DATA,
     HIST_DATA_ERR,
     GET_COIN_DATA,
-    SET_TIMEFRAME
+    SET_TIMEFRAME,
+    SET_ACTIVE_COIN
 } from '../actions/constants';
 
 const histDataReducer = (state = {activeTimeframe:"1day"}, action) => {
@@ -15,6 +16,8 @@ const histDataReducer = (state = {activeTimeframe:"1day"}, action) => {
         return {...state, coinData:action.payload};
       case SET_TIMEFRAME:
         return {...state, activeTimeframe:action.payload};
+      case SET_ACTIVE_COIN:
+        return { ...state, activeCoin: action.payload };
       default:
         return state
     }

@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteCoin, setActiveCoin } from '../../_store/actions/coinList';
-import { getCoinData, getHistData } from '../../_store/actions/histData';
+import { deleteCoin } from '../../_store/actions/coinList';
+import { getCoinData, getHistData, setActiveCoin } from '../../_store/actions/histData';
 
 // TODO add onclick action for changing color
 // optional-TODO add onhover action

@@ -119,7 +119,7 @@ export class TimeFrameList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activeCoin: state.coinList.activeCoin,
+  activeCoin: state.histData.activeCoin,
   activeTimeframe: state.histData.activeTimeframe
 });
 

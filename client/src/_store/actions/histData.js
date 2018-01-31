@@ -10,6 +10,7 @@ import {
     HIST_DATA_ERR,
     GET_COIN_DATA,
     SET_TIMEFRAME,
+    SET_ACTIVE_COIN
 } from './constants';
 
 // set parameters for getHistData function so that it takes in coin and timeframe
@@ -115,5 +116,13 @@ export function setActiveTimeframe(timeframe) {
     return {
         type: SET_TIMEFRAME,
         payload: timeframe
+    };
+}
+
+// SET ACTIVE COIN - action that sets the coin parameter to the applications active coin-the coin that the app will display info about
+export function setActiveCoin(coin){
+    return {
+        type: SET_ACTIVE_COIN,
+        payload: coin
     };
 }
