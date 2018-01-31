@@ -15,8 +15,6 @@ import {
 // set parameters for getHistData function so that it takes in coin and timeframe
 // GET historical data: dispatches an array of objects with x and y coordinates
 export const getHistData = (coin, timeframe) => {
-    console.log("The timeframe in getHIstdata function: "+timeframe);
-    console.log("The coin in getHIstdata function: "+coin.Name);
 
     var histo;
     switch (timeframe){

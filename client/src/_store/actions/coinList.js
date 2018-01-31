@@ -104,7 +104,6 @@ export function deleteCoin(coin){
 
 // SET ACTIVE COIN - action that sets the coin parameter to the applications active coin-the coin that the app will display info about
 export function setActiveCoin(coin){
-    console.log(' coin selected: ' + coin.Name)
     return {
         type: SET_ACTIVE_COIN,
         payload: coin

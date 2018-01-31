@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Charter from './charter/charter';
 import Header from './universal/header';
+import Footer from './universal/footer';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -24,7 +25,8 @@ class HomePage extends Component {
                     <Route path="/signout" component={Signout} />
                     <Route path="/feature" component={RequireAuth(Feature)} />
                 </Switch>
-                
+
+                <Footer />
             </div>
         );
     }

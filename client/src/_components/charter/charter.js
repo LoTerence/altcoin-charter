@@ -11,16 +11,14 @@ export class Charter extends Component {
   render() {
     return (
       <div>
-        <div>
-          <CoinNameInfo></CoinNameInfo>
-          <TimeFrameList />
-          <PriceChart />
-          <br/>
-          <br/>
-          <CoinInfo />
-        </div>
+        <CoinNameInfo></CoinNameInfo>
+        <TimeFrameList />
+        <PriceChart />
+        <br/>
+        <CoinInfo />
         <br/>
         <CoinUList />
+        <br/>
         <br/>
       </div>
     )
