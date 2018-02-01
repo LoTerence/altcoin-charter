@@ -10,8 +10,6 @@ import { getCoins } from '../../../_store/actions/watchList';
 import CoinLi from './coinLi_wl';
 import CoinAdder from './coinAdder_wl';
 
-// TODO create watchlist coinLi
-
 class WatchList extends Component {
   static propTypes = {
     getCoins: PropTypes.func.isRequired,
@@ -29,12 +27,9 @@ class WatchList extends Component {
   render() {
     return (
       <div>
-        <p>hello</p>
-
         {this.props.coins.map(coin =>
           <CoinLi key={coin.Id} coin={coin} />
         )}
-
         <CoinAdder />
       </div>
     );

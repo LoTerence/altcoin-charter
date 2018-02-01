@@ -1,6 +1,3 @@
-export const GET_CUSTOMERS = "GET_CUSTOMERS";
-export const UPDATE_CUSTOMER = "REMOVE_CUSTOMER";
-
 // User authentication consts
 export const AUTH_USER = 'auth_user';
 export const UNAUTH_USER = 'unauth_user';
