@@ -10,7 +10,7 @@ const coinListReducer = (state={}, action) => {
         case GET_COINS:
             return { ...state, coins:action.payload };
         case ADD_COIN:
-            return { ...state, coins:action.payload, error:''};
+            return { ...state, coins:action.payload, error:'' };
         case COIN_ERR:
             return { ...state, error:action.payload };
         case DEL_COIN:

@@ -13,6 +13,9 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    watchList: {          //An array of coin objects
+        type: Array,
     }
 });
 
@@ -45,3 +48,6 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
         callback(null, isMatch);
     });
 };
+
+
+/// ----------- Watchlist related functions --------------------------------------////

@@ -1,32 +1,21 @@
-// ------  Where the main application will live
+/* feature.js 
+ *  component where the main app will live. Authenticated users can save  
+ * and view data on a personal watchlist of coins here.
+ */
 
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types';
-//import { connect } from 'react-redux';
+import WatchList from './charter/watchlist/watchList';
+
+// TODO when component mounts, set activeCoin to empty  object or null -- might be buggy
 
 export default class Feature extends Component {
-/*  static propTypes = {
-    prop: PropTypes
-  }
-  */
 
   render() {
     return (
       <div>
         <h1>Feature</h1>
+        <WatchList />
       </div>
-    )
+    );
   }
 }
-
-/*
-const mapStateToProps = (state) => ({
-   
-});
-
-const mapDispatchToProps = {
-  
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Feature);
-*/

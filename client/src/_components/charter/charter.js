@@ -6,7 +6,7 @@ import TimeFrameList from './timeFrameList';
 import CoinNameInfo from './coinNameInfo';
 
 // Charter will be the container for the charter app
-export class Charter extends Component {
+class Charter extends Component {
 
   render() {
     return (
