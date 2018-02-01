@@ -8,8 +8,6 @@ import {
 
 export function signInAction(history, { email, password }) {
     return async (dispatch) => {
-      //  try {
-      //  const res = await axios.post('/users/authenticate', { email, password });
         //submit email and password to the server
         axios.post('/users/authenticate', { email, password })
             .then( res => {
@@ -35,12 +33,12 @@ export function signInAction(history, { email, password }) {
 
 export function signUpAction(history, { email, password }) {
     //same process as signInAction
-    return async (dispatch) => {
-        axios.post('/users/register', { email,password })
+    return (dispatch) => {
+        axios.post('/users/register', { email, password })
             .then( res => {
                 if(res.data.success){
-                    dispatch({ type: AUTH_USER });
                     localStorage.setItem('token', res.data.token);
+                    dispatch({ type: AUTH_USER });
                     history.push('/feature');
                 }else {
                     dispatch(authError(res.data.msg))
@@ -66,16 +64,16 @@ export function signOutAction() {
 
 // this function is for fetching info from the express server that requires authentication header
 //TODO: revise later with user profile info
-export function fetchMessage(){
+export function getProfile(){
     return function(dispatch){
-        axios.get('/',{
+        axios.get('/users/profile',{
             headers: { authorization: localStorage.getItem('token') }
         })
-        .then((response) => {
+        .then((res) => {
             dispatch({
                 type: FETCH_MESSAGE,
-                payload: response.data.message
-            })
-        })
-    }
+                payload: res.data.user.email
+            });
+        });
+    };
 }

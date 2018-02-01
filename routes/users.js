@@ -17,7 +17,10 @@ router.post('/register', (req, res, next) => {
         if(err){
             res.json({success: false, msg:"Email already registered"});
         } else {
-            res.json({success: true, msg:"User registered"});
+            const token = jwt.sign({data:user}, config.secret, {
+                expiresIn: 604800 //1 week
+            });
+            res.json({success: true, token: 'JWT '+token, msg:"User registered"});
         }
     });
 });
@@ -42,11 +45,11 @@ router.post('/authenticate', (req, res, next) => {
 
                 res.json({
                     success: true,
-                    token: 'JWT ' +token,
-                    user: {
+                    token: 'JWT '+token
+                  /*  user: {
                         id: user._id,
                         email: user.email
-                    } 
+                    } */
                 });
             } else {
                 return res.json({success:false, msg: 'Wrong password'});
@@ -58,25 +61,6 @@ router.post('/authenticate', (req, res, next) => {
 // Profile
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res) => {
     res.json({user: req.user});
-});
-
-// testing router.put
-router.put('/profile/changeEmail', passport.authenticate('jwt', {session:false}), (req, res) => {
-    User.getUserByEmail(req.user.email, (err, user) => {
-        if(err)throw err;
-        if(!user){
-            console.log('error in server/routes/users.js -- router.put(\'/watchlist/addcoin\')');
-            return res.json({success:false, msg:"User not found"});
-        }
-        
-        user.email = req.body.newEmail;
-
-        user.save((err)=>{
-            if (err) res.send(err);
-            res.send('email updated');
-        });
-
-    });
 });
 
 // ----------------- watchlist related functions ----------------------------------///

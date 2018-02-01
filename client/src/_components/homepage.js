@@ -22,7 +22,7 @@ class HomePage extends Component {
                     <Route exact path="/" component = {Charter} />
                     <Route path="/signin" component={Signin} />
                     <Route path="/signup" component={Signup} />
-                    <Route path="/signout" component={Signout} />
+                    <Route path="/signout" component={RequireAuth(Signout)} />
                     <Route path="/feature" component={RequireAuth(Feature)} />
                 </Switch>
 
