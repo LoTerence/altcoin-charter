@@ -10,7 +10,7 @@ export class CoinNameInfo extends Component {
   }
 
   render() {
-    if (!this.props.activeCoin) {
+    if (!this.props.activeCoin || !this.props.activeCoin.Name) {
       return <h1>Chart</h1>;
     }
     return <h1>{this.props.activeCoin.CoinName} - {this.props.activeCoin.Symbol} - {this.props.activeTimeframe}</h1>;

@@ -19,7 +19,6 @@ class Charter extends Component {
         <br/>
         <CoinUList />
         <br/>
-        <br/>
       </div>
     );
   }

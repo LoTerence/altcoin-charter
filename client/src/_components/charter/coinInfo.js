@@ -17,7 +17,7 @@ class CoinInfo extends Component {
     }
 
     render() {
-        if (!this.props.activeCoin || !this.props.coinData){
+        if (!this.props.activeCoin || !this.props.coinData || !this.props.activeCoin.Name){
             return <p>Select a coin in the list below to see its data</p>;
         }
         return (

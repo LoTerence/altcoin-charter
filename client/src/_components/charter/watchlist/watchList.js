@@ -29,7 +29,8 @@ class WatchList extends Component {
   render() {
     return (
       <div>
-        <p>{this.props.profile}</p>
+        <p><b>{this.props.profile}</b></p>
+        <p>Your personal watchlist of coins: Coins you add to this list will be saved to your account</p>
         {this.props.coins.map(coin =>
           <CoinLi key={coin.Id} coin={coin} />
         )}

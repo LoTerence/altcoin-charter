@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries, Crosshair } from 'react-vis';
+import { setActiveCoin, setActiveTimeframe } from '../../_store/actions/histData';
 
 // Converts a time obj to a string
 function timeToStr(timeObj) {
@@ -33,8 +34,13 @@ class PriceChart extends Component {
     histData: PropTypes.array
   }
 
+  componentWillMount() {
+    this.props.setActiveCoin({});
+    this.props.setActiveTimeframe("1day");
+  }
+
   render() {
-    if(!this.props.histData){
+    if(!this.props.histData || !this.props.activeCoin || !this.props.activeCoin.Name){
       return (
         <div width={1000} height={400}>
           <p>Please select a coin from the list below</p>
@@ -70,12 +76,15 @@ class PriceChart extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  histData: state.histData.histData
+  histData: state.histData.histData,
+  activeCoin: state.histData.activeCoin
 });
-/*
+
 const mapDispatchToProps = (dispatch) => {
   return {
-  };
-}; */
+    setActiveCoin: (coin) => dispatch(setActiveCoin(coin)),
+    setActiveTimeframe: (timeframe) => dispatch(setActiveTimeframe(timeframe))
+  }
+};
 
-export default connect(mapStateToProps)(PriceChart);
+export default connect(mapStateToProps, mapDispatchToProps)(PriceChart);
