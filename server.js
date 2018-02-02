@@ -66,7 +66,9 @@ app.get('/', (req, res) => {
 }); */
 
 // Express only serves static assets in production
-app.use('/', express.static('./client/build'));
+app.use(express.static('./client/build'));
+
+
 
 // Start Server
 app.listen(port, () => `Server running on port ${port}`);
