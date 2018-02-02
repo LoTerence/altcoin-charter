@@ -35,7 +35,7 @@ app.get('/api/customers', (req, res) => {
 });
 
 //PORT Number
-const port = 5000;
+const port = Number(process.env.PORT || 5000);
 
 //CORS Middleware
 app.use(cors());
@@ -66,8 +66,9 @@ app.get('/', (req, res) => {
 }); */
 
 // Express only serves static assets in production
-app.use(express.static('./client/build'));
-
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
 
 
 // Start Server
