@@ -59,10 +59,17 @@ app.use('/users',users);
 const coins_unauth = require('./routes/coins_unauth');
 app.use('/coins_unauth',coins_unauth);
 
-// Index Route
+// Index Route 
+/*
 app.get('/', (req, res) => {
   res.send('Invalid Endpoint');
-});
+}); */
+
+// Express only serves static assets in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+}
+
 
 // Start Server
 app.listen(port, () => `Server running on port ${port}`);
