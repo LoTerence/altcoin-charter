@@ -1,3 +1,8 @@
+/**
+ * charter.js
+ * container for the application 
+ */
+
 import React, { Component } from 'react';
 import CoinUList from './coinUList';
 import PriceChart from './priceChart';
@@ -5,7 +10,6 @@ import CoinInfo from './coinInfo';
 import TimeFrameList from './timeFrameList';
 import CoinNameInfo from './coinNameInfo';
 
-// Charter will be the container for the charter app
 class Charter extends Component {
 
   render() {
@@ -14,11 +18,8 @@ class Charter extends Component {
         <CoinNameInfo></CoinNameInfo>
         <TimeFrameList />
         <PriceChart />
-        <br/>
         <CoinInfo />
-        <br/>
         <CoinUList />
-        <br/>
       </div>
     );
   }

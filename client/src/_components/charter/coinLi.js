@@ -5,9 +5,17 @@ import { connect } from 'react-redux';
 import { deleteCoin } from '../../_store/actions/coinList';
 import { getCoinData, getHistData, setActiveCoin } from '../../_store/actions/histData';
 
-// TODO add onclick action for changing color
+// optional-TODO add onclick action for changing color
 // optional-TODO add onhover action
-// TODO use custom css to make it better looking
+
+const coinLiStyle = {
+  border: '1px solid #BCED91',
+  borderLeft: '10px solid #BCED91',
+  borderRadius: '0px',
+  background: '#fafafa',
+  margin: '5px',
+  padding: '5px 10px',
+};
 
 class CoinLi extends Component {
 
@@ -28,11 +36,13 @@ class CoinLi extends Component {
 
   render() {
     return (
-      <div className="col-md-4 col-sm-6 panel panel-info">
+      <div className="col-md-4 col-sm-6">
+        <div style={coinLiStyle} >
         <span className="glyphicon glyphicon-remove pull-right" onClick={this.handleDeleteCoin.bind(this)}></span>
-        <div onClick={this.handleSetActiveCoin.bind(this)}>
-          <div className="panel-heading">{this.props.coin.Name}</div>
-          <div className="panel-body">{this.props.coin.CoinName}</div>
+          <div onClick={this.handleSetActiveCoin.bind(this)}>
+            <h4>{this.props.coin.Name}</h4>
+            <p>{this.props.coin.CoinName} price history, day's change</p>
+          </div>
         </div>
       </div>
     )

@@ -112,7 +112,6 @@ export function getCoinData(coin){
 // setActiveTimeframe(timeframe)  => an action creator that takes a string that represents a time frame (1day, 1week, 1month, 3months, 1year...) 
 //     and sets it as the active time frame
 export function setActiveTimeframe(timeframe) {
-    console.log('Active timeframe has been set to: ' + timeframe)
     return {
         type: SET_TIMEFRAME,
         payload: timeframe

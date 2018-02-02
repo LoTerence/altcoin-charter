@@ -17,8 +17,13 @@ function timeToStr(timeObj) {
   // Seconds part from the timestamp
   var weekdays = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
   var weekday = weekdays[d.getDay()];
-  return weekday+', '+d.getMonth()+1 +'/'+d.getDate()+' '+d.getHours()+':'+minutes.substr(-2);
+  var months = d.getMonth() + 1;
+  return weekday+', '+ months +'/'+d.getDate()+' '+d.getHours()+':'+minutes.substr(-2);
 }
+
+const XYPlotStyle = {
+  paddingLeft: '30px'
+};
 
 // PriceChart Component
 class PriceChart extends Component {
@@ -50,6 +55,7 @@ class PriceChart extends Component {
     return (
       <div>
         <XYPlot
+          style={XYPlotStyle}
           width={1000}
           height={400}
           xType={'time'}

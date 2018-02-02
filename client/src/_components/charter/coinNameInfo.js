@@ -21,9 +21,5 @@ const mapStateToProps = (state) => ({
     activeCoin: state.histData.activeCoin,
     activeTimeframe: state.histData.activeTimeframe
 })
-/*
-const mapDispatchToProps = {
-  
-} */
 
 export default connect(mapStateToProps)(CoinNameInfo)

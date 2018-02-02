@@ -10,8 +10,6 @@ import CoinInfo from './charter/coinInfo';
 import TimeFrameList from './charter/timeFrameList';
 import CoinNameInfo from './charter/coinNameInfo';
 
-// TODO when component mounts, set activeCoin to empty  object or null -- might be buggy
-
 export default class Feature extends Component {
 
   render() {
@@ -20,9 +18,7 @@ export default class Feature extends Component {
         <CoinNameInfo></CoinNameInfo>
         <TimeFrameList />
         <PriceChart />
-        <br/>
         <CoinInfo />
-        <br/>
         <WatchList />
       </div>
     );
