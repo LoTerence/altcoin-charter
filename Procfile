@@ -1,1 +1,1 @@
-web: node server.js --prefix client
+web: npm run dev
