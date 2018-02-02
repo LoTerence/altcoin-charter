@@ -41,7 +41,7 @@ const PORT = Number(process.env.PORT || 5000);
 app.use(cors());
 
 // Set static folder
-//app.use(express.static(path.join(__dirname, 'client')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -60,13 +60,12 @@ const coins_unauth = require('./routes/coins_unauth');
 app.use('/coins_unauth',coins_unauth);
 
 // Index Route 
-/*
 app.get('/', (req, res) => {
-  res.send('Invalid Endpoint');
-}); */
+  res.sendFile(__dirname+'/client/build/index.html');
+}); 
 
 // Express only serves static assets in production
-app.use('/', express.static('./client/build'));
+//app.use('/', express.static('./client/build'));
 
 
 
