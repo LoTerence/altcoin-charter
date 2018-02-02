@@ -35,13 +35,13 @@ app.get('/api/customers', (req, res) => {
 });
 
 //PORT Number
-const port = Number(process.env.PORT || 5000);
+const PORT = Number(process.env.PORT || 5000);
 
 //CORS Middleware
 app.use(cors());
 
 // Set static folder
-app.use(express.static(path.join(__dirname, 'client')));
+//app.use(express.static(path.join(__dirname, 'client')));
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -71,4 +71,8 @@ app.use('/', express.static('./client/build'));
 
 
 // Start Server
-app.listen(port, () => `Server running on port ${port}`);
+app.listen(PORT, error => (
+  error
+    ? console.error(error)
+    : console.info(`Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`)
+));
