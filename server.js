@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Index Route 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname+'\client\build\index.html');
+  res.sendFile(__dirname+'/client/build/index.html');
 }); 
 
 // Body Parser Middleware
