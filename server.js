@@ -61,7 +61,7 @@ app.use('/coins_unauth',coins_unauth);
 
 // Index Route 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname+'/client/build/index.html');
+  res.sendFile('./client/build/index.html');
 }); 
 
 // Express only serves static assets in production
