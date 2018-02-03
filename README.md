@@ -4,7 +4,9 @@
 
 > Built with React + Redux front end and Nodejs, express, mongodb backend
 
-> Still in production
+Example of the app is deployed on:
+https://quiet-anchorage-77609.herokuapp.com/
+
 
 ## Quick Start
 
