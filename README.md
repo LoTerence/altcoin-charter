@@ -5,7 +5,7 @@
 > Built with React + Redux front end and Nodejs, express, mongodb backend
 
 Example of the app is deployed on:
-https://quiet-anchorage-77609.herokuapp.com/
+https://altcoin-charter.herokuapp.com/
 
 
 ## Quick Start
