@@ -1,8 +1,19 @@
-const dbuser = process.env.DB_USER;
-const dbpassword = process.env.DB_PASSWORD;
-const mysecret = process.env.MYSECRET;
+const mongoose = require("mongoose");
 
-module.exports = {
-    database: 'mongodb://'+dbuser+':'+dbpassword+'@ds257627.mlab.com:57627/altcoin-charter',
-    secret:mysecret
-}
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
+      dbName: "altcoin-charter",
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.log(`Error: ${err.message}`);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;
