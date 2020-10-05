@@ -1,53 +1,53 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const config = require('../config/database');
-const uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const uniqueValidator = require("mongoose-unique-validator");
 
 //User Schema
 const UserSchema = mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    watchList: {          //An array of coin objects
-        type: Array,
-    }
+  // TODO: Add a name field
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  watchList: {
+    //An array of coin objects
+    type: Array,
+  },
 });
 
+// pre-save validation for unique fields, returns mongoose validation error instead of E11000 error from MongoDB
 UserSchema.plugin(uniqueValidator);
 
-const User = module.exports = mongoose.model('User', UserSchema);
+const User = (module.exports = mongoose.model("User", UserSchema));
 
-module.exports.getUserById = function(id, callback){
-    User.findById(id, callback);
-};
-
-module.exports.getUserByEmail = function(email, callback){
-    const query = {email: email};
-    User.findOne(query, callback);
-};
-
-module.exports.addUser = function(newUser, callback){
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if(err) throw err;
-            newUser.password = hash;
-            newUser.save(callback);
-        });
+// ------------------------------------------ Services ------------------------------------------ //
+module.exports.addUser = function (newUser, callback) {
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) throw err;
+      newUser.password = hash;
+      newUser.save(callback);
     });
+  });
 };
 
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-    bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-        if (err) throw err;
-        callback(null, isMatch);
-    });
+module.exports.getUserById = function (id, callback) {
+  User.findById(id, callback);
 };
 
+module.exports.getUserByEmail = function (email, callback) {
+  const query = { email: email };
+  User.findOne(query, callback);
+};
 
-/// ----------- Watchlist related functions --------------------------------------////
+module.exports.comparePassword = function (candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
+    if (err) throw err;
+    callback(null, isMatch);
+  });
+};

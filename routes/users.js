@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/User");
 
 // allows project to read from .env
 if (process.env.NODE_ENV !== "production") {
