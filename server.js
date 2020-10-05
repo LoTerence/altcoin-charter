@@ -23,6 +23,10 @@ connectDB();
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
 //CORS Middleware
 app.use(cors());
+/* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
+front end is running on so the server can only accept requests from the front end 
+app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
+*/
 
 // Passport Middleware
 app.use(passport.initialize());
@@ -30,8 +34,8 @@ app.use(passport.session());
 require("./config/passport")(passport); // authentication strategy
 
 // express routing
-app.use("/users", require("./routes/users"));
 app.use("/coins_unauth", require("./routes/coins_unauth"));
+app.use("/users", require("./routes/users"));
 
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //
 
