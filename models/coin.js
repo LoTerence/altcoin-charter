@@ -4,6 +4,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 // Coin Schema
 const CoinSchema = mongoose.Schema({
   Id: {
+    //they need id for mapping components in react
     type: String,
     required: true,
     unique: true,

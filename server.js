@@ -1,6 +1,7 @@
 // Require dependencies
 const express = require("express");
 const dotenv = require("dotenv");
+const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
 const cors = require("cors"); //access the server from any domain name
@@ -21,7 +22,16 @@ app.use(express.json());
 connectDB();
 
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
-//CORS Middleware
+// Express session middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+// CORS Middleware
 app.use(cors());
 /* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
 front end is running on so the server can only accept requests from the front end 
@@ -31,10 +41,10 @@ app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
-require("./config/passport")(passport); // authentication strategy
+require("./config/passport"); // authentication strategy
 
 // express routing
-app.use("/coins_unauth", require("./routes/coins_unauth"));
+app.use("/coins_unauth", require("./routes/coins_unauth")); // maybe change the name to "/coins_public"
 app.use("/users", require("./routes/users"));
 
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //

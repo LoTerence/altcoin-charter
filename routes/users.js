@@ -1,79 +1,29 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const router = express.Router();
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const router = express.Router();
 
-// allows project to read from .env
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config({ path: "../config/.env" });
-}
+const {
+  registerUser,
+  authenticateUser,
+  getUserProfile,
+  getUserWatchlist,
+  addCoinToWatchlist,
+  delCoinFromWatchlist,
+} = require("../controllers/users");
+
+// TODO: move all these callback functions to users.js controller
 
 // Register
-router.post("/register", (req, res, next) => {
-  let newUser = new User({
-    email: req.body.email,
-    password: req.body.password,
-    watchList: [],
-  });
-
-  User.addUser(newUser, (err, user) => {
-    if (err) {
-      res.json({ success: false, msg: "Email already registered" });
-    } else {
-      const token = jwt.sign({ data: user }, process.env.JWT_SECRET_KEY, {
-        expiresIn: 604800, //1 week
-      });
-      res.json({
-        success: true,
-        token: "JWT " + token,
-        msg: "User registered",
-      });
-    }
-  });
-});
+router.post("/register", registerUser);
 
 // Authenticate
-router.post("/authenticate", (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  User.getUserByEmail(email, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "User not found" });
-    }
-
-    User.comparePassword(password, user.password, (err, isMatch) => {
-      if (err) throw err;
-      if (isMatch) {
-        const token = jwt.sign({ data: user }, process.env.JWT_SECRET_KEY, {
-          expiresIn: 604800, //1 week
-        });
-
-        res.json({
-          success: true,
-          token: "JWT " + token,
-          /*  user: {
-                        id: user._id,
-                        email: user.email
-                    } */
-        });
-      } else {
-        return res.json({ success: false, msg: "Wrong password" });
-      }
-    });
-  });
-});
+router.post("/authenticate", authenticateUser);
 
 // Profile
 router.get(
   "/profile",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.json({ user: req.user });
-  }
+  passport.authenticate("jwt", { session: true }),
+  getUserProfile
 );
 
 // ----------------- watchlist related functions ----------------------------------///
@@ -81,85 +31,23 @@ router.get(
 // function that gets an array of coins (watchlist) saved by the user
 router.get(
   "/watchlist",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.send(req.user.watchList);
-  }
+  passport.authenticate("jwt", { session: true }),
+  getUserWatchlist
 );
 
 // function that adds a new coin to watchlist
+// TODO: make a service function for adding coin to user watchlist (User.addCoinToWatchList)
 router.put(
   "/watchlist/addcoin",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    User.getUserByEmail(req.user.email, (err, user) => {
-      //handle errors
-      if (err) throw err;
-      if (!user) {
-        console.log(
-          "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-        );
-        return res.json({ success: false, msg: "User not found" });
-      }
-      for (let i = 0; i < user.watchList.length; i++) {
-        if (user.watchList[i].Symbol == req.body.newCoin.Symbol) {
-          return res.json({
-            success: false,
-            msg: "That coin is already on the list",
-          });
-        }
-      }
-
-      // update watchlist with the new coin obj from req.body, then res.json the new watchlist
-      user.watchList.push(req.body.newCoin);
-      user.save((err) => {
-        if (err)
-          res.json({
-            success: false,
-            msg:
-              "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
-          });
-        res.json({ success: true, newWatchList: user.watchList });
-      });
-    });
-  }
+  passport.authenticate("jwt", { session: true }),
+  addCoinToWatchlist
 );
 
 // function that deletes a coin from watchlist
 router.put(
   "/watchlist/delcoin",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    User.getUserByEmail(req.user.email, (err, user) => {
-      //handle errors
-      if (err) throw err;
-      if (!user) {
-        console.log(
-          "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-        );
-        return res.json({ success: false, msg: "User not found" });
-      }
-
-      //update watchlist by removing the requested coin from watchlist, then res.json the new watchlist
-      let index = 0;
-      for (let i = 0; i < user.watchList.length; i++) {
-        if (user.watchList[i].Symbol == req.body.Symbol) {
-          index = i;
-          break;
-        }
-      }
-      user.watchList.splice(index, 1);
-      user.save((err) => {
-        if (err)
-          res.json({
-            success: false,
-            msg:
-              "error deleting coin in routes/users.js - put(watchlist/delcoin)",
-          });
-        res.json({ success: true, newWatchList: user.watchList });
-      });
-    });
-  }
+  passport.authenticate("jwt", { session: true }),
+  delCoinFromWatchlist
 );
 
 // ------------------- export router ---------------------///

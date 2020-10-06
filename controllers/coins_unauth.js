@@ -9,7 +9,7 @@ exports.getCoinList = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      msg: "List of coins successfully found",
+      message: "List of coins successfully found",
       data: coins,
     });
   } catch (err) {
@@ -30,11 +30,16 @@ exports.addCoin = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      msg: "Coin was successfully added",
+      message: "Coin was successfully added",
       data: newCoin,
     });
   } catch (err) {
-    console.log(err);
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        error: "There is already a coin with this symbol: " + req.body.Symbol,
+      });
+    }
     return res.status(500).json({
       success: false,
       error: "Server error",
@@ -58,7 +63,7 @@ exports.deleteCoin = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      msg: "Coin was successfully deleted",
+      message: "Coin was successfully deleted",
       data: {},
     });
   } catch (err) {

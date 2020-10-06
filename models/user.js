@@ -23,17 +23,25 @@ const UserSchema = mongoose.Schema({
 // pre-save validation for unique fields, returns mongoose validation error instead of E11000 error from MongoDB
 UserSchema.plugin(uniqueValidator);
 
+// before saving a new user, salt and hash the password field
+UserSchema.pre("save", async function (next) {
+  const user = this;
+  this.password = await bcrypt.hash(user.password, 10);
+  next();
+});
+
+// returns true if the password param matches the hashed password of the user this method is called on
+UserSchema.methods.isValidPassword = async function (password) {
+  const user = this;
+  const compare = await bcrypt.compare(password, user.password);
+  return compare;
+};
+
 const User = (module.exports = mongoose.model("User", UserSchema));
 
 // ------------------------------------------ Services ------------------------------------------ //
 module.exports.addUser = function (newUser, callback) {
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err;
-      newUser.password = hash;
-      newUser.save(callback);
-    });
-  });
+  newUser.save(callback);
 };
 
 module.exports.getUserById = function (id, callback) {
@@ -43,11 +51,4 @@ module.exports.getUserById = function (id, callback) {
 module.exports.getUserByEmail = function (email, callback) {
   const query = { email: email };
   User.findOne(query, callback);
-};
-
-module.exports.comparePassword = function (candidatePassword, hash, callback) {
-  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-    if (err) throw err;
-    callback(null, isMatch);
-  });
 };
