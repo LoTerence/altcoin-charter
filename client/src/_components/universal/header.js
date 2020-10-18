@@ -1,44 +1,64 @@
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../_store/reducers/authSlice";
 
-class Header extends Component {
+function Header() {
+  const authenticated = useSelector(selectAuth).authenticated;
 
-    renderLinks() {
-        if(this.props.authenticated) {
-        return [
-            <li key ="0" className='nav-item'> <Link className="nav-link" to='/signout'>Sign Out </Link></li>,
-            <li key ="1" className='nav-item'> <Link className="nav-link" to='/feature'>Personal Watchlist </Link></li>
-        ];
-        } else {
-            return [
-                <li key ="0" className='nav-item'><Link className='nav-link' to='/signin'> Sign in </Link></li>,
-                <li key ="1" className='nav-item'><Link className="nav-link" to="/signup"> Sign up</Link></li>,
-                <li key ="2" className='nav-item'> <Link className="nav-link" to='/feature'>Personal Watchlist </Link></li>
-            ];
-        }
+  function renderLinks() {
+    if (authenticated) {
+      return [
+        <li key="0" className="nav-item">
+          {" "}
+          <Link className="nav-link" to="/signout">
+            Sign Out{" "}
+          </Link>
+        </li>,
+        <li key="1" className="nav-item">
+          {" "}
+          <Link className="nav-link" to="/feature">
+            Personal Watchlist{" "}
+          </Link>
+        </li>,
+      ];
+    } else {
+      return [
+        <li key="0" className="nav-item">
+          <Link className="nav-link" to="/signin">
+            {" "}
+            Sign in{" "}
+          </Link>
+        </li>,
+        <li key="1" className="nav-item">
+          <Link className="nav-link" to="/signup">
+            {" "}
+            Sign up
+          </Link>
+        </li>,
+        <li key="2" className="nav-item">
+          {" "}
+          <Link className="nav-link" to="/feature">
+            Personal Watchlist{" "}
+          </Link>
+        </li>,
+      ];
     }
-
-    render() {
-        return(
-            <nav className="navbar navbar-default">
-                <div className="container-fluid">
-                    <div className="navbar-header">
-                        <Link to='/' className="navbar-brand"> Altcoin Charter </Link>
-                    </div>
-                    <ul className="nav navbar-nav">
-                        {this.renderLinks()}
-                    </ul>
-                </div>
-            </nav>
-        );
-    }
-}
-
-function mapStateToProps(state){
-  return {
-    authenticated: state.auth.authenticated
   }
+
+  return (
+    <nav className="navbar navbar-default">
+      <div className="container-fluid">
+        <div className="navbar-header">
+          <Link to="/" className="navbar-brand">
+            {" "}
+            Altcoin Charter{" "}
+          </Link>
+        </div>
+        <ul className="nav navbar-nav">{renderLinks()}</ul>
+      </div>
+    </nav>
+  );
 }
 
-export default connect(mapStateToProps)(Header);
+export default Header;

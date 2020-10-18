@@ -1,14 +1,27 @@
-import {combineReducers} from 'redux';
-import { reducer as formReducer } from 'redux-form';
-import authReducer from './auth_reducer';
-import coinListReducer from './coinList';
-import histDataReducer from './histData_reducer';
-import watchListReducer from './watchList_reducer';
+// import { combineReducers } from "redux";
+// import { reducer as formReducer } from "redux-form";
+// import authReducer from "./auth_reducer";
+import authReducer1 from "./authSlice";
+import coinListReducer from "./coinList";
+import histDataReducer from "./histData_reducer";
+import watchListReducer from "./watchList_reducer";
 
-export default combineReducers({
-  form: formReducer,
-  auth: authReducer,
-  coinList: coinListReducer,
-  histData: histDataReducer,
-  watchList: watchListReducer
-});
+// export default combineReducers({
+//   form: formReducer,
+//   auth: authReducer,
+//   coinList: coinListReducer,
+//   histData: histDataReducer,
+//   watchList: watchListReducer
+// });
+
+const rootReducer = {
+  reducer: {
+    // form: formReducer,
+    auth: authReducer1,
+    coinList: coinListReducer,
+    histData: histDataReducer,
+    watchList: watchListReducer,
+  },
+};
+
+export default rootReducer;
