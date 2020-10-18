@@ -1,75 +1,84 @@
-import React, { Component } from 'react';
-import { Field, reduxForm, Form } from 'redux-form';
-import { signInAction } from '../../_store/actions/auth';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signInAction, selectAuth } from "../../_store/reducers/authSlice";
 
-const renderInput = field => {
-    const { input, type } = field;
-    return (
-        <div>
-            <input {...input} type={type} className="form-control" />
+function Signin() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const authSelector = useSelector(selectAuth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  if (authSelector.authenticated) {
+    return <Redirect to={"/feature"} />;
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (email === "") {
+      setIsError(true);
+    } else {
+      try {
+        dispatch(signInAction(history, { email, password }));
+      } catch (err) {
+        setIsError(true);
+      }
+    }
+  }
+
+  function renderAlert() {
+    if (isError || authSelector.error !== "") {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong>
+          {authSelector.error}
         </div>
-    );
+      );
+    }
+  }
+
+  return (
+    <div className="col-md-8 col-md-offset-2">
+      <form>
+        <h2>Sign into Altcoin Charter</h2>
+        <div className="form-group">
+          <label>Email:</label>
+          <input
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
+          <input
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        {renderAlert()}
+        <button
+          className="btn btn-primary"
+          onClick={(e) => handleFormSubmit(e)}
+        >
+          Sign in
+        </button>
+      </form>
+      <h4>
+        Dont have an account? Click{" "}
+        <Link className="nav-link" to="/signup">
+          here
+        </Link>{" "}
+        to sign up!
+      </h4>
+    </div>
+  );
 }
 
-class Signin extends Component {
-    handleFormSubmit ({ email, password }) {
-        this.props.signInAction({email, password});
-    }
-
-    renderAlert() {
-        const { errorMessage } = this.props;
-        if ( errorMessage ) {
-            return (
-                <div className="alert alert-danger">
-                    <strong>Oops!</strong>{errorMessage}
-                </div>
-            );
-        }
-    }
-
-    render() {
-        const { handleSubmit } = this.props;
-
-        return (
-            <div className="col-md-8 col-md-offset-2">
-                <Form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                    <h2>Sign into Altcoin Charter</h2>
-                    <div className="form-group">
-                        <label>Email:</label>
-                        <Field name="email"
-                            type="email" component={renderInput} />
-                    </div>
-                    <div className="form-group">
-                        <label>Password:</label>
-                        <Field name="password"
-                            type="password" component={renderInput} />
-                    </div>
-                    {this.renderAlert()}
-                    <button action="submit" className="btn btn-primary">Sign in</button>
-                </Form>
-                <h4>Dont have an account? Click <Link className="nav-link" to="/signup">here</Link> to sign up!</h4>
-            </div>
-        );
-    }
-}
-
-function mapStateToProps(state) {
-    return { 
-        errorMessage: state.auth.error
-    };
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-      signInAction: (data) => dispatch(signInAction(ownProps.history, data))
-    }
-};
-
-const reduxFormSignin = reduxForm({
-    form:'signin'
-})(Signin);
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(reduxFormSignin));
+export default withRouter(Signin);

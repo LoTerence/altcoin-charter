@@ -11,7 +11,7 @@ const {
   delCoinFromWatchlist,
 } = require("../controllers/users");
 
-// TODO: move all these callback functions to users.js controller
+// TODO: add a log out user route (maybe can be done in client)
 
 // Register
 router.post("/register", registerUser);

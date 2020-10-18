@@ -1,8 +1,8 @@
 // User authentication consts
-export const AUTH_USER = 'auth_user';
-export const UNAUTH_USER = 'unauth_user';
-export const AUTH_ERROR = 'auth_error';
-export const FETCH_MESSAGE = 'fetch_message';
+export const AUTH_USER = "auth_user";
+export const UNAUTH_USER = "unauth_user";
+export const AUTH_ERROR = "auth_error";
+export const FETCH_MESSAGE = "fetch_message";
 
 // coin list consts
 export const GET_COINS = "get_coins";
@@ -18,7 +18,7 @@ export const SET_TIMEFRAME = "set_timeframe";
 export const SET_ACTIVE_COIN = "set_active_coin";
 
 // Watchlist consts
-export const GET_COINS_WL ="get_coins_wl"; 
+export const GET_COINS_WL = "get_coins_wl";
 export const ADD_COIN_WL = "add_coin_wl";
 export const COIN_ERR_WL = "coin_err_wl";
 export const DEL_COIN_WL = "del_coin_wl";

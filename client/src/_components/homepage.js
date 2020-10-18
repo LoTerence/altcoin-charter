@@ -1,35 +1,33 @@
-import React, { Component } from 'react';
-import Charter from './charter/charter';
-import Header from './universal/header';
-import Footer from './universal/footer';
+import React from "react";
+import Charter from "./charter/charter";
+import Header from "./universal/Header";
+import Footer from "./universal/footer";
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from "react-router-dom";
 
-import Signin from './auth/signin';
-import Signout from './auth/signout';
-import Signup from './auth/signup';
+import Signin from "./auth/Signin";
+import Signout from "./auth/Signout";
+import Signup from "./auth/signup";
 import Feature from "./feature";
-import RequireAuth from './auth/require_auth';
+import PrivateRoute from "./auth/PrivateRoute";
+// import RequireAuth from "./auth/require_auth";
 
-class HomePage extends Component {
+function HomePage() {
+  return (
+    <>
+      <Header />
 
-    render() {
-        return(
-            <div >
-                <Header />
+      <Switch>
+        <Route exact path="/" component={Charter} />
+        <Route exact path="/signin" component={Signin} />
+        <Route exact path="/signup" component={Signup} />
+        <PrivateRoute path="/signout" component={Signout} />
+        <PrivateRoute path="/feature" component={Feature} />
+      </Switch>
 
-                <Switch>
-                    <Route exact path="/" component = {Charter} />
-                    <Route path="/signin" component={Signin} />
-                    <Route path="/signup" component={Signup} />
-                    <Route path="/signout" component={RequireAuth(Signout)} />
-                    <Route path="/feature" component={RequireAuth(Feature)} />
-                </Switch>
-
-                <Footer />
-            </div>
-        );
-    }
+      <Footer />
+    </>
+  );
 }
 
 export default HomePage;

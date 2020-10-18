@@ -1,20 +1,21 @@
-import React, { Component } from 'react'
-import { signOutAction } from '../../_store/actions/auth';
-import { connect } from 'react-redux';
+import React, { useEffect } from "react";
+import { withRouter } from "react-router-dom";
 
-class Signout extends Component {
+import { useDispatch } from "react-redux";
+import { signOutAction } from "../../_store/reducers/authSlice";
 
-  componentWillMount(){
-    this.props.signOutAction();
-  }
+function Signout() {
+  const dispatch = useDispatch();
 
-  render(){
-    return(
-      <div>
+  useEffect(() => {
+    dispatch(signOutAction());
+  });
+
+  return (
+    <div>
       <h1>You have been logged out</h1>
-      </div>
-    )
-  }
+    </div>
+  );
 }
 
-export default connect(null, {signOutAction})(Signout);
+export default withRouter(Signout);

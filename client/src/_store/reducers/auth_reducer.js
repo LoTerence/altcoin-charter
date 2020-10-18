@@ -1,23 +1,23 @@
-import { 
-    AUTH_USER, 
-    UNAUTH_USER, 
-    AUTH_ERROR, 
-    FETCH_MESSAGE 
-} from '../actions/constants';
+import {
+  AUTH_USER,
+  UNAUTH_USER,
+  AUTH_ERROR,
+  FETCH_MESSAGE,
+} from "../actions/constants";
 
-const authReducer = (state={}, action) => {
-    switch(action.type) {
-        case AUTH_USER:
-            return { ...state, error:'', authenticated:true };
-        case UNAUTH_USER:
-            return { ...state, authenticated:false };  
-        case AUTH_ERROR:
-            return { ...state, authenticated:false, error:action.payload };
-        case FETCH_MESSAGE:
-            return { ...state, message:action.payload };
-        default:
-            return { ...state};
-    }
-}
+const authReducer = (state = {}, action) => {
+  switch (action.type) {
+    case AUTH_USER:
+      return { ...state, error: "", authenticated: true };
+    case UNAUTH_USER:
+      return { ...state, authenticated: false };
+    case AUTH_ERROR:
+      return { ...state, authenticated: false, error: action.payload };
+    case FETCH_MESSAGE:
+      return { ...state, message: action.payload };
+    default:
+      return { ...state };
+  }
+};
 
 export default authReducer;
