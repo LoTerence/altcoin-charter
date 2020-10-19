@@ -9,7 +9,7 @@ function Signout() {
 
   useEffect(() => {
     dispatch(signOutAction());
-  });
+  }, [dispatch]); // do I need to include this [dispatch] ?
 
   return (
     <div>

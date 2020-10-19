@@ -1,45 +1,31 @@
 // Component for the unordered list of coins: CoinUList
 
 import React, { useEffect } from "react";
-import PropTypes, { func } from "prop-types";
-import { connect } from "react-redux";
-import { getCoins } from "../../_store/actions/coinList";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getCoinsAction,
+  selectCoinList,
+} from "../../_store/reducers/coinListSlice";
 import CoinLi from "./coinLi";
-import CoinAdder from "./coinAdder";
+import CoinAdder from "./CoinAdder";
 
-function CoinUList(props) {
-  // static propTypes = {
-  //   getCoins: PropTypes.func.isRequired,
-  //   coins: PropTypes.array.isRequired           //an array of coin objects
-  // }
-
-  // static defaultProps = {
-  //   coins: []
-  // }
+const CoinUList = () => {
+  const dispatch = useDispatch();
+  const coins = useSelector(selectCoinList).coins;
 
   useEffect(() => {
-    props.getCoins();
-  }, []);
+    dispatch(getCoinsAction());
+  }, [dispatch]);
 
   return (
     <div>
-      {props.coins.map((coin) => (
+      {coins.map((coin) => (
         <CoinLi key={coin.Id} coin={coin} />
       ))}
 
       <CoinAdder />
     </div>
   );
-}
-
-const mapStateToProps = (state) => ({
-  coins: state.coinList.coins,
-});
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getCoins: () => dispatch(getCoins()),
-  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoinUList);
+export default CoinUList;
