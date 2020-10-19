@@ -6,14 +6,14 @@
 import React from "react";
 import CoinUList from "./CoinUList";
 import PriceChart from "./priceChart";
-import CoinInfo from "./coinInfo";
-import TimeFrameList from "./timeFrameList";
-import CoinNameInfo from "./coinNameInfo";
+import CoinInfo from "./CoinInfo";
+import TimeFrameList from "./TimeFrameList";
+import CoinNameInfo from "./CoinNameInfo";
 
 export default function Charter() {
   return (
     <div>
-      <CoinNameInfo></CoinNameInfo>
+      <CoinNameInfo />
       <TimeFrameList />
       <PriceChart />
       <CoinInfo />

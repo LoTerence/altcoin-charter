@@ -6,9 +6,8 @@ import {
   getCoinData,
   getHistData,
   setActiveCoin,
-} from "../../_store/actions/histData";
-
-// TODO - histdata functionality
+  selectHistData,
+} from "../../_store/reducers/histDataSlice";
 
 // optional-TODO add onclick action for changing color
 // optional-TODO add onhover action
@@ -24,6 +23,7 @@ const coinLiStyle = {
 
 function CoinLi(props) {
   const dispatch = useDispatch();
+  const tf = useSelector(selectHistData).activeTimeframe;
   const COIN = props.coin;
 
   function handleDeleteCoin() {
@@ -31,10 +31,9 @@ function CoinLi(props) {
   }
 
   function handleSetActiveCoin() {
-    console.log("fix this");
-    // this.props.setActiveCoin();
-    // this.props.getCoinData();
-    // this.props.getHistData(this.props.activeTimeframe);
+    dispatch(setActiveCoin(COIN));
+    dispatch(getCoinData(COIN));
+    dispatch(getHistData(COIN, tf));
   }
 
   return (

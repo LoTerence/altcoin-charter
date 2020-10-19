@@ -6,7 +6,7 @@ import {
   getCoinsAction,
   selectCoinList,
 } from "../../_store/reducers/coinListSlice";
-import CoinLi from "./coinLi";
+import CoinLi from "./CoinLi";
 import CoinAdder from "./CoinAdder";
 
 const CoinUList = () => {
