@@ -1,14 +1,14 @@
 import React from "react";
 import Charter from "./charter/Charter";
 import Header from "./universal/Header";
-import Footer from "./universal/footer";
+import Footer from "./universal/Footer";
 
 import { Route, Switch } from "react-router-dom";
 
 import Signin from "./auth/Signin";
 import Signout from "./auth/Signout";
 import Signup from "./auth/Signup";
-import Feature from "./feature";
+import Feature from "./Feature";
 import PrivateRoute from "./auth/PrivateRoute";
 
 function HomePage() {
