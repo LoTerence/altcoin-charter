@@ -1,75 +1,58 @@
 // The block in the coinUList component that lets the user add a new AltCoin
 
 //TODO: add custom styling
+//TODO: add loading indicator
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { addCoin } from '../../_store/actions/coinList'; 
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCoinAction,
+  selectCoinList,
+} from "../../_store/reducers/coinListSlice";
 
-const renderInput = field => {
-    const { input, type } = field;
-    return (
-        <div>
-            <input {...input} type={type} className="form-control" placeholder="Altcoin Symbol, i.e. BTC, LTC..."/>
-        </div>
-    );
-}
+const CoinAdder = () => {
+  const dispatch = useDispatch();
+  const [symbol, setSymbol] = useState("");
+  const errorMessage = useSelector(selectCoinList).error;
 
-class CoinAdder extends Component {
-    handleFormSubmit(coin_symbol){
-        this.props.addCoin(coin_symbol);
+  function handleBtnClick(e) {
+    e.preventDefault();
+    dispatch(addCoinAction(symbol));
+    setSymbol("");
+  }
+
+  function renderAlert() {
+    if (errorMessage) {
+      return <div className="alert alert-danger">{errorMessage}</div>;
     }
+  }
 
-    renderAlert() {
-        if ( this.props.errorMessage ) {
-            return (
-                <div className="alert alert-danger">
-                    {this.props.errorMessage}
-                </div>
-            );
-        }   
-    } 
-
-    render() {
-        const { handleSubmit } = this.props;
-
-        return (
-            <div className="col-md-4 col-sm-6">
-                <label>Add a new coin to the list</label>
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                    <fieldset className="input-group">
-                        <Field
-                            name="symbol"
-                            component={renderInput} 
-                            type="string"
-                            />
-                        <span>
-                            <button className="btn btn-success" action="submit">Add</button>
-                        </span>
-                    </fieldset>
-                </form>
-                {this.renderAlert()}
-            </div>
-        )
-    }
-}
-
-const mapStateToProps = (state) => {  
-    return { 
-        errorMessage: state.coinList.error
-     };
+  return (
+    <div className="col-md-4 col-sm-6">
+      <label>Add a new coin to the list</label>
+      <form>
+        <fieldset className="input-group">
+          <input
+            name="symbol"
+            type="string"
+            className="form-control"
+            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+            value={symbol}
+            onChange={(e) => setSymbol(e.target.value)}
+          />
+          <span>
+            <button
+              className="btn btn-success"
+              onClick={(e) => handleBtnClick(e)}
+            >
+              Add
+            </button>
+          </span>
+        </fieldset>
+      </form>
+      {renderAlert()}
+    </div>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return{
-        addCoin: (coin_symbol) => dispatch(addCoin(coin_symbol))
-    };
-};
-
-const reduxFormCoinAdder = reduxForm({
-    form:'CoinAdder'
-})(CoinAdder);
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFormCoinAdder);
+export default CoinAdder;

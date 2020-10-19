@@ -2,7 +2,8 @@
 // import { reducer as formReducer } from "redux-form";
 // import authReducer from "./auth_reducer";
 import authReducer1 from "./authSlice";
-import coinListReducer from "./coinList";
+import coinListReducer1 from "./coinListSlice";
+// import coinListReducer from "./coinList";
 import histDataReducer from "./histData_reducer";
 import watchListReducer from "./watchList_reducer";
 
@@ -18,7 +19,7 @@ const rootReducer = {
   reducer: {
     // form: formReducer,
     auth: authReducer1,
-    coinList: coinListReducer,
+    coinList: coinListReducer1,
     histData: histDataReducer,
     watchList: watchListReducer,
   },

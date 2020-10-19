@@ -45,7 +45,6 @@ export const signInAction = (history, { email, password }) => (dispatch) => {
       }
     })
     .catch((err) => {
-      throw err;
       dispatch(authError("Bad Login Info"));
     });
 };

@@ -4,6 +4,7 @@ import Homepage from "./_components/Homepage";
 import { useDispatch } from "react-redux";
 import { authenticate } from "./_store/reducers/authSlice";
 
+// extract user from token then authenticate
 function App() {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
