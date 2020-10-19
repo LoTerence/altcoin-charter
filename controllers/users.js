@@ -99,7 +99,7 @@ exports.addCoinToWatchlist = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
 
-    // Chcek if the coin is already in the watchlist by comparing its symbol
+    // Check if the coin is already in the watchlist by comparing its symbol
     if (user.watchList.filter((e) => e.Symbol === newCoin.Symbol).length) {
       return res.json({
         success: false,
