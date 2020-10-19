@@ -1,12 +1,7 @@
-// import { combineReducers } from "redux";
-// import { reducer as formReducer } from "redux-form";
-// import authReducer from "./auth_reducer";
-import authReducer1 from "./authSlice";
-import coinListReducer1 from "./coinListSlice";
-import histDataReducer1 from "./histDataSlice";
-// import coinListReducer from "./coinList";
-// import histDataReducer from "./histData_reducer";
-import watchListReducer from "./watchList_reducer";
+import authReducer from "./authSlice";
+import coinListReducer from "./coinListSlice";
+import histDataReducer from "./histDataSlice";
+import watchListReducer from "./watchListSlice";
 
 // export default combineReducers({
 //   form: formReducer,
@@ -18,10 +13,9 @@ import watchListReducer from "./watchList_reducer";
 
 const rootReducer = {
   reducer: {
-    // form: formReducer,
-    auth: authReducer1,
-    coinList: coinListReducer1,
-    histData: histDataReducer1,
+    auth: authReducer,
+    coinList: coinListReducer,
+    histData: histDataReducer,
     watchList: watchListReducer,
   },
 };

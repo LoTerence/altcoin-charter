@@ -3,53 +3,44 @@
  * personal watchlist
  */
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { getCoins } from '../../../_store/actions/watchList';
-import CoinLi from './coinLi_wl';
-import CoinAdder from './coinAdder_wl';
-import { getProfile } from '../../../_store/actions/auth';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-class WatchList extends Component {
-  static propTypes = {
-    getCoins: PropTypes.func.isRequired,
-    coins: PropTypes.array.isRequired
-  }
+import {
+  getCoinsWLAction,
+  selectWatchList,
+} from "../../../_store/reducers/watchListSlice";
+import { getProfile, selectAuth } from "../../../_store/reducers/authSlice";
 
-  static defaultProps = {
-    coins: []
-  } 
+import CoinLi from "./CoinLi_wl";
+import CoinAdder from "./CoinAdder_wl";
 
-  componentWillMount() {
-    this.props.getCoins();
-    this.props.getProfile();
-  }
+const WatchList = () => {
+  const dispatch = useDispatch();
+  const profile = useSelector(selectAuth).message;
+  const coins = useSelector(selectWatchList).coins;
 
-  render() {
-    return (
-      <div>
-        <p><b>{this.props.profile}</b></p>
-        <p>Your personal watchlist of coins: Coins you add to this list will be saved to your account</p>
-        {this.props.coins.map(coin =>
-          <CoinLi key={coin.Id} coin={coin} />
-        )}
-        <CoinAdder />
-      </div>
-    );
-  }
-}
+  useEffect(() => {
+    console.log("Using effect in watchlist");
+    dispatch(getCoinsWLAction());
+    dispatch(getProfile());
+  }, [dispatch]);
 
-const mapStateToProps = (state) => ({
-  coins: state.watchList.coins,
-  profile: state.auth.message
-});
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getCoins: () => dispatch(getCoins()),
-    getProfile: () => dispatch(getProfile())
-  };
+  return (
+    <div>
+      <p>
+        <b>{profile}</b>
+      </p>
+      <p>
+        Your personal watchlist of coins: Coins you add to this list will be
+        saved to your account
+      </p>
+      {coins.map((coin) => (
+        <CoinLi key={coin.Id} coin={coin} />
+      ))}
+      <CoinAdder />
+    </div>
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WatchList);
+export default WatchList;

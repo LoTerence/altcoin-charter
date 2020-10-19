@@ -1,77 +1,78 @@
 /* coinAdder_wl.js
  * component that adds a new coin to watchlist
- * 
+ *
  * known issue: updating watchlist on the front end is noticeably slow
+ *
+ * TODO: add loading indicator
  */
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { addCoin } from '../../../_store/actions/watchList';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCoinWLAction,
+  selectWatchList,
+} from "../../../_store/reducers/watchListSlice";
 
-const renderInput = field => {
-    const { input, type } = field;
-    return (
-        <div>
-            <input {...input} type={type} className="form-control" placeholder="Altcoin Symbol, i.e. BTC, LTC..."/>
-        </div>
-    );
-}
+const CoinAdder_wl = () => {
+  const dispatch = useDispatch();
+  const [symbol, setSymbol] = useState("");
+  const errorMessage = useSelector(selectWatchList).error;
 
-class CoinAdder_wl extends Component {
+  function handleBtnClick(e) {
+    e.preventDefault();
+    dispatch(addCoinWLAction(symbol));
+    setSymbol("");
+  }
 
-    handleFormSubmit(coin_symbol){
-        this.props.addCoin(coin_symbol);
+  const renderAlert = () => {
+    if (errorMessage) {
+      return <div className="alert alert-danger">{errorMessage}</div>;
     }
+  };
 
-    renderAlert() {
-        if ( this.props.errorMessage ) {
-            return (
-                <div className="alert alert-danger">
-                    {this.props.errorMessage}
-                </div>
-            );
-        }   
-    } 
-
-    render() {
-        const { handleSubmit } = this.props;
-
-        return (
-            <div className="col-md-4 col-sm-6">
-                <label>Add a new coin to the list</label>
-                <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                    <fieldset className="input-group">
-                        <Field
-                            name="symbol"
-                            component={renderInput} 
-                            type="string"
-                            />
-                        <span>
-                            <button className="btn btn-success" action="submit">Add</button>
-                        </span>
-                    </fieldset>
-                </form>
-                {this.renderAlert()}
-            </div>
-        )
-    }
-}
-
-const mapStateToProps = (state) => {
-    return { 
-        errorMessage: state.watchList.error
-     };
+  return (
+    <div className="col-md-4 col-sm-6">
+      <label>Add a new coin to the list</label>
+      <form>
+        <fieldset className="input-group">
+          <input
+            name="symbol"
+            type="string"
+            className="form-control"
+            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+            value={symbol}
+            onChange={(e) => setSymbol(e.target.value)}
+          />
+          <span>
+            <button
+              className="btn btn-success"
+              action="submit"
+              onClick={(e) => handleBtnClick(e)}
+            >
+              Add
+            </button>
+          </span>
+        </fieldset>
+      </form>
+      {renderAlert()}
+    </div>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return{
-        addCoin: (coin_symbol) => dispatch(addCoin(coin_symbol))
-    };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     errorMessage: state.watchList.error,
+//   };
+// };
 
-const reduxFormCoinAdderwl = reduxForm({
-    form:'CoinAdder_wl'
-})(CoinAdder_wl);
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     addCoin: (coin_symbol) => dispatch(addCoin(coin_symbol)),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxFormCoinAdderwl);
+// const reduxFormCoinAdderwl = reduxForm({
+//   form: "CoinAdder_wl",
+// })(CoinAdder_wl);
+
+export default CoinAdder_wl;
