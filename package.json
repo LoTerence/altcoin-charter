@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "description": "Charts the histories of user saved cryptocurrencies",
   "main": "server.js",
+  "homepage": "https://peaceful-everglades-34159.herokuapp.com/",
   "engines": {
     "node": "12.18.3"
   },
