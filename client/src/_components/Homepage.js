@@ -16,13 +16,15 @@ function HomePage() {
     <>
       <Header />
 
-      <Switch>
-        <Route exact path="/" component={Charter} />
-        <Route exact path="/signin" component={Signin} />
-        <Route exact path="/signup" component={Signup} />
-        <PrivateRoute path="/signout" component={Signout} />
-        <PrivateRoute path="/feature" component={Feature} />
-      </Switch>
+      <div className="container">
+        <Switch>
+          <Route exact path="/" component={Charter} />
+          <Route exact path="/signin" component={Signin} />
+          <Route exact path="/signup" component={Signup} />
+          <PrivateRoute path="/signout" component={Signout} />
+          <PrivateRoute path="/feature" component={Feature} />
+        </Switch>
+      </div>
 
       <Footer />
     </>
