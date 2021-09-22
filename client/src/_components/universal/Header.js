@@ -47,8 +47,8 @@ function Header() {
   }
 
   return (
-    <nav className="navbar navbar-default">
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-md navbar-dark bg-success mb-2">
+      <div className="container flex-wrap flex-md-nowrap">
         <div className="navbar-header">
           <Link to="/" className="navbar-brand">
             {" "}
