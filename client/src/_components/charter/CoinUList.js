@@ -18,7 +18,7 @@ const CoinUList = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="d-flex flex-wrap ">
       {coins.map((coin) => (
         <CoinLi key={coin.Id} coin={coin} />
       ))}

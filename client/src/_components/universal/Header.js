@@ -48,14 +48,27 @@ function Header() {
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-success mb-2">
-      <div className="container flex-wrap flex-md-nowrap">
-        <div className="navbar-header">
-          <Link to="/" className="navbar-brand">
-            {" "}
-            Altcoin Charter{" "}
-          </Link>
+      <div className="container d-flex justify-content-between">
+        <Link to="/" className="navbar-brand">
+          {" "}
+          Altcoin Charter{" "}
+        </Link>
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarToggler">
+          <ul className="navbar-nav">{renderLinks()}</ul>
         </div>
-        <ul className="nav navbar-nav">{renderLinks()}</ul>
       </div>
     </nav>
   );
