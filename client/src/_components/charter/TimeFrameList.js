@@ -11,7 +11,10 @@ import {
   selectHistData,
 } from "../../_store/reducers/histDataSlice";
 
-// optional TODO: clean up the render function. The code works but its ugly
+const m1px = {
+  margin: "1px",
+  borderColor: "#ccc",
+};
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
@@ -30,49 +33,56 @@ const TimeFrameList = () => {
 
   const buttonList = [
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "1hour")}
       key={0}
     >
       1Hr
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm "
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "12hours")}
       key={1}
     >
       12Hrs
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "1day")}
       key={2}
     >
       Day
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "1week")}
       key={3}
     >
       Week
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "1month")}
       key={4}
     >
       Month
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "3months")}
       key={5}
     >
       3months
     </button>,
     <button
-      className="btn btn-default"
+      className="btn btn-outline-dark btn-sm"
+      style={m1px}
       onClick={(e) => handleClickEvent(e, "1year")}
       key={6}
     >
@@ -80,12 +90,14 @@ const TimeFrameList = () => {
     </button>,
   ];
 
+  // tfl is timeframe list
   let tfl = buttonList;
   switch (activeTimeframe) {
     case "1hour":
       tfl[0] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "1hour")}
           key={0}
         >
@@ -96,7 +108,8 @@ const TimeFrameList = () => {
     case "12hours":
       tfl[1] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "12hours")}
           key={1}
         >
@@ -107,7 +120,8 @@ const TimeFrameList = () => {
     case "1day":
       tfl[2] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "1day")}
           key={2}
         >
@@ -118,7 +132,8 @@ const TimeFrameList = () => {
     case "1week":
       tfl[3] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "1week")}
           key={3}
         >
@@ -129,7 +144,8 @@ const TimeFrameList = () => {
     case "1month":
       tfl[4] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "1month")}
           key={4}
         >
@@ -140,7 +156,8 @@ const TimeFrameList = () => {
     case "3months":
       tfl[5] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "3months")}
           key={5}
         >
@@ -151,7 +168,8 @@ const TimeFrameList = () => {
     case "1year":
       tfl[6] = (
         <button
-          className="btn btn-success"
+          className="btn btn-success btn-sm"
+          style={m1px}
           onClick={(e) => handleClickEvent(e, "1year")}
           key={6}
         >
@@ -164,7 +182,11 @@ const TimeFrameList = () => {
   }
 
   return (
-    <div>
+    <div
+      className="flex-wrap"
+      role="group"
+      aria-label="Timeframes button group"
+    >
       {tfl.map((btn) => {
         return btn;
       })}

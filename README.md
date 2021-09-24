@@ -1,8 +1,8 @@
 # Altcoin Charter
 
-> See the histories of cryptocurrencies you saved
+See the histories of cryptocurrencies you saved
 
-> Built with React + Redux front end and Nodejs, express, and MongoDB backend
+Built with React + Redux front end and Nodejs, express, and MongoDB backend
 
 Example of the app is deployed on:
 https://altcoin-charter.herokuapp.com/

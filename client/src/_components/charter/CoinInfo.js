@@ -14,7 +14,7 @@ const infoStyle = {
   border: "1px solid gold",
   borderRadius: "0px",
   background: "#fafafa",
-  margin: "10px",
+  margin: ".5rem 0",
   padding: "10px 10px",
 };
 
@@ -31,17 +31,20 @@ const CoinInfo = () => {
   }
 
   return (
-    <div className="container" style={infoStyle}>
-      <p>{activeCoin.CoinName}'s current Price:</p>
-      <div className="col-md-4">
+    <div
+      className="d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap"
+      style={infoStyle}
+    >
+      <div className="p-2 flex-fill">
+        <p>{activeCoin.CoinName}'s current Price:</p>
         <h1>{coinData.currentPrice}</h1>
         <p>{coinData.pctChange}% change today</p>
       </div>
-      <div className="col-md-4">
+      <div className="p-2 flex-fill">
         <p>Today's Open: {coinData.open}</p>
         <p>Change: {coinData.usdChange}</p>
       </div>
-      <div className="col-md-4">
+      <div className="p-2 flex-fill">
         <p>Today's High: {coinData.high}</p>
         <p>Today's Low: {coinData.low}</p>
       </div>
