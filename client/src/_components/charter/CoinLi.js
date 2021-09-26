@@ -8,23 +8,17 @@ import {
   setActiveCoin,
   selectHistData,
 } from "../../_store/reducers/histDataSlice";
-
-// optional-TODO add onclick action for changing color
-// optional-TODO add onhover action
-
-const coinLiStyle = {
-  border: "1px solid #BCED91",
-  borderLeft: "10px solid #BCED91",
-  borderRadius: "0px",
-  background: "#fafafa",
-  margin: "5px",
-  padding: "5px 10px",
-};
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function CoinLi(props) {
   const dispatch = useDispatch();
   const tf = useSelector(selectHistData).activeTimeframe;
   const COIN = props.coin;
+
+  const removeIcon = (
+    <FontAwesomeIcon icon={faTrashAlt} className="remove-icon" />
+  );
 
   function handleDeleteCoin() {
     dispatch(deleteCoinAction(COIN));
@@ -37,14 +31,11 @@ function CoinLi(props) {
   }
 
   return (
-    <div className="col-md-4 col-sm-6">
-      <div style={coinLiStyle}>
-        <span
-          className="glyphicon glyphicon-remove pull-right"
-          onClick={() => handleDeleteCoin()}
-        ></span>
+    <div className="col-md-4 col-sm-6 col-12">
+      <div className="coin-li">
+        <span onClick={() => handleDeleteCoin()}>{removeIcon}</span>
         <div onClick={() => handleSetActiveCoin()}>
-          <h4>{COIN.Name}</h4>
+          <h5>{COIN.Name}</h5>
           <p>{COIN.CoinName} price history, day's change</p>
         </div>
       </div>

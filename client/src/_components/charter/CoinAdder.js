@@ -28,27 +28,29 @@ const CoinAdder = () => {
   }
 
   return (
-    <div className="col-md-4 col-sm-6">
-      <label>Add a new coin to the list</label>
+    <div className="col-md-4 col-sm-6 col-12 p-2">
+      <label>Add new coin:</label>
       <form>
-        <fieldset className="input-group">
+        <div className="form-floating d-flex">
           <input
             name="symbol"
+            id="addNewCoinInput"
             type="string"
-            className="form-control"
+            className="form-control form-control-sm"
             placeholder="Altcoin Symbol, i.e. BTC, LTC..."
             value={symbol}
             onChange={(e) => setSymbol(e.target.value)}
           />
-          <span>
-            <button
-              className="btn btn-success"
-              onClick={(e) => handleBtnClick(e)}
-            >
-              Add
-            </button>
-          </span>
-        </fieldset>
+          <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput">
+            Altcoin Symbol, i.e. BTC, LTC...
+          </label>
+          <button
+            className="btn btn-success"
+            onClick={(e) => handleBtnClick(e)}
+          >
+            Add
+          </button>
+        </div>
       </form>
       {renderAlert()}
     </div>
