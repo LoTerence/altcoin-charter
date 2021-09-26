@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 function Signup() {
   const dispatch = useDispatch();
@@ -116,10 +118,10 @@ function Signup() {
             <hr className="my-4" />
 
             <button className="btn google-button btn-lg mb-2" type="submit">
-              <i className="fab fa-google me-2"></i> Sign in with Google
+              <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
             </button>
             <button className="btn fb-button btn-lg mb-2" type="submit">
-              <i className="fab fa-facebook-f me-2"></i>Sign in with Facebook
+              <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
             </button>
           </form>
           <br />

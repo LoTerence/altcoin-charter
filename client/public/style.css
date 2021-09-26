@@ -16,3 +16,28 @@
 .fb-button:hover {
   filter: brightness(90%);
 }
+
+.coin-li {
+  border: 1px solid #bced91;
+  border-left: 10px solid #bced91;
+  border-radius: 0px;
+  background: #fafafa;
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: .65rem;
+}
+
+.coin-li:hover {
+    filter: brightness(97%);
+    cursor: pointer;
+}
+
+.remove-icon {
+    float: right;
+    opacity: 85%;
+    padding: 1px;
+}
+
+.remove-icon:hover {
+    opacity: 1;
+}
