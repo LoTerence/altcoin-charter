@@ -35,10 +35,12 @@ const WatchList = () => {
         Your personal watchlist of coins: Coins you add to this list will be
         saved to your account
       </p>
-      {coins.map((coin) => (
-        <CoinLi key={coin.Id} coin={coin} />
-      ))}
-      <CoinAdder />
+      <div className="d-flex flex-wrap">
+        {coins.map((coin) => (
+          <CoinLi key={coin.Id} coin={coin} />
+        ))}
+        <CoinAdder />
+      </div>
     </div>
   );
 };
