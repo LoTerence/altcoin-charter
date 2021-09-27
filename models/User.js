@@ -26,14 +26,14 @@ UserSchema.plugin(uniqueValidator);
 // before saving a new user, salt and hash the password field
 UserSchema.pre("save", async function (next) {
   const user = this;
-  this.password = await bcrypt.hash(user.password, 10);
+  this.password = bcrypt.hashSync(user.password, 10);
   next();
 });
 
 // returns true if the password param matches the hashed password of the user this method is called on
 UserSchema.methods.isValidPassword = async function (password) {
   const user = this;
-  const compare = await bcrypt.compare(password, user.password);
+  const compare = bcrypt.compareSync(password, user.password);
   return compare;
 };
 

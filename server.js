@@ -50,7 +50,7 @@ app.use("/users", require("./routes/users"));
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //
 
 // Express only serves static assets in production
-// TODO: rebuild after revamping the client for 2020
+// TODO: rebuild after revamping the client for 2021
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 

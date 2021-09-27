@@ -11,6 +11,7 @@ exports.registerUser = async (req, res) => {
     watchList: [],
   });
 
+  // TODO: specify unique email error instead of returning email already registered for all errors
   User.addUser(newUser, (err, user) => {
     if (err) {
       console.log(err);
@@ -61,7 +62,7 @@ exports.authenticateUser = async (req, res) => {
           message: "User logged in",
         });
       } else {
-        return res.json({ success: false, message: "Wrong password" });
+        return res.json({ success: false, message: "Invalid password!" });
       }
     } catch (error) {
       throw error;
@@ -113,8 +114,7 @@ exports.addCoinToWatchlist = async (req, res) => {
       if (err)
         res.json({
           success: false,
-          msg:
-            "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
+          msg: "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
         });
       res.json({ success: true, newWatchList: user.watchList });
     });
@@ -141,8 +141,7 @@ exports.delCoinFromWatchlist = async (req, res) => {
       if (err)
         res.json({
           success: false,
-          msg:
-            "error deleting coin in routes/users.js - put(watchlist/delcoin)",
+          msg: "error deleting coin in routes/users.js - put(watchlist/delcoin)",
         });
       res.json({ success: true, newWatchList: user.watchList });
     });
