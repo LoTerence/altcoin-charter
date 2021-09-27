@@ -1,6 +1,7 @@
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+// const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("../models/User");
 
 const opts = {
@@ -22,6 +23,26 @@ passport.use(
     });
   })
 );
+
+// // TODOs: add facebook app id and secret to .env
+// // TODO: fill in User.findOrCreate function
+// passport.use(
+//   new FacebookStrategy(
+//     {
+//       clientID: FACEBOOK_APP_ID,
+//       clientSecret: FACEBOOK_APP_SECRET,
+//       callbackURL: "https://altcoin-charter.herokuapp.com/feature",
+//     },
+//     function (accessToken, refreshToken, profile, done) {
+//       User.findOrCreate(accessToken, function (err, user) {
+//         if (err) {
+//           return done(err);
+//         }
+//         done(null, user);
+//       });
+//     }
+//   )
+// );
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);

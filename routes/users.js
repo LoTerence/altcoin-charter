@@ -1,3 +1,4 @@
+const { application } = require("express");
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
@@ -25,6 +26,11 @@ router.get(
   passport.authenticate("jwt", { session: true }),
   getUserProfile
 );
+
+// // ----------------- Oauth 2.0 routes ------------------------------------------------///
+// // --- Facebook ---
+// router.get("/auth/facebook", passport.authenticate('facebook'));
+// router.get("/auth/facebook/callback", passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
 
 // ----------------- watchlist related functions ----------------------------------///
 
