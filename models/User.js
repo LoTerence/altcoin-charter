@@ -23,13 +23,6 @@ const UserSchema = mongoose.Schema({
 // pre-save validation for unique fields, returns mongoose validation error instead of E11000 error from MongoDB
 UserSchema.plugin(uniqueValidator);
 
-// before saving a new user, salt and hash the password field
-UserSchema.pre("save", async function (next) {
-  const user = this;
-  this.password = bcrypt.hashSync(user.password, 10);
-  next();
-});
-
 // returns true if the password param matches the hashed password of the user this method is called on
 UserSchema.methods.isValidPassword = async function (password) {
   const user = this;
@@ -41,6 +34,7 @@ const User = (module.exports = mongoose.model("User", UserSchema));
 
 // ------------------------------------------ Services ------------------------------------------ //
 module.exports.addUser = function (newUser, callback) {
+  newUser.password = bcrypt.hashSync(newUser.password, 10);
   newUser.save(callback);
 };
 
