@@ -47,10 +47,10 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
       histo = { timeUnit: "histominute", limit: 60 };
       break;
     case "12hours":
-      histo = { timeUnit: "histominute", limit: 720 };
+      histo = { timeUnit: "histominute", limit: 144 };
       break;
     case "1day":
-      histo = { timeUnit: "histominute", limit: 1440 };
+      histo = { timeUnit: "histominute", limit: 288 };
       break;
     case "1week":
       histo = { timeUnit: "histohour", limit: 168 };
@@ -79,10 +79,10 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
       let histData = [];
       //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
       for (let i = 0; i < res.data.Data.length; i++) {
-        let date = new Date(res.data.Data[i].time * 1000);
+        // let date = new Date(res.data.Data[i].time * 1000);
         let coord = {
-          x: date,
-          y: res.data.Data[i].close,
+          time: res.data.Data[i].time,
+          price: res.data.Data[i].close,
         };
         histData.push(coord);
       }
@@ -111,8 +111,6 @@ export const getCoinData = (coin) => (dispatch) => {
         high: res.data.DISPLAY.HIGH24HOUR,
         low: res.data.DISPLAY.LOW24HOUR,
         usdChange: res.data.DISPLAY.CHANGE24HOUR,
-        //marketCap: res.data.DISPLAY.,
-        //supply: res.data.DISPLAY.
       };
 
       dispatch(setCoinData(coindata));
