@@ -72,7 +72,7 @@ const PriceChart = () => {
         break;
       case "1year":
         tickDate = d.toLocaleDateString([], {
-          month: "long",
+          month: "short",
           year: "numeric",
         });
         break;
@@ -113,6 +113,9 @@ const PriceChart = () => {
             dataKey="time"
             domain={["dataMin", "dataMax"]}
             tickFormatter={formatXAxis}
+            angle={35}
+            dy={20}
+            tick={{ fontSize: 14 }}
           >
             <Label
               value={"Time"}
