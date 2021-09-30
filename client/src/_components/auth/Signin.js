@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signInAction, selectAuth } from "../../_store/reducers/authSlice";
+import {
+  signInAction,
+  selectAuth,
+  googleSignInAction,
+} from "../../_store/reducers/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -28,6 +32,16 @@ function Signin() {
       } catch (err) {
         setIsError(true);
       }
+    }
+  }
+
+  async function handleGoogleButtonClick(e) {
+    e.preventDefault();
+
+    try {
+      dispatch(googleSignInAction(history));
+    } catch (err) {
+      setIsError(true);
     }
   }
 
@@ -108,16 +122,21 @@ function Signin() {
             >
               Sign in
             </button>
-
-            <hr className="my-4" />
-
-            <button className="btn google-button btn-lg mb-2" type="submit">
-              <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
-            </button>
-            <button className="btn fb-button btn-lg mb-2" type="submit">
-              <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
-            </button>
           </form>
+
+          <hr className="my-4" />
+          {/* <form action="http://localhost:5000/users/google"> */}
+          {/* <button
+            className="btn google-button btn-lg mb-2"
+            type="submit"
+            onClick={(e) => handleGoogleButtonClick(e)}
+          >
+            <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+          </button>
+          {/* </form>
+          <button className="btn fb-button btn-lg mb-2" type="submit">
+            <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
+          </button> */}
           <br />
           <p>
             Dont have an account? Click <Link to="/signup">here</Link> to sign

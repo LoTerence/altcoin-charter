@@ -10,6 +10,7 @@ const {
   getUserWatchlist,
   addCoinToWatchlist,
   delCoinFromWatchlist,
+  authenticateUserGoogle,
 } = require("../controllers/users");
 
 // TODO: add a log out user route (maybe can be done in client)
@@ -31,6 +32,24 @@ router.get(
 // // --- Facebook ---
 // router.get("/auth/facebook", passport.authenticate('facebook'));
 // router.get("/auth/facebook/callback", passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
+
+// login with google OAuth
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
+  authenticateUserGoogle
+);
+
+// TODO: add and refine a logout function
+// logout function
+// router.get("/logout", (req, res) => {
+//   res.redirect("http://localhost:3000");
+// });
 
 // ----------------- watchlist related functions ----------------------------------///
 
