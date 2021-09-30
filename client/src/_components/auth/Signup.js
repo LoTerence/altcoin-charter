@@ -116,14 +116,13 @@ function Signup() {
               Sign Up
             </button>
             <hr className="my-4" />
-
-            <button className="btn google-button btn-lg mb-2" type="submit">
-              <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
-            </button>
-            <button className="btn fb-button btn-lg mb-2" type="submit">
-              <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
-            </button>
           </form>
+          {/* <button className="btn google-button btn-lg mb-2" type="submit">
+            <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+          </button>
+          <button className="btn fb-button btn-lg mb-2" type="submit">
+            <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
+          </button> */}
           <br />
           <p>
             Already have an account? Click <Link to="/signin">here</Link> to
