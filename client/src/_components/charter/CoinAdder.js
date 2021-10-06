@@ -9,16 +9,43 @@ import {
   addCoinAction,
   selectCoinList,
 } from "../../_store/reducers/coinListSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch, faSpin } from "@fortawesome/free-solid-svg-icons";
 
 const CoinAdder = () => {
   const dispatch = useDispatch();
   const [symbol, setSymbol] = useState("");
   const errorMessage = useSelector(selectCoinList).error;
+  const reqInProgress = useSelector(selectCoinList).reqInProgress;
 
   function handleBtnClick(e) {
     e.preventDefault();
     dispatch(addCoinAction(symbol));
     setSymbol("");
+  }
+
+  function renderAddButton() {
+    if (reqInProgress) {
+      return (
+        <button
+          className="btn btn-success"
+          onClick={(e) => handleBtnClick(e)}
+          disabled
+        >
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            className="fa-spin"
+            style={{ width: "37px" }}
+          />
+        </button>
+      );
+    } else {
+      return (
+        <button className="btn btn-success" onClick={(e) => handleBtnClick(e)}>
+          Add
+        </button>
+      );
+    }
   }
 
   function renderAlert() {
@@ -44,12 +71,8 @@ const CoinAdder = () => {
           <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput">
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
-          <button
-            className="btn btn-success"
-            onClick={(e) => handleBtnClick(e)}
-          >
-            Add
-          </button>
+
+          {renderAddButton()}
         </div>
       </form>
       {renderAlert()}
