@@ -9,6 +9,8 @@ export const watchListSlice = createSlice({
   name: "watchList",
   initialState: {
     coins: [],
+    reqInProgress: false,
+    error: "",
   },
   reducers: {
     setCoinsWL: (state, action) => {
@@ -17,6 +19,7 @@ export const watchListSlice = createSlice({
     addCoinWL: (state, action) => {
       const newCoin = action.payload;
       state.coins.push(newCoin);
+      state.reqInProgress = false;
       state.error = "";
     },
     deleteCoinWL: (state, action) => {
@@ -25,8 +28,12 @@ export const watchListSlice = createSlice({
       state.coins = coinsArr.filter((c) => c.Symbol !== sym);
       state.error = "";
     },
+    setReqInProgressWL: (state, action) => {
+      state.reqInProgress = action.payload;
+    },
     coinErrWL: (state, action) => {
       state.error = action.payload;
+      state.reqInProgress = false;
     },
   },
 });
@@ -35,6 +42,7 @@ export const {
   setCoinsWL,
   addCoinWL,
   deleteCoinWL,
+  setReqInProgressWL,
   coinErrWL,
 } = watchListSlice.actions;
 
@@ -57,6 +65,8 @@ export const getCoinsWLAction = () => (dispatch) => {
 
 // adding a coin to watchlist action
 export const addCoinWLAction = (newCoinSymbol) => (dispatch) => {
+  dispatch(setReqInProgressWL(true));
+
   const sym = newCoinSymbol.toUpperCase();
 
   axios

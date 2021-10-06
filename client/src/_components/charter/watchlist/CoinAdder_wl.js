@@ -12,16 +12,43 @@ import {
   addCoinWLAction,
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch, faSpin } from "@fortawesome/free-solid-svg-icons";
 
 const CoinAdder_wl = () => {
   const dispatch = useDispatch();
   const [symbol, setSymbol] = useState("");
   const errorMessage = useSelector(selectWatchList).error;
+  const reqInProgress = useSelector(selectWatchList).reqInProgress;
 
   function handleBtnClick(e) {
     e.preventDefault();
     dispatch(addCoinWLAction(symbol));
     setSymbol("");
+  }
+
+  function renderAddButton() {
+    if (reqInProgress) {
+      return (
+        <button
+          className="btn btn-success"
+          onClick={(e) => handleBtnClick(e)}
+          disabled
+        >
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            className="fa-spin"
+            style={{ width: "37px" }}
+          />
+        </button>
+      );
+    } else {
+      return (
+        <button className="btn btn-success" onClick={(e) => handleBtnClick(e)}>
+          Add
+        </button>
+      );
+    }
   }
 
   const renderAlert = () => {
@@ -47,13 +74,7 @@ const CoinAdder_wl = () => {
           <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput2">
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
-          <button
-            className="btn btn-success"
-            action="submit"
-            onClick={(e) => handleBtnClick(e)}
-          >
-            Add
-          </button>
+          {renderAddButton()}
         </div>
       </form>
       {renderAlert()}

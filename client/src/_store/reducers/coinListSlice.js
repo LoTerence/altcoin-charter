@@ -5,6 +5,8 @@ export const coinListSlice = createSlice({
   name: "coinList",
   initialState: {
     coins: [],
+    reqInProgress: false,
+    error: "",
   },
   reducers: {
     getCoins: (state, action) => {
@@ -13,6 +15,7 @@ export const coinListSlice = createSlice({
     addCoin: (state, action) => {
       const newCoin = action.payload;
       state.coins.push(newCoin);
+      state.reqInProgress = false;
       state.error = "";
     },
     deleteCoin: (state, action) => {
@@ -21,13 +24,18 @@ export const coinListSlice = createSlice({
       state.coins = coinsArr.filter((c) => c.Symbol !== sym);
       state.error = "";
     },
+    setReqInProgress: (state, action) => {
+      state.reqInProgress = action.payload;
+    },
     coinErr: (state, action) => {
       state.error = action.payload;
+      state.reqInProgress = false;
     },
   },
 });
 
-export const { getCoins, addCoin, deleteCoin, coinErr } = coinListSlice.actions;
+export const { getCoins, addCoin, deleteCoin, setReqInProgress, coinErr } =
+  coinListSlice.actions;
 
 // Async thunks
 // GET COINS -- action creator that sends a list of coins from db to reducer/state
@@ -47,8 +55,10 @@ export const getCoinsAction = () => (dispatch) => {
 };
 
 // ADD COIN method
-//TODO(if you want) add by coinname as well as symbol
+// TODO(if you want): add by coinname as well as symbol
 export const addCoinAction = (newCoinSymbol) => (dispatch) => {
+  dispatch(setReqInProgress(true));
+
   const sym = newCoinSymbol.toUpperCase(); //convert newCoinSymbol param to uppercase string
 
   axios
