@@ -9,6 +9,8 @@ component that will display the active coin's day's data including current price
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 const infoStyle = {
   border: "1px solid gold",
@@ -16,18 +18,36 @@ const infoStyle = {
   background: "#fafafa",
   margin: ".5rem 0",
   padding: "10px 10px",
+  position: "relative",
 };
 
 const CoinInfo = () => {
   const activeCoin = useSelector(selectHistData).activeCoin;
   const coinData = useSelector(selectHistData).coinData;
+  const fetchHistInProgress = useSelector(selectHistData).fetchHistInProgress;
+  const fetchCoinInProgress = useSelector(selectHistData).fetchCoinInProgress;
 
   if (!activeCoin || !coinData || !activeCoin.Name) {
     return (
       <div className="alert alert-warning">
+        {renderLoading()}
         Select a coin from the list below to see its data
       </div>
     );
+  }
+
+  function renderLoading() {
+    if (fetchHistInProgress || fetchCoinInProgress) {
+      return (
+        <div className="coin-info-loading">
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            className="fa-spin fa-3x"
+            // style={{ width: "2rem" }}
+          />
+        </div>
+      );
+    }
   }
 
   return (
@@ -35,6 +55,7 @@ const CoinInfo = () => {
       className="d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap"
       style={infoStyle}
     >
+      {renderLoading()}
       <div className="p-2 flex-fill">
         <p>{activeCoin.CoinName}'s current Price:</p>
         <h1>{coinData.currentPrice}</h1>

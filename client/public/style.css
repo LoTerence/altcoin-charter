@@ -28,18 +28,30 @@
 }
 
 .coin-li:hover {
-    filter: brightness(97%);
+    filter: brightness(95%);
     cursor: pointer;
 }
 
 .remove-icon {
     float: right;
-    opacity: 85%;
-    padding: 1px;
+    opacity: 80%;
 }
 
 .remove-icon:hover {
     opacity: 1;
 }
 
-
+.coin-info-loading {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #fafafa;
+  opacity: 95%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

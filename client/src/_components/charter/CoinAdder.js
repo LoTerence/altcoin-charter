@@ -10,7 +10,7 @@ import {
   selectCoinList,
 } from "../../_store/reducers/coinListSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch, faSpin } from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 const CoinAdder = () => {
   const dispatch = useDispatch();
