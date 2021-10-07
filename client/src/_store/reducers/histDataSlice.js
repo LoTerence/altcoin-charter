@@ -10,19 +10,30 @@ export const histDataSlice = createSlice({
   initialState: {
     activeCoin: {},
     activeTimeframe: "1day",
+    fetchHistInProgress: false,
+    fetchCoinInProgress: false,
+    error: "",
   },
   reducers: {
     setHistData: (state, action) => {
       state.histData = action.payload;
+      state.fetchHistInProgress = false;
     },
     setCoinData: (state, action) => {
       state.coinData = action.payload;
+      state.fetchCoinInProgress = false;
     },
     setTimeFrame: (state, action) => {
       state.activeTimeframe = action.payload;
     },
     setActiveCoin: (state, action) => {
       state.activeCoin = action.payload;
+    },
+    setFetchHistInProgress: (state, action) => {
+      state.fetchHistInProgress = action.payload;
+    },
+    setFetchCoinInProgress: (state, action) => {
+      state.fetchCoinInProgress = action.payload;
     },
     histDataErr: (state, action) => {
       state.error = action.payload;
@@ -35,12 +46,15 @@ export const {
   setCoinData,
   setTimeFrame,
   setActiveCoin,
+  setFetchHistInProgress,
+  setFetchCoinInProgress,
   histDataErr,
 } = histDataSlice.actions;
 
 // Async thunks
 // get the historical data from the cryptocompare api and save it to histData
 export const getHistData = (coin, timeframe) => (dispatch) => {
+  dispatch(setFetchHistInProgress(true));
   let histo;
   switch (timeframe) {
     case "1hour":
@@ -93,12 +107,14 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
       console.log(
         "error in getHistData method api call to cryptocompare.com: \n" + err
       );
-      dispatch(histDataErr("err"));
+      dispatch(histDataErr("error fetching data from cryptocompare.com"));
+      dispatch(setFetchHistInProgress(false));
     });
 };
 
 // Get the coin data from the cryptocompare api and save it to coinData
 export const getCoinData = (coin) => (dispatch) => {
+  dispatch(setFetchCoinInProgress(true));
   axios
     .get(
       `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coin.Name}&tsym=USD&e=CCCAGG`
@@ -117,17 +133,10 @@ export const getCoinData = (coin) => (dispatch) => {
     })
     .catch((err) => {
       console.log("error in getCoinData function api request: \n" + err);
-      dispatch(histDataErr("err"));
+      dispatch(histDataErr("error fetching data from cryptocompare.com"));
+      dispatch(setFetchCoinInProgress(false));
     });
 };
-
-// export const setActiveTimeframe = (timeframe) => (dispatch) => {
-//   dispatch(setTimeFrame(timeframe));
-// };
-
-// export const setActiveCoinAction = (coin) => (dispatch) => {
-//   dispatch(setActiveCoin(coin));
-// };
 
 // Selector
 export const selectHistData = (state) => state.histData;
