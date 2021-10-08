@@ -58,7 +58,7 @@ const CoinAdder = () => {
     if (reqInProgress) {
       return (
         <button
-          className="btn btn-success"
+          className="btn btn-success add-button-loading"
           onClick={(e) => handleBtnClick(e)}
           disabled
         >
@@ -71,7 +71,10 @@ const CoinAdder = () => {
       );
     } else {
       return (
-        <button className="btn btn-success" onClick={(e) => handleBtnClick(e)}>
+        <button
+          className="btn btn-success add-button"
+          onClick={(e) => handleBtnClick(e)}
+        >
           Add
         </button>
       );

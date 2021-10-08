@@ -71,3 +71,14 @@
 .suggestion:hover{
   background-color: silver;
 }
+
+.add-button {
+  z-index: 1020;
+}
+
+.add-button-loading {
+  z-index: 1020;
+  opacity: 1 !important;
+  background-color: #72A68E !important;
+  border-color: #5A987B !important;
+}
