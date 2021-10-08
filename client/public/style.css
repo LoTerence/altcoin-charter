@@ -55,3 +55,19 @@
   justify-content: center;
   align-items: center;
 }
+
+.suggestions{
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  
+}
+
+.suggestion{
+  cursor:pointer;
+  padding-left: 5px;
+}
+
+.suggestion:hover{
+  background-color: silver;
+}
