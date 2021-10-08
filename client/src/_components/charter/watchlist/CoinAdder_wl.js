@@ -1,25 +1,51 @@
 /* coinAdder_wl.js
  * component that adds a new coin to watchlist
- *
- * known issue: updating watchlist on the front end is noticeably slow
- *
- * TODO: add loading indicator
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import {
   addCoinWLAction,
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch, faSpin } from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 const CoinAdder_wl = () => {
   const dispatch = useDispatch();
   const [symbol, setSymbol] = useState("");
+  const [symbols, setSymbols] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const errorMessage = useSelector(selectWatchList).error;
   const reqInProgress = useSelector(selectWatchList).reqInProgress;
+
+  useEffect(() => {
+    const loadSymbols = async () => {
+      const res = await axios.get(
+        "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
+      );
+      setSymbols(Object.values(res.data.Data));
+    };
+    loadSymbols();
+  }, []);
+
+  const onChangeHandler = (e) => {
+    setSymbol(e);
+    let matches = [];
+    if (e.length > 0) {
+      matches = symbols.filter((sym) => {
+        const regex = new RegExp(`${e}`, "gi");
+        return sym.Symbol.match(regex);
+      });
+    }
+    setSuggestions(matches);
+  };
+
+  const onSuggestHandler = (text) => {
+    setSymbol(text);
+    setSuggestions([]);
+  };
 
   function handleBtnClick(e) {
     e.preventDefault();
@@ -31,7 +57,7 @@ const CoinAdder_wl = () => {
     if (reqInProgress) {
       return (
         <button
-          className="btn btn-success"
+          className="btn btn-success add-button-loading"
           onClick={(e) => handleBtnClick(e)}
           disabled
         >
@@ -44,9 +70,35 @@ const CoinAdder_wl = () => {
       );
     } else {
       return (
-        <button className="btn btn-success" onClick={(e) => handleBtnClick(e)}>
+        <button
+          className="btn btn-success add-button"
+          onClick={(e) => handleBtnClick(e)}
+        >
           Add
         </button>
+      );
+    }
+  }
+
+  function renderSuggestions() {
+    if (suggestions.length > 0) {
+      let suggestions_s = suggestions.sort((a, b) => {
+        return a.Id - b.Id;
+      });
+      return (
+        <div className="suggestions">
+          {suggestions_s.slice(0, 10).map((suggestion) => {
+            return (
+              <div
+                key={suggestion.Id}
+                className="suggestion"
+                onClick={() => onSuggestHandler(suggestion.Symbol)}
+              >
+                {suggestion.FullName}
+              </div>
+            );
+          })}
+        </div>
       );
     }
   }
@@ -69,33 +121,25 @@ const CoinAdder_wl = () => {
             className="form-control form-control-sm"
             placeholder="Altcoin Symbol, i.e. BTC, LTC..."
             value={symbol}
-            onChange={(e) => setSymbol(e.target.value)}
+            onChange={(e) => onChangeHandler(e.target.value)}
+            autoComplete="off"
+            onBlur={() => {
+              setTimeout(() => {
+                setSuggestions([]);
+              }, 100);
+            }}
           />
           <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput2">
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
           {renderAddButton()}
         </div>
+        {renderSuggestions()}
       </form>
+
       {renderAlert()}
     </div>
   );
 };
-
-// const mapStateToProps = (state) => {
-//   return {
-//     errorMessage: state.watchList.error,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addCoin: (coin_symbol) => dispatch(addCoin(coin_symbol)),
-//   };
-// };
-
-// const reduxFormCoinAdderwl = reduxForm({
-//   form: "CoinAdder_wl",
-// })(CoinAdder_wl);
 
 export default CoinAdder_wl;
