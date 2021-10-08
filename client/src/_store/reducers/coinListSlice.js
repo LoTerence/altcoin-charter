@@ -85,6 +85,7 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
             }
           })
           .catch((err) => {
+            dispatch(coinErr("There was an error fetching new coin data"));
             console.log("error in posting to coins_unauth in addcoin action: ");
             throw err;
           });

@@ -1,5 +1,7 @@
 const Coin = require("../models/Coin");
 
+// TODO: clean up this file so there are better status codes and returns more informative data
+
 // @desc Get list of all public coins
 // @route GET /coins_unauth/coinList
 // @access only from client
@@ -35,7 +37,7 @@ exports.addCoin = async (req, res) => {
     });
   } catch (err) {
     if (err.name === "ValidationError") {
-      return res.status(400).json({
+      return res.status(200).json({
         success: false,
         error: "There is already a coin with this symbol: " + req.body.Symbol,
       });
