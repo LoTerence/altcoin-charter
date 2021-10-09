@@ -25,20 +25,47 @@
   margin: 5px;
   padding: 5px 10px;
   font-size: .65rem;
+  position: relative;
 }
 
 .coin-li:hover {
-    filter: brightness(95%);
+    filter: brightness(90%);
+    cursor: pointer;
+}
+
+.coin-li:focus {
+  box-shadow: 0 0 5px 5px rgb(155, 228, 155);
+}
+
+.coin-li-active {
+  border: 2px solid #006A4E;
+  border-left: 10px solid #006A4E;
+  border-radius: 0px;
+  background: rgb(68, 136, 68);
+  color: white;
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: .9rem;
+  position: relative;
+}
+
+.coin-li-active:hover {
+  filter: brightness(90%);
     cursor: pointer;
 }
 
 .remove-icon {
-    float: right;
-    opacity: 80%;
+    /* float: right; */
+    opacity: 75%;
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    font-size: .65rem;
 }
 
 .remove-icon:hover {
     opacity: 1;
+    cursor: pointer;
 }
 
 .coin-info-loading {
@@ -70,4 +97,15 @@
 
 .suggestion:hover{
   background-color: silver;
+}
+
+.add-button {
+  z-index: 1020;
+}
+
+.add-button-loading {
+  z-index: 1020;
+  opacity: 1 !important;
+  background-color: #72A68E !important;
+  border-color: #5A987B !important;
 }
