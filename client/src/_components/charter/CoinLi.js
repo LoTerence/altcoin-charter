@@ -14,11 +14,10 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 function CoinLi(props) {
   const dispatch = useDispatch();
   const tf = useSelector(selectHistData).activeTimeframe;
+  const activeCoin = useSelector(selectHistData).activeCoin;
   const COIN = props.coin;
 
-  const removeIcon = (
-    <FontAwesomeIcon icon={faTrashAlt} className="remove-icon" />
-  );
+  const removeIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 
   function handleDeleteCoin() {
     dispatch(deleteCoinAction(COIN));
@@ -32,12 +31,17 @@ function CoinLi(props) {
 
   return (
     <div className="col-md-4 col-sm-6 col-12">
-      <div className="coin-li">
-        <span onClick={() => handleDeleteCoin()}>{removeIcon}</span>
+      <div
+        className={COIN == activeCoin ? "coin-li-active" : "coin-li"}
+        tabIndex="0"
+      >
         <div onClick={() => handleSetActiveCoin()}>
           <h5>{COIN.Name}</h5>
           <p>{COIN.CoinName} price history, day's change</p>
         </div>
+        <span className="remove-icon" onClick={() => handleDeleteCoin()}>
+          {removeIcon}
+        </span>
       </div>
     </div>
   );
