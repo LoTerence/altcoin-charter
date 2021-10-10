@@ -4,12 +4,14 @@ This is the Redux state slice for state related to the personal watchlist of a u
 
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setDeletingCoinId } from "./coinListSlice";
 
 export const watchListSlice = createSlice({
   name: "watchList",
   initialState: {
     coins: [],
     reqInProgress: false,
+    deletingCoinId: "",
     error: "",
   },
   reducers: {
@@ -31,6 +33,9 @@ export const watchListSlice = createSlice({
     setReqInProgressWL: (state, action) => {
       state.reqInProgress = action.payload;
     },
+    setDeletingCoinIdWL: (state, action) => {
+      state.deletingCoinId = action.payload;
+    },
     coinErrWL: (state, action) => {
       state.error = action.payload;
       state.reqInProgress = false;
@@ -43,6 +48,7 @@ export const {
   addCoinWL,
   deleteCoinWL,
   setReqInProgressWL,
+  setDeletingCoinIdWL,
   coinErrWL,
 } = watchListSlice.actions;
 
@@ -117,7 +123,9 @@ export const addCoinWLAction = (newCoinSymbol) => (dispatch) => {
 };
 
 // Delete coin from watchlist action
-export const deleteCoinWLAction = (coin) => (dispatch) => {
+export const deleteCoinWLAction = (coin, id) => (dispatch) => {
+  dispatch(setDeletingCoinIdWL(id));
+
   const sym = coin.Symbol;
   console.log("Deleting coin: " + sym);
   axios
@@ -129,13 +137,16 @@ export const deleteCoinWLAction = (coin) => (dispatch) => {
     .then((res) => {
       if (res.data.success) {
         dispatch(deleteCoinWL(sym));
+        dispatch(setDeletingCoinIdWL(""));
       } else {
         dispatch(coinErrWL(res.data.msg));
+        dispatch(setDeletingCoinIdWL(""));
       }
     })
     .catch((err) => {
       console.log(err);
       dispatch(coinErrWL("There was a server error while putting to delcoin"));
+      dispatch(setDeletingCoinIdWL(""));
     });
 };
 

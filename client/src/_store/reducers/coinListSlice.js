@@ -6,6 +6,7 @@ export const coinListSlice = createSlice({
   initialState: {
     coins: [],
     reqInProgress: false,
+    deletingCoinId: "",
     error: "",
   },
   reducers: {
@@ -27,6 +28,9 @@ export const coinListSlice = createSlice({
     setReqInProgress: (state, action) => {
       state.reqInProgress = action.payload;
     },
+    setDeletingCoinId: (state, action) => {
+      state.deletingCoinId = action.payload;
+    },
     coinErr: (state, action) => {
       state.error = action.payload;
       state.reqInProgress = false;
@@ -34,8 +38,14 @@ export const coinListSlice = createSlice({
   },
 });
 
-export const { getCoins, addCoin, deleteCoin, setReqInProgress, coinErr } =
-  coinListSlice.actions;
+export const {
+  getCoins,
+  addCoin,
+  deleteCoin,
+  setReqInProgress,
+  setDeletingCoinId,
+  coinErr,
+} = coinListSlice.actions;
 
 // Async thunks
 // GET COINS -- action creator that sends a list of coins from db to reducer/state
@@ -101,7 +111,9 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
 };
 
 // DELETE COIN
-export const deleteCoinAction = (coin) => (dispatch) => {
+export const deleteCoinAction = (coin, id) => (dispatch) => {
+  dispatch(setDeletingCoinId(id));
+
   const sym = coin.Symbol;
   console.log("Deleting coin: " + sym);
   axios
@@ -109,15 +121,20 @@ export const deleteCoinAction = (coin) => (dispatch) => {
     .then((res) => {
       if (res.data.success) {
         dispatch(deleteCoin(sym));
+        dispatch(setDeletingCoinId(""));
       } else {
         dispatch(coinErr("Something went wrong while deleting coin"));
+        dispatch(setDeletingCoinId(""));
       }
     })
     .catch((err) => {
       console.log(err);
-      coinErr(
-        "There was an error deleting from coins_unauth in deleteCoin action"
+      dispatch(
+        coinErr(
+          "There was an error deleting from coins_unauth in deleteCoin action"
+        )
       );
+      dispatch(setDeletingCoinId(""));
     });
 };
 
