@@ -1,7 +1,10 @@
 // a <li> element modified to display coins: coinLi
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCoinAction } from "../../_store/reducers/coinListSlice";
+import {
+  deleteCoinAction,
+  selectCoinList,
+} from "../../_store/reducers/coinListSlice";
 import {
   getCoinData,
   getHistData,
@@ -10,23 +13,39 @@ import {
 } from "../../_store/reducers/histDataSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 function CoinLi(props) {
   const dispatch = useDispatch();
   const tf = useSelector(selectHistData).activeTimeframe;
+  const deletingCoinId = useSelector(selectCoinList).deletingCoinId;
   const activeCoin = useSelector(selectHistData).activeCoin;
   const COIN = props.coin;
 
   const removeIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 
   function handleDeleteCoin() {
-    dispatch(deleteCoinAction(COIN));
+    dispatch(deleteCoinAction(COIN, COIN.Id));
   }
 
   function handleSetActiveCoin() {
     dispatch(setActiveCoin(COIN));
     dispatch(getCoinData(COIN));
     dispatch(getHistData(COIN, tf));
+  }
+
+  function renderDeleteButton() {
+    if (COIN.Id === deletingCoinId) {
+      return (
+        <FontAwesomeIcon icon={faCircleNotch} className="remove-icon fa-spin" />
+      );
+    }
+
+    return (
+      <span className="remove-icon" onClick={() => handleDeleteCoin()}>
+        {removeIcon}
+      </span>
+    );
   }
 
   return (
@@ -39,9 +58,7 @@ function CoinLi(props) {
           <h5>{COIN.Name}</h5>
           <p>{COIN.CoinName} price history, day's change</p>
         </div>
-        <span className="remove-icon" onClick={() => handleDeleteCoin()}>
-          {removeIcon}
-        </span>
+        {renderDeleteButton()}
       </div>
     </div>
   );
