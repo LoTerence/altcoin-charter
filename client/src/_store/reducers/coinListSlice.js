@@ -60,6 +60,7 @@ export const getCoinsAction = () => (dispatch) => {
       }
     })
     .catch((err) => {
+      console.log(err);
       dispatch(coinErr("Something went wrong while getting coin list"));
     });
 };
