@@ -4,7 +4,6 @@ This is the Redux state slice for state related to the personal watchlist of a u
 
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { setDeletingCoinId } from "./coinListSlice";
 
 export const watchListSlice = createSlice({
   name: "watchList",

@@ -8,6 +8,7 @@ import axios from "axios";
 import {
   addCoinWLAction,
   selectWatchList,
+  coinErrWL,
 } from "../../../_store/reducers/watchListSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,7 @@ const CoinAdder_wl = () => {
   const [symbol, setSymbol] = useState("");
   const [symbols, setSymbols] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const coins = useSelector(selectWatchList).coins;
   const errorMessage = useSelector(selectWatchList).error;
   const reqInProgress = useSelector(selectWatchList).reqInProgress;
 
@@ -49,8 +51,28 @@ const CoinAdder_wl = () => {
 
   function handleBtnClick(e) {
     e.preventDefault();
-    dispatch(addCoinWLAction(symbol));
+
+    if (symbol === "") {
+      dispatch(coinErrWL("Input required"));
+      return;
+    }
+
+    const iChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (iChars.test(symbol)) {
+      dispatch(coinErrWL("No special characters allowed"));
+      return;
+    }
+
+    const sym = symbol.toUpperCase();
+
+    if (coins.some((c) => c.Symbol === sym)) {
+      dispatch(coinErrWL(sym + " is already in your watchlist"));
+      return;
+    }
+
+    dispatch(addCoinWLAction(sym));
     setSymbol("");
+    setSuggestions([]);
   }
 
   function renderAddButton() {

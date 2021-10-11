@@ -8,6 +8,7 @@ import axios from "axios";
 import {
   addCoinAction,
   selectCoinList,
+  coinErr,
 } from "../../_store/reducers/coinListSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,7 @@ const CoinAdder = () => {
   const [symbol, setSymbol] = useState("");
   const [symbols, setSymbols] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const coins = useSelector(selectCoinList).coins;
   const errorMessage = useSelector(selectCoinList).error;
   const reqInProgress = useSelector(selectCoinList).reqInProgress;
 
@@ -49,7 +51,26 @@ const CoinAdder = () => {
 
   function handleBtnClick(e) {
     e.preventDefault();
-    dispatch(addCoinAction(symbol));
+
+    if (symbol === "") {
+      dispatch(coinErr("Input required"));
+      return;
+    }
+
+    const iChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (iChars.test(symbol)) {
+      dispatch(coinErr("No special characters allowed"));
+      return;
+    }
+
+    const sym = symbol.toUpperCase();
+
+    if (coins.some((c) => c.Symbol === sym)) {
+      dispatch(coinErr(sym + " is already in the list of coins"));
+      return;
+    }
+
+    dispatch(addCoinAction(sym));
     setSymbol("");
     setSuggestions([]);
   }
