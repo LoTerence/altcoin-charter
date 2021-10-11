@@ -93,6 +93,7 @@ export const signUpAction =
           localStorage.setItem("token", res.data.token);
           history.push("/feature");
         } else {
+          console.log(res.data.message);
           dispatch(authError(res.data.message));
         }
       })
@@ -101,7 +102,7 @@ export const signUpAction =
       });
   };
 
-// App.js:14 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMSIsImlhdCI6MTYwMjczMDI1OCwiZXhwIjoxNjAyOTAzMDU4fQ._uG_qHD0Vd3aDbCxiDMF2CHWujS02ayVF51nJNrJrl4
+// App.js:14
 export const signOutAction = () => (dispatch) => {
   localStorage.removeItem("token");
   dispatch(unauthenticate());

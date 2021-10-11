@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import * as EmailValidator from "email-validator";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 function Signup() {
   const dispatch = useDispatch();
@@ -19,34 +20,54 @@ function Signup() {
     return <Redirect to={"/feature"} />;
   }
 
-  if (authSelector.error !== "") {
-    setIsError(true);
-    setMessage(authSelector.error);
-  }
-
   async function handleFormSubmit(e) {
     e.preventDefault();
+
+    if (email === "") {
+      setMessage("Email field should not be empty");
+      setIsError(true);
+      return;
+    }
+
+    if (!EmailValidator.validate(email)) {
+      setMessage("Invalid email");
+      setIsError(true);
+      return;
+    }
+
+    if (password1.length < 6) {
+      setMessage("Password length should be at least 6 characters");
+      setIsError(true);
+      return;
+    }
 
     if (password1 !== password2) {
       setMessage("Passwords do not match!");
       setIsError(true);
-    } else if (email === "") {
-      setMessage("Email field empty");
+      return;
+    }
+
+    try {
+      dispatch(signUpAction(history, { email, password: password1 }));
+    } catch (err) {
+      console.log(err);
       setIsError(true);
-    } else {
-      try {
-        dispatch(signUpAction(history, { email, password: password1 }));
-      } catch (err) {
-        setIsError(true);
-      }
     }
   }
 
   function renderAlert() {
+    if (authSelector.error) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {authSelector.error}
+        </div>
+      );
+    }
+
     if (isError) {
       return (
         <div className="alert alert-danger">
-          <strong>Oops!</strong>
+          <strong>Oops! </strong>
           {message}
         </div>
       );

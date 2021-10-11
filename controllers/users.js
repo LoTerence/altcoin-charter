@@ -15,10 +15,9 @@ exports.registerUser = async (req, res) => {
   User.addUser(newUser, (err, user) => {
     if (err) {
       console.log(err);
-      // res.json({ success: false, message: "Email already registered" });
       res.json({
         success: false,
-        message: "Something went wrong with registering",
+        message: "Email already registered",
       });
     } else {
       const data = {

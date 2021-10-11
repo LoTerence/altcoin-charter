@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   signInAction,
   selectAuth,
-  googleSignInAction,
+  // googleSignInAction,
 } from "../../_store/reducers/authSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import * as EmailValidator from "email-validator";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 function Signin() {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
 
   if (authSelector.authenticated) {
     return <Redirect to={"/feature"} />;
@@ -25,31 +27,54 @@ function Signin() {
     e.preventDefault();
 
     if (email === "") {
+      setMessage("Email field should not be empty");
       setIsError(true);
-    } else {
-      try {
-        dispatch(signInAction(history, { email, password }));
-      } catch (err) {
-        setIsError(true);
-      }
+      return;
     }
-  }
 
-  async function handleGoogleButtonClick(e) {
-    e.preventDefault();
+    if (!EmailValidator.validate(email)) {
+      setMessage("Invalid email");
+      setIsError(true);
+      return;
+    }
+
+    if (password === "") {
+      setMessage("Password field should not be empty");
+      setIsError(true);
+      return;
+    }
 
     try {
-      dispatch(googleSignInAction(history));
+      dispatch(signInAction(history, { email, password }));
     } catch (err) {
       setIsError(true);
     }
   }
 
+  // async function handleGoogleButtonClick(e) {
+  //   e.preventDefault();
+
+  //   try {
+  //     dispatch(googleSignInAction(history));
+  //   } catch (err) {
+  //     setIsError(true);
+  //   }
+  // }
+
   function renderAlert() {
-    if (isError || authSelector.error !== "") {
+    if (authSelector.error) {
       return (
         <div className="alert alert-danger">
           <strong>Oops!</strong> {authSelector.error}
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops! </strong>
+          {message}
         </div>
       );
     }
@@ -149,5 +174,3 @@ function Signin() {
 }
 
 export default withRouter(Signin);
-// sign in form template can be found on:
-// https://mdbootstrap.com/docs/standard/extended/login/

@@ -50,13 +50,13 @@ app.use("/users", require("./routes/users"));
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //
 
 // Express only serves static assets in production
-// TODO: rebuild after revamping the client for 2021
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 
-  app.get("/service-worker.js", (req, res) => {
-    res.sendFile(__dirname + "/client/build/service-worker.js");
-  });
+  // TODO: implement service worker in react?
+  // app.get("/service-worker.js", (req, res) => {
+  //   res.sendFile(__dirname + "/client/build/service-worker.js");
+  // });
 
   app.get("*", (req, res) => {
     res.sendFile(__dirname + "/client/build/index.html");
