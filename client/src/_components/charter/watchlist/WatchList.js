@@ -21,7 +21,6 @@ const WatchList = () => {
   const coins = useSelector(selectWatchList).coins;
 
   useEffect(() => {
-    console.log("Using effect in watchlist");
     dispatch(getCoinsWLAction());
     dispatch(getProfile());
   }, [dispatch]);

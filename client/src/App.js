@@ -9,6 +9,7 @@ function App() {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
 
+  // TODO: should check if token is legit
   if (token) {
     dispatch(authenticate());
   }

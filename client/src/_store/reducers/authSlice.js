@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { openSignInWindow } from "./utility/oauth_popup";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -47,38 +48,12 @@ export const signInAction =
       });
   };
 
-export const googleSignInAction = (history) => (dispatch) => {
-  // axios
-  //   .get("/users/google")
-  //   .then((res) => {
-  //     if (res.data.success) {
-  //       dispatch(authenticate());
-  //       localStorage.setItem("token", res.data.token);
-  //       history.push("/feature");
-  //     } else {
-  //       dispatch(authError(res.data.message));
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     dispatch(authError("Bad Login Info"));
-  //   });
-
-  let oauth_page = window.open(
-    "http://localhost:5000/users/google",
-    "mywindow",
-    "location=1, status=1,scrollbars=1,width=800,height=800"
+// <----------------------  OAuth2.0 signin  ------------------------->
+export const googleSignInAction = () => () => {
+  openSignInWindow(
+    "https://altcoin-charter.herokuapp.com/users/google", // server port localhost:5000
+    "SignIn"
   );
-  window.addEventListener("message", (message) => {
-    //message will contain google user and details
-    if (message.data == "ready") {
-      oauth_page.postMessage(
-        "http://localhost:5000/users/google",
-        "http://localhost:3000"
-      );
-    } else {
-      console.log(message.data);
-    }
-  });
 };
 
 export const signUpAction =
@@ -97,8 +72,9 @@ export const signUpAction =
           dispatch(authError(res.data.message));
         }
       })
-      .catch(() => {
-        dispatch(authError("Email already registered."));
+      .catch((err) => {
+        console.log(err);
+        dispatch(authError("Error with signing up"));
       });
   };
 
