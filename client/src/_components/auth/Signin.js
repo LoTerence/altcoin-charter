@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   signInAction,
   selectAuth,
-  // googleSignInAction,
+  googleSignInAction,
 } from "../../_store/reducers/authSlice";
 import * as EmailValidator from "email-validator";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 function Signin() {
   const dispatch = useDispatch();
@@ -47,19 +47,21 @@ function Signin() {
     try {
       dispatch(signInAction(history, { email, password }));
     } catch (err) {
+      console.log(err);
       setIsError(true);
     }
   }
 
-  // async function handleGoogleButtonClick(e) {
-  //   e.preventDefault();
+  async function handleGoogleButtonClick(e) {
+    e.preventDefault();
 
-  //   try {
-  //     dispatch(googleSignInAction(history));
-  //   } catch (err) {
-  //     setIsError(true);
-  //   }
-  // }
+    try {
+      dispatch(googleSignInAction());
+    } catch (err) {
+      console.log(err);
+      setIsError(true);
+    }
+  }
 
   function renderAlert() {
     if (authSelector.error) {
@@ -151,15 +153,14 @@ function Signin() {
 
           <hr className="my-4" />
           {/* <form action="http://localhost:5000/users/google"> */}
-          {/* <button
+          <button
             className="btn google-button btn-lg mb-2"
             type="submit"
             onClick={(e) => handleGoogleButtonClick(e)}
           >
             <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
           </button>
-          {/* </form>
-          <button className="btn fb-button btn-lg mb-2" type="submit">
+          {/* <button className="btn fb-button btn-lg mb-2" type="submit">
             <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
           </button> */}
           <br />

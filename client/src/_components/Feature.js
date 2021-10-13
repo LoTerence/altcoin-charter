@@ -18,7 +18,6 @@ export default function Feature() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("using effect");
     dispatch(setActiveCoin({}));
     dispatch(setTimeFrame("1day"));
   });

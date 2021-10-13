@@ -33,7 +33,7 @@ router.get(
 // router.get("/auth/facebook", passport.authenticate('facebook'));
 // router.get("/auth/facebook/callback", passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
 
-// login with google OAuth
+// -------------- login with google OAuth -----------------
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -41,7 +41,9 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
+  passport.authenticate("google", {
+    failureRedirect: "https://altcoin-charter.herokuapp.com/signin", //client port localhost:3000
+  }),
   authenticateUserGoogle
 );
 

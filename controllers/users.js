@@ -157,9 +157,10 @@ exports.authenticateUserGoogle = async (req, res) => {
   User.getUserById(req.user._id, (err, user) => {
     if (err) throw err;
     if (!user) {
+      console.log("no user");
       return res.json({ success: false, message: "User not found" });
     }
-    // user is not defined - fix this
+
     const data = {
       _id: user._id,
       email: user.email,
@@ -168,10 +169,8 @@ exports.authenticateUserGoogle = async (req, res) => {
       expiresIn: 604800, //1 week
     });
 
-    res.json({
-      success: true,
-      token: "JWT " + token,
-      message: "User logged in",
-    });
+    res.redirect(
+      "https://altcoin-charter.herokuapp.com/googlecallback?token=" + token
+    ); // client port localhost:3000
   });
 };

@@ -58,12 +58,14 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+// < -------------  Google OAuth2.0 strategy  --------------- >
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/users/google/callback",
+      callbackURL:
+        "https://altcoin-charter.herokuapp.com/users/google/callback", // server port localhost:5000
     },
     (accessToken, refreshToken, profile, cb) => {
       User.findOrCreate(
