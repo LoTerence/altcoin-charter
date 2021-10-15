@@ -13,6 +13,7 @@ const UserSchema = mongoose.Schema({
     unique: true,
   },
   googleid: String,
+  facebookid: String,
   name: String,
   secret: String,
   password: {
