@@ -69,8 +69,9 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      // callbackURL: "https://altcoin-charter.herokuapp.com/users/facebook/callback",
-      callbackURL: "http://localhost:5000/users/facebook/callback",
+      callbackURL:
+        "https://altcoin-charter.herokuapp.com/users/facebook/callback",
+      // callbackURL: "http://localhost:5000/users/facebook/callback",
       profileFields: ["id", "first_name", "email"],
     },
     function (accessToken, refreshToken, profile, cb) {
