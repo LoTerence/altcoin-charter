@@ -193,6 +193,9 @@ exports.authenticateUserFacebook = async (req, res) => {
       expiresIn: 604800, //1 week
     });
 
-    res.redirect("http://localhost:3000/googlecallback?token=" + token);
+    res.redirect(
+      "https://altcoin-charter.herokuapp.com/googlecallback?token=" + token
+    );
+    // res.redirect("http://localhost:3000/googlecallback?token=" + token);
   });
 };
