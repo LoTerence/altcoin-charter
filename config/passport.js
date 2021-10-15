@@ -81,7 +81,7 @@ passport.use(
         {
           email: profile.emails[0].value,
           name: profile.name.givenName,
-          facebookId: profile.id,
+          facebookid: profile.id,
         },
         function (err, user) {
           console.log(user);
