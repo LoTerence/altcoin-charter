@@ -56,6 +56,11 @@ export const googleSignInAction = () => () => {
   );
 };
 
+export const fbSignInAction = () => () => {
+  openSignInWindow("http://localhost:5000/users/facebook", "SignIn");
+};
+
+// Sign up thunk
 export const signUpAction =
   (history, { email, password }) =>
   (dispatch) => {
