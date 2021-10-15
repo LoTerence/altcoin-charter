@@ -11,6 +11,8 @@ import Signup from "./auth/Signup";
 import GoogleCallback from "./auth/GoogleCallback";
 import Feature from "./Feature";
 import PrivateRoute from "./auth/PrivateRoute";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ContactUs from "./pages/ContactUs";
 
 function HomePage() {
   return (
@@ -22,6 +24,8 @@ function HomePage() {
           <Route exact path="/" component={Charter} />
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+          <Route exact path="/contact-us" component={ContactUs} />
           <Route exact path="/googlecallback" component={GoogleCallback} />
           <PrivateRoute path="/signout" component={Signout} />
           <PrivateRoute path="/feature" component={Feature} />

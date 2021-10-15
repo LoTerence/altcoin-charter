@@ -78,11 +78,12 @@ passport.use(
       console.log(profile);
       User.findOrCreate(
         {
-          email: profile.email,
-          name: profile.first_name,
+          email: profile.emails[0].value,
+          name: profile.name.givenName,
           facebookId: profile.id,
         },
         function (err, user) {
+          console.log(user);
           return cb(err, user);
         }
       );
