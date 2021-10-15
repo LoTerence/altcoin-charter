@@ -171,7 +171,8 @@ exports.authenticateUserGoogle = async (req, res) => {
 
     res.redirect(
       "https://altcoin-charter.herokuapp.com/googlecallback?token=" + token
-    ); // client port localhost:3000
+      // "http://localhost:3000/googlecallback?token=" + token
+    );
   });
 };
 

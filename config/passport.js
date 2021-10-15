@@ -46,7 +46,8 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
-        "https://altcoin-charter.herokuapp.com/users/google/callback", // server port localhost:5000
+        "https://altcoin-charter.herokuapp.com/users/google/callback",
+      // callbackURL: "http://localhost:5000/users/google/callback",
     },
     (accessToken, refreshToken, profile, cb) => {
       User.findOrCreate(

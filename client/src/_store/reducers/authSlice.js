@@ -51,13 +51,18 @@ export const signInAction =
 // <----------------------  OAuth2.0 signin  ------------------------->
 export const googleSignInAction = () => () => {
   openSignInWindow(
-    "https://altcoin-charter.herokuapp.com/users/google", // server port localhost:5000
+    "https://altcoin-charter.herokuapp.com/users/google",
+    // "http://localhost:5000/users/google",
     "SignIn"
   );
 };
 
 export const fbSignInAction = () => () => {
-  openSignInWindow("http://localhost:5000/users/facebook", "SignIn");
+  openSignInWindow(
+    "https://altcoin-charter.herokuapp.com/users/facebook",
+    // "http://localhost:5000/users/facebook",
+    "SignIn"
+  );
 };
 
 // Sign up thunk
