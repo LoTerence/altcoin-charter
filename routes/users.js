@@ -56,7 +56,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "https://altcoin-charter.herokuapp.com/signin",
+    failureRedirect: "https://altcoin-charter.herokuapp.com", // change this to /signin
     // failureRedirect: "http://localhost:3000/signin",
   }),
   authenticateUserFacebook
