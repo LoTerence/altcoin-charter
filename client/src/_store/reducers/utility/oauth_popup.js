@@ -36,7 +36,8 @@ const openSignInWindow = (url, name) => {
 
 const receiveMessage = (event) => {
   // Do we trust the sender of this message? (might be different from what we originally opened, for example).
-  if (event.origin !== "https://altcoin-charter.herokuapp.com") {
+  // if (event.origin !== "https://altcoin-charter.herokuapp.com") {
+  if (event.origin !== "http://localhost:3000") {
     // event origin should be client port localhost:3000
     return;
   }

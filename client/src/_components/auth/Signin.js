@@ -5,6 +5,7 @@ import {
   signInAction,
   selectAuth,
   googleSignInAction,
+  fbSignInAction,
 } from "../../_store/reducers/authSlice";
 import * as EmailValidator from "email-validator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -57,6 +58,17 @@ function Signin() {
 
     try {
       dispatch(googleSignInAction());
+    } catch (err) {
+      console.log(err);
+      setIsError(true);
+    }
+  }
+
+  async function handleFbButtonClick(e) {
+    e.preventDefault();
+
+    try {
+      dispatch(fbSignInAction());
     } catch (err) {
       console.log(err);
       setIsError(true);
@@ -152,7 +164,6 @@ function Signin() {
           </form>
 
           <hr className="my-4" />
-          {/* <form action="http://localhost:5000/users/google"> */}
           <button
             className="btn google-button btn-lg mb-2"
             type="submit"
@@ -160,9 +171,13 @@ function Signin() {
           >
             <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
           </button>
-          {/* <button className="btn fb-button btn-lg mb-2" type="submit">
+          <button
+            className="btn fb-button btn-lg mb-2"
+            type="submit"
+            onClick={(e) => handleFbButtonClick(e)}
+          >
             <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
-          </button> */}
+          </button>
           <br />
           <p>
             Dont have an account? Click <Link to="/signup">here</Link> to sign
