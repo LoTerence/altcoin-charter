@@ -174,3 +174,24 @@ exports.authenticateUserGoogle = async (req, res) => {
     ); // client port localhost:3000
   });
 };
+
+// Facebook login controller
+exports.authenticateUserFacebook = async (req, res) => {
+  User.getUserById(req.user._id, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      console.log("No user");
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const data = {
+      _id: user._id,
+      email: user.email,
+    };
+    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: 604800, //1 week
+    });
+
+    res.redirect("http://localhost:3000/googlecallback?token=" + token);
+  });
+};

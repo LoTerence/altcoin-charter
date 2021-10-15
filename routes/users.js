@@ -11,6 +11,7 @@ const {
   addCoinToWatchlist,
   delCoinFromWatchlist,
   authenticateUserGoogle,
+  authenticateUserFacebook,
 } = require("../controllers/users");
 
 // TODO: add a log out user route (maybe can be done in client)
@@ -29,10 +30,6 @@ router.get(
 );
 
 // // ----------------- Oauth 2.0 routes ------------------------------------------------///
-// // --- Facebook ---
-// router.get("/auth/facebook", passport.authenticate('facebook'));
-// router.get("/auth/facebook/callback", passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login'}));
-
 // -------------- login with google OAuth -----------------
 router.get(
   "/google",
@@ -45,6 +42,23 @@ router.get(
     failureRedirect: "https://altcoin-charter.herokuapp.com/signin", //client port localhost:3000
   }),
   authenticateUserGoogle
+);
+
+// // ------------- login with Facebook ------------
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", {
+    scope: ["public_profile", "email"],
+  })
+);
+
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", {
+    // failureRedirect: "http://localhost:3000/signin",
+    failureRedirect: "https://altcoin-charter.herokuapp.com/signin",
+  }),
+  authenticateUserFacebook
 );
 
 // TODO: add and refine a logout function
