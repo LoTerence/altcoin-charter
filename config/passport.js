@@ -73,7 +73,7 @@ passport.use(
       callbackURL:
         "https://altcoin-charter.herokuapp.com/users/facebook/callback",
       // callbackURL: "http://localhost:5000/users/facebook/callback",
-      // profileFields: ["id", "first_name", "email"],
+      profileFields: ["id", "first_name", "email"],
     },
     (accessToken, refreshToken, profile, cb) => {
       console.log(profile);
