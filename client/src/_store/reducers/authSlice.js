@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { openSignInWindow } from "./utility/oauth_popup";
+const { REACT_APP_SERVER_URL } = process.env;
 
 export const authSlice = createSlice({
   name: "auth",
@@ -50,19 +51,13 @@ export const signInAction =
 
 // <----------------------  OAuth2.0 signin  ------------------------->
 export const googleSignInAction = () => () => {
-  openSignInWindow(
-    "https://altcoin-charter.herokuapp.com/users/google",
-    // "http://localhost:5000/users/google",
-    "SignIn"
-  );
+  console.log("server url: ", REACT_APP_SERVER_URL);
+  openSignInWindow(REACT_APP_SERVER_URL + "/users/google", "SignIn");
 };
 
 export const fbSignInAction = () => () => {
-  openSignInWindow(
-    "https://altcoin-charter.herokuapp.com/users/facebook",
-    // "http://localhost:5000/users/facebook",
-    "SignIn"
-  );
+  console.log("server url: ", REACT_APP_SERVER_URL);
+  openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
 };
 
 // Sign up thunk

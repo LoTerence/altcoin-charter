@@ -1,5 +1,6 @@
 let windowObjectReference = null;
 let previousUrl = null;
+const { REACT_APP_CLIENT_URL } = process.env;
 
 const openSignInWindow = (url, name) => {
   // remove any existing event listeners
@@ -36,22 +37,16 @@ const openSignInWindow = (url, name) => {
 
 const receiveMessage = (event) => {
   // Do we trust the sender of this message? (might be different from what we originally opened, for example).
-  if (event.origin !== "https://altcoin-charter.herokuapp.com") {
-    // if (event.origin !== "http://localhost:3000") {
-    console.log("Event origin is off oauth_popup.js 41");
+  if (event.origin !== REACT_APP_CLIENT_URL) {
+    console.log(REACT_APP_CLIENT_URL);
     return;
   }
 
-  console.log("Receiving message oauth_popup.js 45");
-
   // if we trust the sender and the source is our popup
   if (event.source.name === "SignIn") {
-    console.log("Event source is right oauth_popup.js 47");
     const { data } = event;
     const token = "JWT " + data.slice(7);
-    console.log("token", token);
     localStorage.setItem("token", token);
-
     window.location.pathname = "/feature";
   }
 };
