@@ -39,8 +39,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://altcoin-charter.herokuapp.com/signin",
-    // failureRedirect: "http://localhost:3000/signin",
+    failureRedirect: process.env.CLIENT_URL + "/signin",
   }),
   authenticateUserGoogle
 );
@@ -56,8 +55,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "https://altcoin-charter.herokuapp.com", // change this to /signin
-    // failureRedirect: "http://localhost:3000/signin",
+    failureRedirect: process.env.CLIENT_URL + "/signin",
   }),
   authenticateUserFacebook
 );

@@ -169,10 +169,7 @@ exports.authenticateUserGoogle = async (req, res) => {
       expiresIn: 604800, //1 week
     });
 
-    res.redirect(
-      "https://altcoin-charter.herokuapp.com/googlecallback?token=" + token
-      // "http://localhost:3000/googlecallback?token=" + token
-    );
+    res.redirect(process.env.CLIENT_URL + "/oauthcallback?token=" + token);
   });
 };
 
@@ -193,9 +190,6 @@ exports.authenticateUserFacebook = async (req, res) => {
       expiresIn: 604800, //1 week
     });
 
-    res.redirect(
-      "https://altcoin-charter.herokuapp.com/googlecallback?token=" + token
-    );
-    // res.redirect("http://localhost:3000/googlecallback?token=" + token);
+    res.redirect(process.env.CLIENT_URL + "/oauthcallback?token=" + token);
   });
 };

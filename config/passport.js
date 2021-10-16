@@ -45,9 +45,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        "https://altcoin-charter.herokuapp.com/users/google/callback",
-      // callbackURL: "http://localhost:5000/users/google/callback",
+      callbackURL: process.env.SERVER_URL + "/users/google/callback",
     },
     (accessToken, refreshToken, profile, cb) => {
       User.findOrCreate(
@@ -70,13 +68,10 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL:
-        "https://altcoin-charter.herokuapp.com/users/facebook/callback",
-      // callbackURL: "http://localhost:5000/users/facebook/callback",
+      callbackURL: process.env.SERVER_URL + "/users/facebook/callback",
       profileFields: ["id", "first_name", "email"],
     },
     (accessToken, refreshToken, profile, cb) => {
-      console.log(profile);
       User.findOrCreate(
         {
           email: profile.emails[0].value,
@@ -84,7 +79,6 @@ passport.use(
           facebookid: profile.id,
         },
         function (err, user) {
-          console.log(user);
           return cb(err, user);
         }
       );
