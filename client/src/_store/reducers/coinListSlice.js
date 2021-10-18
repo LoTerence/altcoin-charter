@@ -51,7 +51,7 @@ export const {
 // GET COINS -- action creator that sends a list of coins from db to reducer/state
 export const getCoinsAction = () => (dispatch) => {
   axios
-    .get("/coins_unauth/coinList")
+    .get("/coins_public/coinList")
     .then((res) => {
       if (res.data.success) {
         dispatch(getCoins(res.data.data));
@@ -86,9 +86,8 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
         };
 
         axios //adding coin to coinlist db
-          .post("/coins_unauth/coinList", newCoin)
+          .post("/coins_public/coinList", newCoin)
           .then((res2) => {
-            console.log("Adding coin: " + sym);
             if (res2.data.success) {
               dispatch(addCoin(newCoin));
             } else {
@@ -97,7 +96,7 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
           })
           .catch((err) => {
             dispatch(coinErr("There was an error fetching new coin data"));
-            console.log("error in posting to coins_unauth in addcoin action: ");
+            console.log("error in posting to coins_public in addcoin action: ");
             throw err;
           });
       } else {
@@ -117,7 +116,7 @@ export const deleteCoinAction = (coin, id) => (dispatch) => {
 
   const sym = coin.Symbol;
   axios
-    .delete("/coins_unauth/coinList/" + sym)
+    .delete("/coins_public/coinList/" + sym)
     .then((res) => {
       if (res.data.success) {
         dispatch(deleteCoin(sym));
@@ -131,7 +130,7 @@ export const deleteCoinAction = (coin, id) => (dispatch) => {
       console.log(err);
       dispatch(
         coinErr(
-          "There was an error deleting from coins_unauth in deleteCoin action"
+          "There was an error deleting from coins_public in deleteCoin action"
         )
       );
       dispatch(setDeletingCoinId(""));
