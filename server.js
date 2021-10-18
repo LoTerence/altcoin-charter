@@ -44,7 +44,7 @@ app.use(passport.session());
 require("./config/passport"); // authentication strategy
 
 // API express routing
-app.use("/coins_unauth", require("./routes/coins_unauth")); // maybe change the name to "/coins_public"
+app.use("/coins_public", require("./routes/coins_public"));
 app.use("/users", require("./routes/users"));
 
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //

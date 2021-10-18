@@ -6,7 +6,7 @@ const {
   getCoinList,
   addCoin,
   deleteCoin,
-} = require("../controllers/coins_unauth");
+} = require("../controllers/coins_public");
 
 router.route("/coinList").get(getCoinList).post(addCoin);
 

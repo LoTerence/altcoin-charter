@@ -3,7 +3,7 @@ const Coin = require("../models/Coin");
 // TODO: clean up this file so there are better status codes and returns more informative data
 
 // @desc Get list of all public coins
-// @route GET /coins_unauth/coinList
+// @route GET /coins_public/coinList
 // @access only from client
 exports.getCoinList = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ exports.getCoinList = async (req, res) => {
 };
 
 // @desc Add a new coin to the public coin list
-// @route POST /coins_unauth/coinList
+// @route POST /coins_public/coinList
 // @access only from client
 exports.addCoin = async (req, res) => {
   try {
@@ -50,7 +50,7 @@ exports.addCoin = async (req, res) => {
 };
 
 // @desc Delete a coin from the public coin list
-// @route DELETE /coins_unauth/coinList/:coin_symbol
+// @route DELETE /coins_public/coinList/:coin_symbol
 // @access only from client
 exports.deleteCoin = async (req, res) => {
   try {
