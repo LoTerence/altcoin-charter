@@ -10,6 +10,7 @@ function App() {
   const dispatch = useDispatch();
 
   // TODO: should check if token is legit
+  // server will check jwt token to see if it is legit before returning any user data
   if (token) {
     dispatch(authenticate());
   }
