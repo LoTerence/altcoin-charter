@@ -116,7 +116,6 @@ export const deleteCoinAction = (coin, id) => (dispatch) => {
   dispatch(setDeletingCoinId(id));
 
   const sym = coin.Symbol;
-  console.log("Deleting coin: " + sym);
   axios
     .delete("/coins_unauth/coinList/" + sym)
     .then((res) => {
