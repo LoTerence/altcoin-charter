@@ -51,12 +51,10 @@ export const signInAction =
 
 // <----------------------  OAuth2.0 signin  ------------------------->
 export const googleSignInAction = () => () => {
-  console.log("server url: ", REACT_APP_SERVER_URL);
   openSignInWindow(REACT_APP_SERVER_URL + "/users/google", "SignIn");
 };
 
 export const fbSignInAction = () => () => {
-  console.log("server url: ", REACT_APP_SERVER_URL);
   openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
 };
 

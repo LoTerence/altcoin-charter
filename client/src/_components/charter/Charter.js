@@ -21,7 +21,6 @@ export default function Charter() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("using effect");
     dispatch(setActiveCoin({}));
     dispatch(setTimeFrame("1day"));
   });

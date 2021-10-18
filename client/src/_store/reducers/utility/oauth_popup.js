@@ -38,7 +38,6 @@ const openSignInWindow = (url, name) => {
 const receiveMessage = (event) => {
   // Do we trust the sender of this message? (might be different from what we originally opened, for example).
   if (event.origin !== REACT_APP_CLIENT_URL) {
-    console.log(REACT_APP_CLIENT_URL);
     return;
   }
 
