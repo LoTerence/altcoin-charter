@@ -6,6 +6,9 @@ const {
   registerUser,
   authenticateUser,
   getUserProfile,
+  editUserName,
+  editUserEmail,
+  editUserPassword,
   getUserWatchlist,
   addCoinToWatchlist,
   delCoinFromWatchlist,
@@ -27,6 +30,29 @@ router.get(
   passport.authenticate("jwt", { session: true }),
   getUserProfile
 );
+
+// edit name
+router.put(
+  "/profile/name",
+  passport.authenticate("jwt", { session: true }),
+  editUserName
+);
+
+// edit email
+router.put(
+  "/profile/email",
+  passport.authenticate("jwt", { session: true }),
+  editUserEmail
+);
+
+// edit password
+router.put(
+  "/password",
+  passport.authenticate("jwt", { session: true }),
+  editUserPassword
+);
+
+// delete account
 
 // // ----------------- Oauth 2.0 routes ------------------------------------------------///
 // -------------- login with google OAuth -----------------

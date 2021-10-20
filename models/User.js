@@ -9,13 +9,20 @@ const UserSchema = mongoose.Schema({
   // TODO: Add a name field and give it some functionality
   email: {
     type: String,
-    required: true,
+    trim: true,
+    lowercase: true,
+    required: [true, "Email required"],
     unique: true,
+    validate: {
+      validator: function (v) {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+      },
+      message: "Please enter a valid email",
+    },
   },
   googleid: String,
   facebookid: String,
   name: String,
-  secret: String,
   password: {
     type: String,
   },
@@ -54,4 +61,12 @@ module.exports.getUserById = function (id, callback) {
 module.exports.getUserByEmail = function (email, callback) {
   const query = { email: email };
   User.findOne(query, callback);
+};
+
+module.exports.changeUserPassword = function (id, password, callback) {
+  User.findById(id, (err, user) => {
+    if (err) throw err;
+    user.password = bcrypt.hashSync(password, 10);
+    user.save(callback);
+  });
 };
