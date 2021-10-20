@@ -17,7 +17,7 @@ exports.registerUser = async (req, res) => {
       console.log(err);
       res.json({
         success: false,
-        message: "Email already registered",
+        message: "Email already registered or not a real email",
       });
     } else {
       const data = {
@@ -77,8 +77,106 @@ exports.authenticateUser = async (req, res) => {
 // @route GET /users/profile
 // @access private - only the client can access
 exports.getUserProfile = async (req, res) => {
-  const { _id, email, watchList } = req.user;
-  res.json({ user: { _id, email, watchList } });
+  const { _id, email, name } = req.user;
+  res.json({ user: { _id, email, name } });
+};
+
+// @desc Edit the user's name
+// @route PUT /users/profile/name
+// @access private - only the client can access
+exports.editUserName = async (req, res) => {
+  const newName = req.body.newName;
+  User.getUserById(req.user._id, (err, user) => {
+    //handle errors
+    if (err) throw err;
+    if (!user) {
+      console.log(
+        "error in server/routes/users.js -- router.put('/users/profile/name"
+      );
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    // check if the name is the same. If it is, nothing needs to be changed
+    if (user.name === newName) {
+      return res.json({
+        success: true,
+        msg: "User already had the same name",
+      });
+    }
+
+    // Change the name of the user
+    user.name = newName;
+    user.save((err) => {
+      if (err) {
+        return res.json({
+          success: false,
+          msg: "error changing name in routes/users.js - put(users/profile/name)",
+        });
+      }
+      res.json({ success: true, newName: user.name });
+    });
+  });
+};
+
+// @desc Edit the user's email
+// @route PUT /users/profile/email
+// @access private - only the client can access
+exports.editUserEmail = async (req, res) => {
+  const newEmail = req.body.newEmail;
+  User.getUserById(req.user._id, (err, user) => {
+    //handle errors
+    if (err) throw err;
+    if (!user) {
+      console.log(
+        "error in server/routes/users.js -- router.put('/users/profile/email"
+      );
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    // check if the email is the same. If it is, nothing needs to be changed
+    if (user.email === newEmail) {
+      return res.json({
+        success: true,
+        msg: "User already had the same email",
+      });
+    }
+
+    // Change the email of the user
+    try {
+      user.email = newEmail;
+    } catch (err) {
+      // throw err;
+      return res.json({
+        success: false,
+        msg: "Email already registered or not a real email",
+      });
+    }
+
+    user.save((err) => {
+      if (err) {
+        return res.json({
+          success: false,
+          msg: "error changing email in routes/users.js - put(users/profile/email)",
+        });
+      }
+      res.json({ success: true, newEmail: user.email });
+    });
+  });
+};
+
+// @desc Edit the user's password
+// @route PUT /users/password
+// @access private - only the client can access
+exports.editUserPassword = async (req, res) => {
+  User.changeUserPassword(req.user._id, req.body.newPassword, (err) => {
+    if (err) {
+      return res.json({
+        success: false,
+        msg: "error editing user password in server/routes/users.js -- router.put('/users/pasword')",
+      });
+    }
+    res.json({ success: true, msg: "Password successfully changed" });
+  });
 };
 
 // @desc Get the user's watchlist
@@ -114,11 +212,12 @@ exports.addCoinToWatchlist = async (req, res) => {
     // update watchlist with the new coin obj from req.body, then res.json the new watchlist
     user.watchList.push(newCoin);
     user.save((err) => {
-      if (err)
-        res.json({
+      if (err) {
+        return res.json({
           success: false,
           msg: "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
         });
+      }
       res.json({ success: true, newWatchList: user.watchList });
     });
   });
@@ -141,11 +240,12 @@ exports.delCoinFromWatchlist = async (req, res) => {
     user.watchList = user.watchList.filter((e) => e.Symbol !== req.body.Symbol);
 
     user.save((err) => {
-      if (err)
-        res.json({
+      if (err) {
+        return res.json({
           success: false,
           msg: "error deleting coin in routes/users.js - put(watchlist/delcoin)",
         });
+      }
       res.json({ success: true, newWatchList: user.watchList });
     });
   });

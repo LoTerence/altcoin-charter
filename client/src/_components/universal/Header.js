@@ -21,6 +21,12 @@ function Header() {
             Personal Watchlist{" "}
           </Link>
         </li>,
+        <li key="2" className="nav-item">
+          {" "}
+          <Link className="nav-link" to="/settings">
+            Settings{" "}
+          </Link>
+        </li>,
       ];
     } else {
       return [

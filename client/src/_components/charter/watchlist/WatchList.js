@@ -11,13 +11,12 @@ import {
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
 import { getProfile, selectAuth } from "../../../_store/reducers/authSlice";
-
 import CoinLi from "./CoinLi_wl";
 import CoinAdder from "./CoinAdder_wl";
 
 const WatchList = () => {
   const dispatch = useDispatch();
-  const profile = useSelector(selectAuth).message;
+  const profile = useSelector(selectAuth).userProfile;
   const coins = useSelector(selectWatchList).coins;
 
   useEffect(() => {
@@ -28,7 +27,7 @@ const WatchList = () => {
   return (
     <div>
       <p>
-        <b>{profile}</b>
+        <b>{profile.email}</b>
       </p>
       <p>
         Your personal watchlist of coins: Coins you add to this list will be

@@ -13,6 +13,7 @@ import Feature from "./Feature";
 import PrivateRoute from "./auth/PrivateRoute";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ContactUs from "./pages/ContactUs";
+import Settings from "./pages/Settings";
 
 function HomePage() {
   return (
@@ -29,6 +30,7 @@ function HomePage() {
           <Route exact path="/oauthcallback" component={OAuthCallback} />
           <PrivateRoute path="/signout" component={Signout} />
           <PrivateRoute path="/feature" component={Feature} />
+          <PrivateRoute path="/settings" component={Settings} />
         </Switch>
       </div>
 

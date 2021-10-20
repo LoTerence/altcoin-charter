@@ -7,6 +7,11 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     error: "",
+    userProfile: {
+      name: "",
+      email: "",
+      _id: "",
+    },
   },
   reducers: {
     authenticate: (state) => {
@@ -20,13 +25,13 @@ export const authSlice = createSlice({
       state.authenticated = false;
       state.error = action.payload;
     },
-    fetchMessage: (state, action) => {
-      state.message = action.payload;
+    updateProfile: (state, action) => {
+      state.userProfile = action.payload;
     },
   },
 });
 
-export const { authenticate, unauthenticate, authError, fetchMessage } =
+export const { authenticate, unauthenticate, authError, updateProfile } =
   authSlice.actions;
 
 // thunks that allows us to perform async logic
@@ -85,17 +90,86 @@ export const signUpAction =
 export const signOutAction = () => (dispatch) => {
   localStorage.removeItem("token");
   dispatch(unauthenticate());
+  dispatch(
+    updateProfile({
+      name: "",
+      email: "",
+      _id: "",
+    })
+  );
 };
 
-// this function is for fetching info from the express server that requires authentication header
-//TODO: revise later with user profile info
+// this function is for fetching user info from the express server that requires authentication header
 export const getProfile = () => (dispatch) => {
   axios
     .get("/users/profile", {
       headers: { authorization: localStorage.getItem("token") },
     })
     .then((res) => {
-      dispatch(fetchMessage(res.data.user.email));
+      dispatch(updateProfile(res.data.user));
+    });
+};
+
+// action for changing the name of the user
+export const changeNameAction = (newName) => (dispatch) => {
+  axios
+    .put(
+      "/users/profile/name",
+      {
+        newName: newName,
+      },
+      {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      }
+    )
+    .then((res) => {
+      dispatch(getProfile());
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
+//action for change the email of the user
+export const changeEmailAction = (newEmail) => (dispatch) => {
+  axios
+    .put(
+      "/users/profile/email",
+      {
+        newEmail: newEmail,
+      },
+      {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      }
+    )
+    .then((res) => {
+      dispatch(getProfile());
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
+//action for changing the user's password
+export const changePasswordAction = (newPassword) => (dispatch) => {
+  axios
+    .put(
+      "/users/password",
+      { newPassword: newPassword },
+      { headers: { authorization: localStorage.getItem("token") } }
+    )
+    .then((res) => {
+      console.log(res.data.msg);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
     });
 };
 
