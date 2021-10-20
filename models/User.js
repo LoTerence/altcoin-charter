@@ -22,7 +22,7 @@ const UserSchema = mongoose.Schema({
   },
   googleid: String,
   facebookid: String,
-  name: String,
+  name: { type: String, trim: true, uppercase: true },
   password: {
     type: String,
   },
@@ -63,10 +63,26 @@ module.exports.getUserByEmail = function (email, callback) {
   User.findOne(query, callback);
 };
 
-module.exports.changeUserPassword = function (id, password, callback) {
-  User.findById(id, (err, user) => {
+module.exports.changeUserPassword = function (
+  id,
+  oldPassword,
+  newPassword,
+  callback
+) {
+  User.findById(id, async (err, user) => {
     if (err) throw err;
-    user.password = bcrypt.hashSync(password, 10);
-    user.save(callback);
+
+    const isMatch = await user.isValidPassword(oldPassword);
+    if (isMatch) {
+      user.password = bcrypt.hashSync(newPassword, 10);
+      user.save(
+        callback(null, {
+          success: true,
+          message: "Password successfully changed",
+        })
+      );
+    } else {
+      callback(null, { success: false, message: "Invalid password!" });
+    }
   });
 };

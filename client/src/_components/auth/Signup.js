@@ -35,6 +35,12 @@ function Signup() {
       return;
     }
 
+    if (password1 === "") {
+      setMessage("Password field empty");
+      setIsError(true);
+      return;
+    }
+
     if (password1.length < 6) {
       setMessage("Password length should be at least 6 characters");
       setIsError(true);
