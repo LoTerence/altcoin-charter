@@ -28,11 +28,23 @@ export const authSlice = createSlice({
     updateProfile: (state, action) => {
       state.userProfile = action.payload;
     },
+    changeEmailAlert: (state, action) => {
+      state.emailAlert = action.payload;
+    },
+    changepwAlert: (state, action) => {
+      state.pwAlert = action.payload;
+    },
   },
 });
 
-export const { authenticate, unauthenticate, authError, updateProfile } =
-  authSlice.actions;
+export const {
+  authenticate,
+  unauthenticate,
+  authError,
+  updateProfile,
+  changeEmailAlert,
+  changepwAlert,
+} = authSlice.actions;
 
 // thunks that allows us to perform async logic
 export const signInAction =
@@ -134,12 +146,13 @@ export const changeNameAction = (newName) => (dispatch) => {
 };
 
 //action for change the email of the user
-export const changeEmailAction = (newEmail) => (dispatch) => {
+export const changeEmailAction = (newEmail, password) => (dispatch) => {
   axios
     .put(
       "/users/profile/email",
       {
         newEmail: newEmail,
+        password: password,
       },
       {
         headers: {
@@ -148,7 +161,11 @@ export const changeEmailAction = (newEmail) => (dispatch) => {
       }
     )
     .then((res) => {
-      dispatch(getProfile());
+      if (res.data.success) {
+        dispatch(getProfile());
+      } else {
+        dispatch(changeEmailAlert(res.data.message));
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -157,21 +174,30 @@ export const changeEmailAction = (newEmail) => (dispatch) => {
 };
 
 //action for changing the user's password
-export const changePasswordAction = (newPassword) => (dispatch) => {
-  axios
-    .put(
-      "/users/password",
-      { newPassword: newPassword },
-      { headers: { authorization: localStorage.getItem("token") } }
-    )
-    .then((res) => {
-      console.log(res.data.msg);
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
-};
+export const changePasswordAction =
+  (oldPassword, newPassword) => (dispatch) => {
+    axios
+      .put(
+        "/users/password",
+        {
+          password: oldPassword,
+          newPassword: newPassword,
+        },
+        { headers: { authorization: localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.data.success) {
+          dispatch(changepwAlert(res.data.message));
+        } else {
+          dispatch(changepwAlert(res.data.message));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(changepwAlert("Something went wrong, please try again later"));
+        throw err;
+      });
+  };
 
 // Selector that lets the rest of the app get read access to authSlice state
 export const selectAuth = (state) => state.auth;

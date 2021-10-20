@@ -122,8 +122,15 @@ exports.editUserName = async (req, res) => {
 // @route PUT /users/profile/email
 // @access private - only the client can access
 exports.editUserEmail = async (req, res) => {
+  if (!req.body.hasOwnProperty("password")) {
+    console.log("req does not have password");
+    return res.json({ success: false, message: "No password!" });
+  }
+
   const newEmail = req.body.newEmail;
-  User.getUserById(req.user._id, (err, user) => {
+  const password = req.body.password;
+
+  User.getUserById(req.user._id, async (err, user) => {
     //handle errors
     if (err) throw err;
     if (!user) {
@@ -133,34 +140,40 @@ exports.editUserEmail = async (req, res) => {
       return res.json({ success: false, message: "User not found" });
     }
 
-    // check if the email is the same. If it is, nothing needs to be changed
-    if (user.email === newEmail) {
-      return res.json({
-        success: true,
-        msg: "User already had the same email",
-      });
-    }
-
     // Change the email of the user
     try {
-      user.email = newEmail;
+      const isMatch = await user.isValidPassword(password);
+      if (isMatch) {
+        // check if the email is the same. If it is, nothing needs to be changed
+        if (user.email === newEmail) {
+          return res.json({
+            success: true,
+            message: "User already had the same email",
+          });
+        }
+
+        // change the user's email to the new email
+        user.email = newEmail;
+        user.save((err) => {
+          if (err) {
+            return res.json({
+              success: false,
+              message: "Something went wrong, please try again later",
+            });
+          }
+          return res.json({ success: true, newEmail: user.email });
+        });
+      } else {
+        // if password does not match
+        return res.json({ success: false, message: "Invalid password!" });
+      }
     } catch (err) {
-      // throw err;
+      console.log(err);
       return res.json({
         success: false,
-        msg: "Email already registered or not a real email",
+        message: "Something went wrong, please try again later",
       });
     }
-
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error changing email in routes/users.js - put(users/profile/email)",
-        });
-      }
-      res.json({ success: true, newEmail: user.email });
-    });
   });
 };
 
@@ -168,15 +181,28 @@ exports.editUserEmail = async (req, res) => {
 // @route PUT /users/password
 // @access private - only the client can access
 exports.editUserPassword = async (req, res) => {
-  User.changeUserPassword(req.user._id, req.body.newPassword, (err) => {
-    if (err) {
-      return res.json({
-        success: false,
-        msg: "error editing user password in server/routes/users.js -- router.put('/users/pasword')",
-      });
+  // check if req body has property for password
+  if (!req.body.hasOwnProperty("password")) {
+    console.log("req does not have password");
+    return res.json({ success: false, message: "No password!" });
+  }
+
+  User.changeUserPassword(
+    req.user._id,
+    req.body.password,
+    req.body.newPassword,
+    (err, json) => {
+      if (err) {
+        console.log(err);
+        return res.json({
+          success: false,
+          message:
+            "error editing user password in server/routes/users.js -- router.put('/users/pasword')",
+        });
+      }
+      return res.json(json);
     }
-    res.json({ success: true, msg: "Password successfully changed" });
-  });
+  );
 };
 
 // @desc Get the user's watchlist
