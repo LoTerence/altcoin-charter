@@ -86,3 +86,29 @@ module.exports.changeUserPassword = function (
     }
   });
 };
+
+module.exports.deleteUserById = function (id, password, callback) {
+  User.findById(id, async (err, user) => {
+    if (err) throw err;
+
+    const isMatch = await user.isValidPassword(password);
+    if (isMatch) {
+      User.deleteOne({ _id: id })
+        .then(
+          callback(null, {
+            success: true,
+            message: "User successfully deleted",
+          })
+        )
+        .catch((err) => {
+          console.log(err);
+          callback(err, {
+            success: false,
+            message: "Error while trying to delete user in database",
+          });
+        });
+    } else {
+      callback(null, { success: false, message: "Invalid password!" });
+    }
+  });
+};

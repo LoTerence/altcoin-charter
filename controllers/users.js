@@ -205,6 +205,29 @@ exports.editUserPassword = async (req, res) => {
   );
 };
 
+// @desc Delete the user account by deleting the user document by id
+// @route DELETE /users/delete
+// @access private - only the client can access
+exports.deleteUser = async (req, res) => {
+  // check if req body has property for password
+  if (!req.body.hasOwnProperty("password")) {
+    console.log("req does not have password");
+    return res.json({ success: false, message: "No password!" });
+  }
+
+  User.deleteUserById(req.user._id, req.body.password, (err, json) => {
+    if (err) {
+      console.log(err);
+      return res.json({
+        success: false,
+        message:
+          "error deleting user in server/routes/users.js -- router.delete('/users/delete')",
+      });
+    }
+    return res.json(json);
+  });
+};
+
 // @desc Get the user's watchlist
 // @route GET /users/watchlist
 // @access private - only the client can access

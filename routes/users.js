@@ -9,6 +9,7 @@ const {
   editUserName,
   editUserEmail,
   editUserPassword,
+  deleteUser,
   getUserWatchlist,
   addCoinToWatchlist,
   delCoinFromWatchlist,
@@ -53,6 +54,11 @@ router.put(
 );
 
 // delete account
+router.delete(
+  "/delete",
+  passport.authenticate("jwt", { session: true }),
+  deleteUser
+);
 
 // // ----------------- Oauth 2.0 routes ------------------------------------------------///
 // -------------- login with google OAuth -----------------

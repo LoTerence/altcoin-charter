@@ -34,6 +34,9 @@ export const authSlice = createSlice({
     changepwAlert: (state, action) => {
       state.pwAlert = action.payload;
     },
+    deleteAccountAlert: (state, action) => {
+      state.daAlert = action.payload;
+    },
   },
 });
 
@@ -44,6 +47,7 @@ export const {
   updateProfile,
   changeEmailAlert,
   changepwAlert,
+  deleteAccountAlert,
 } = authSlice.actions;
 
 // thunks that allows us to perform async logic
@@ -198,6 +202,34 @@ export const changePasswordAction =
         throw err;
       });
   };
+
+// action for deleting the user's account
+export const deleteAccountAction = (password) => (dispatch) => {
+  axios
+    .delete("/users/delete", {
+      headers: {
+        authorization: localStorage.getItem("token"),
+      },
+      data: {
+        password: password,
+      },
+    })
+    .then((res) => {
+      if (res.data.success) {
+        dispatch(signOutAction);
+        dispatch(authError(res.data.message));
+      } else {
+        dispatch(deleteAccountAlert(res.data.message));
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch(
+        deleteAccountAlert("Something went wrong, please try again later")
+      );
+      throw err;
+    });
+};
 
 // Selector that lets the rest of the app get read access to authSlice state
 export const selectAuth = (state) => state.auth;
