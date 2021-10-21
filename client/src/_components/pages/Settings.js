@@ -9,6 +9,7 @@ import {
   changeNameAction,
   changeEmailAction,
   changePasswordAction,
+  deleteAccountAction,
   changeEmailAlert,
   selectAuth,
 } from "../../_store/reducers/authSlice";
@@ -24,9 +25,12 @@ const Settings = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
+  const [dPassword, setDPassword] = useState("");
   const [newNameAlert, setNewNameAlert] = useState("");
   const [newEmailAlert, setNewEmailAlert] = useState("");
   const [newPasswordAlert, setNewPasswordAlert] = useState("");
+  const [deleteAccountAlert, setDeleteAccountAlert] = useState("");
+  const [daForm, setDAform] = useState(false);
 
   useEffect(() => {
     if (profile.email === "") {
@@ -112,12 +116,30 @@ const Settings = () => {
 
     try {
       dispatch(changePasswordAction(oldPassword, newPassword1));
-      setOldPassword("");
+      setDPassword("");
       setNewPassword1("");
       setNewPassword2("");
     } catch (err) {
       console.log(err);
       setNewPasswordAlert("Something went wrong please try again later");
+    }
+  }
+
+  async function handleDeleteAccountButton(e) {
+    e.preventDefault();
+    setDeleteAccountAlert("");
+
+    if (dPassword === "") {
+      setDeleteAccountAlert("Password field empty");
+      return;
+    }
+
+    try {
+      dispatch(deleteAccountAction(dPassword));
+      setDPassword("");
+    } catch (err) {
+      console.log(err);
+      setDeleteAccountAlert("Something went wrong please try again later");
     }
   }
 
@@ -149,6 +171,81 @@ const Settings = () => {
       return (
         <div className="alert alert-danger">
           <strong>Oops!</strong> {newPasswordAlert}
+        </div>
+      );
+    }
+  }
+
+  function renderDAform() {
+    if (daForm) {
+      return (
+        <>
+          <div className="alert alert-danger">
+            WARNING: This action cannot be reversed. If you are sure you want to
+            delete your account, confirm your password and continue. Otherwise
+            click cancel.
+          </div>
+          <div className="form-floating mb-4">
+            <input
+              name="dPassword"
+              id="dPassword"
+              type="password"
+              className="form-control form-control-lg"
+              placeholder="Confirm password"
+              value={dPassword}
+              onChange={(e) => setDPassword(e.target.value)}
+              required
+            />
+            <label style={{ opacity: "0.5" }} htmlFor="dPassword">
+              Confirm password
+            </label>
+          </div>
+          <button
+            className="btn btn-danger btn-md btn-block"
+            style={{ marginRight: "5px" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setDAform(false);
+            }}
+          >
+            CANCEL
+          </button>
+          <button
+            className="btn btn-secondary btn-md btn-block"
+            onClick={(e) => handleDeleteAccountButton(e)}
+          >
+            Continue to Delete account
+          </button>
+        </>
+      );
+    } else {
+      return (
+        <button
+          className="btn btn-danger btn-md btn-block"
+          onClick={(e) => {
+            e.preventDefault();
+            setDAform(true);
+          }}
+        >
+          Delete account
+        </button>
+      );
+    }
+  }
+
+  function renderDeleteAlert() {
+    if (authSelector.daAlert) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {authSelector.daAlert}
+        </div>
+      );
+    }
+
+    if (deleteAccountAlert) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {deleteAccountAlert}
         </div>
       );
     }
@@ -281,6 +378,13 @@ const Settings = () => {
         Submit password change
       </button>
       {renderPasswordAlert()}
+
+      <hr />
+
+      <h5>Danger zone</h5>
+
+      {renderDAform()}
+      {renderDeleteAlert()}
     </div>
   );
 };
