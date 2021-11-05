@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { signOutAction } from "../../_store/reducers/authSlice";
+import { useWithRouter } from "./useWithRouter";
 
 function Signout() {
   const dispatch = useDispatch();
@@ -18,4 +18,4 @@ function Signout() {
   );
 }
 
-export default withRouter(Signout);
+export default useWithRouter(Signout);

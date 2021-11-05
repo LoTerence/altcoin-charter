@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signInAction,
@@ -10,10 +10,11 @@ import {
 import * as EmailValidator from "email-validator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useWithRouter } from "./useWithRouter";
 
 function Signin() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const authSelector = useSelector(selectAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +22,7 @@ function Signin() {
   const [message, setMessage] = useState("");
 
   if (authSelector.authenticated) {
-    return <Redirect to={"/feature"} />;
+    return <Navigate to={"/feature"} />;
   }
 
   async function handleFormSubmit(e) {
@@ -46,7 +47,7 @@ function Signin() {
     }
 
     try {
-      dispatch(signInAction(history, { email, password }));
+      dispatch(signInAction(navigate, { email, password }));
     } catch (err) {
       console.log(err);
       setIsError(true);
@@ -189,4 +190,4 @@ function Signin() {
   );
 }
 
-export default withRouter(Signin);
+export default useWithRouter(Signin);

@@ -5,7 +5,7 @@
   "main": "server.js",
   "homepage": "https://altcoin-charter.herokuapp.com/",
   "engines": {
-    "node": "12.18.3"
+    "node": "14.17.4"
   },
   "scripts": {
     "client-install": "cd client && npm install",
@@ -18,7 +18,9 @@
   "author": "Terence Lo",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.3.0",
+    "jest": "^27.3.1",
+    "mongodb-memory-server": "^8.0.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
@@ -28,9 +30,7 @@
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "jest": "^27.3.1",
     "jsonwebtoken": "^8.5.1",
-    "mongodb-memory-server": "^7.5.1",
     "mongoose": "^5.10.7",
     "mongoose-findorcreate": "^3.0.0",
     "mongoose-unique-validator": "^2.0.3",

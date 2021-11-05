@@ -52,7 +52,7 @@ export const {
 
 // thunks that allows us to perform async logic
 export const signInAction =
-  (history, { email, password }) =>
+  (navigate, { email, password }) =>
   (dispatch) => {
     axios
       .post("/users/authenticate", { email, password })
@@ -60,7 +60,7 @@ export const signInAction =
         if (res.data.success) {
           dispatch(authenticate());
           localStorage.setItem("token", res.data.token);
-          history.push("/feature");
+          navigate("/feature");
         } else {
           dispatch(authError(res.data.message));
         }
@@ -81,7 +81,7 @@ export const fbSignInAction = () => () => {
 
 // Sign up thunk
 export const signUpAction =
-  (history, { email, password }) =>
+  (navigate, { email, password }) =>
   (dispatch) => {
     //same process as signInAction
     axios
@@ -90,7 +90,7 @@ export const signUpAction =
         if (res.data.success) {
           dispatch(authenticate());
           localStorage.setItem("token", res.data.token);
-          history.push("/feature");
+          navigate("/feature");
         } else {
           console.log(res.data.message);
           dispatch(authError(res.data.message));

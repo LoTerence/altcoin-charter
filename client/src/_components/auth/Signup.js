@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Link, withRouter, Redirect, useHistory } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
 import * as EmailValidator from "email-validator";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useWithRouter } from "./useWithRouter";
 
 function Signup() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const authSelector = useSelector(selectAuth);
   const [email, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
@@ -17,7 +18,7 @@ function Signup() {
   const [message, setMessage] = useState("");
 
   if (authSelector.authenticated) {
-    return <Redirect to={"/feature"} />;
+    return <Navigate to={"/feature"} />;
   }
 
   async function handleFormSubmit(e) {
@@ -54,7 +55,7 @@ function Signup() {
     }
 
     try {
-      dispatch(signUpAction(history, { email, password: password1 }));
+      dispatch(signUpAction(navigate, { email, password: password1 }));
     } catch (err) {
       console.log(err);
       setIsError(true);
@@ -161,4 +162,4 @@ function Signup() {
   );
 }
 
-export default withRouter(Signup);
+export default useWithRouter(Signup);
