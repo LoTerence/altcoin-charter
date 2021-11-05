@@ -3,7 +3,7 @@ import Charter from "./charter/Charter";
 import Header from "./universal/Header";
 import Footer from "./universal/Footer";
 
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Signin from "./auth/Signin";
 import Signout from "./auth/Signout";
@@ -21,17 +21,38 @@ function HomePage() {
       <Header />
 
       <div className="container">
-        <Switch>
-          <Route exact path="/" component={Charter} />
-          <Route exact path="/signin" component={Signin} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-          <Route exact path="/contact-us" component={ContactUs} />
-          <Route exact path="/oauthcallback" component={OAuthCallback} />
-          <PrivateRoute path="/signout" component={Signout} />
-          <PrivateRoute path="/feature" component={Feature} />
-          <PrivateRoute path="/settings" component={Settings} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Charter />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/oauthcallback" element={<OAuthCallback />} />
+          <Route
+            path="/signout"
+            element={
+              <PrivateRoute>
+                <Signout />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/feature"
+            element={
+              <PrivateRoute>
+                <Feature />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
       </div>
 
       <Footer />

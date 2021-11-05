@@ -1,23 +1,12 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Navigate, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ children }) {
   const authenticated = useSelector(selectAuth).authenticated;
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        authenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: "/signin" }} />
-        )
-      }
-    />
-  );
+  return authenticated ? children : <Navigate to="/signin" />;
 }
 
 export default PrivateRoute;
