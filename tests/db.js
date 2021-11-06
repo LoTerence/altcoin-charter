@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const mongod = new MongoMemoryServer();
+const mongod = MongoMemoryServer.create();
+export { mongod };
 
 // connect to db
 module.exports.connect = async () => {
