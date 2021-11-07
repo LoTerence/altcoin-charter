@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+/* 
+For testing the Coin mongoose model, services, and controller
+*/
 const db = require("./db");
-// import { mongod as db } from "./db";
 
-// const { getCoinList, addCoin } = require("../controllers/coins_public");
 const Coin = require("../models/Coin");
 
 // when unit testing, each test should start on a blank canvas
@@ -18,8 +18,15 @@ const coinComplete = {
   CoinName: "Bitcoin",
 };
 
-describe("Coin", () => {
-  it("can be added to db correctly", async () => {
+const coinComplete2 = {
+  Id: "7605",
+  Name: "ETH",
+  Symbol: "ETH",
+  CoinName: "Ethereum",
+};
+
+describe("Coin model and services", () => {
+  it("a coin document can be added to db collection correctly", async () => {
     await Coin.addCoin(coinComplete);
 
     //find the coin from the db
@@ -29,5 +36,32 @@ describe("Coin", () => {
       expect(coin.Symbol).toEqual("BTC");
       expect(coin.CoinName).toEqual("Bitcoin");
     });
+  });
+
+  it("can get the collection of coins", async () => {
+    await Coin.addCoin(coinComplete);
+    await Coin.addCoin(coinComplete2);
+
+    const coins = await Coin.getCoinList();
+
+    expect(coins[0].Symbol).toEqual("BTC");
+    expect(coins[0].Name).toEqual("BTC");
+    expect(coins[0].CoinName).toEqual("Bitcoin");
+    expect(coins[1].Symbol).toEqual("ETH");
+    expect(coins[1].Name).toEqual("ETH");
+    expect(coins[1].CoinName).toEqual("Ethereum");
+  });
+
+  it("can delete a coin from the list", async () => {
+    await Coin.addCoin(coinComplete);
+    await Coin.addCoin(coinComplete2);
+
+    const deletedcoin = await Coin.deleteCoinBySymbol(coinComplete.Symbol);
+    const coins = await Coin.getCoinList();
+
+    expect(deletedcoin.Symbol).toEqual("BTC");
+    expect(coins[0].Symbol).toEqual("ETH");
+    expect(coins[0].Name).toEqual("ETH");
+    expect(coins[0].CoinName).toEqual("Ethereum");
   });
 });
