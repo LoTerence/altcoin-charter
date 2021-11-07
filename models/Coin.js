@@ -38,13 +38,16 @@ module.exports.getCoinList = async function (query) {
   }
 };
 
-module.exports.getCoinById = function (id, callback) {
-  Coin.findById(id, callback);
+// find coin by _id not Id
+module.exports.getCoinBy_id = async (id, callback) => {
+  const c = await Coin.findById(id);
+  callback(c);
 };
 
-module.exports.getCoinBySymbol = function (symbol, callback) {
+module.exports.getCoinBySymbol = async (symbol, callback) => {
   const query = { Symbol: symbol };
-  Coin.findOne(query, callback);
+  const c = await Coin.findOne(query);
+  callback(c);
 };
 
 // @param newCoin takes a coin object and saves it to the collection
