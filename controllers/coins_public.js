@@ -7,7 +7,7 @@ const Coin = require("../models/Coin");
 // @access only from client
 exports.getCoinList = async (req, res) => {
   try {
-    const coins = await Coin.getCoinList({});
+    const coins = await Coin.getCoinList();
 
     return res.status(200).json({
       success: true,

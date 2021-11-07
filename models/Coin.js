@@ -29,10 +29,19 @@ CoinSchema.plugin(uniqueValidator);
 const Coin = (module.exports = mongoose.model("Coin", CoinSchema));
 
 // -------------------------------------------------- Services -------------------------------------------------- //
-// @param query - should be an object representing the model.find query for mongoose
-module.exports.getCoinList = async function (query) {
+// @param newCoin takes a coin object and saves it to the collection
+module.exports.addCoin = async function (newCoin) {
   try {
-    return Coin.find(query);
+    return Coin.create(newCoin);
+  } catch (err) {
+    throw err;
+  }
+};
+
+// return list of all coins in public coin list
+module.exports.getCoinList = async function () {
+  try {
+    return Coin.find({});
   } catch (err) {
     throw err;
   }
@@ -50,18 +59,9 @@ module.exports.getCoinBySymbol = async (symbol, callback) => {
   callback(c);
 };
 
-// @param newCoin takes a coin object and saves it to the collection
-module.exports.addCoin = async function (newCoin) {
-  try {
-    return Coin.create(newCoin);
-  } catch (err) {
-    throw err;
-  }
-};
-
 // @desc delete a coin with its symbol
 // @param symbol - the symbol of the coin that will be deleted
-module.exports.deleteCoinBySymbol = function (symbol) {
+module.exports.deleteCoinBySymbol = (symbol) => {
   try {
     const query = { Symbol: symbol };
     return Coin.findOneAndDelete(query);
