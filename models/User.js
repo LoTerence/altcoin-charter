@@ -49,13 +49,15 @@ UserSchema.methods.isValidPassword = async function (password) {
 const User = (module.exports = mongoose.model("User", UserSchema));
 
 // ------------------------------------------ Services ------------------------------------------ //
+
+// takes a user object and adds it to the collection of users
 module.exports.addUser = function (newUser, callback) {
   newUser.password = bcrypt.hashSync(newUser.password, 10);
-  newUser.save(callback);
+  return newUser.save(callback);
 };
 
 module.exports.getUserById = function (id, callback) {
-  User.findById(id, callback);
+  return User.findById(id, callback);
 };
 
 module.exports.getUserByEmail = function (email, callback) {
