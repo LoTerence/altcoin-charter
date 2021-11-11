@@ -1,5 +1,5 @@
 /* 
-For testing the User mongoose model, services, and controller
+For testing the User mongoose model and services
 */
 
 const db = require("./db");
@@ -17,13 +17,6 @@ const userReqBody = {
   password: "password123",
 };
 
-// example of User instance
-const userInstance = new User({
-  email: userReqBody.email,
-  password: userReqBody.password,
-  watchList: [],
-});
-
 describe("User model and services - adding a user", () => {
   it("can add a user", async () => {
     const newUser = new User({
@@ -32,7 +25,7 @@ describe("User model and services - adding a user", () => {
       watchList: [],
     });
 
-    User.addUser(userInstance, (err, user) => {
+    await User.addUser(newUser, (err, user) => {
       expect(user._id).toBeTruthy();
       expect(user.email).toBe(userReqBody.email);
       expect(typeof user.password).toBe("string");
@@ -47,7 +40,7 @@ describe("User model and services - adding a user", () => {
       watchList: [],
     });
 
-    User.addUser(newUser, (err, user) => {
+    await User.addUser(newUser, (err, user) => {
       expect(err).toBeTruthy();
       expect(err.message).toBe("User validation failed: email: Email required");
     });
@@ -60,14 +53,11 @@ describe("User model and services - adding a user", () => {
       watchList: [],
     });
 
-    User.addUser(newUser, (err, user) => {
+    await User.addUser(newUser, (err, user) => {
       expect(err.message).toBe(
         "User validation failed: email: Please enter a valid email"
       );
     });
-
-    // const e = await User.addUser(newUser);
-    // expect(e).toThrow();
   });
 
   /*
@@ -92,14 +82,54 @@ describe("User model and services - adding a user", () => {
   }); */
 });
 
-describe("User model and services - service functions", () => {
-  it("can get user by _id", async () => {
-    let user_id = await User.addUser(userInstance)._id;
+let userInstanceId;
 
-    await User.getUserById(user_id, (err1, user1) => {
-      console.log(err1);
-      console.log(user1);
-      expect(user1.email).toBe(userInstance.email);
+const addUsers = async () => {
+  const addedUser = await User.addUser(userInstance);
+  userInstanceId = addedUser._id;
+  await User.addUser(userInstance2);
+};
+
+// example of User instance
+const userInstance = new User({
+  email: "unittest2@email.com",
+  password: "anotherpassword",
+  watchList: [],
+  username: "WUT?",
+});
+
+// const userInstanceId = userInstance._id;
+
+const userInstance2 = new User({
+  email: "unittest3@email2.com",
+  password: "someotherpassword321",
+  watchList: [],
+  username: "whyDoWeNeedUsername",
+});
+
+describe("User model and services - service functions", () => {
+  beforeEach(async () => {
+    await addUsers();
+  });
+
+  // it("can get user by id", async () => {
+  //   await User.getUserById(userInstanceId, (err, user) => {
+  //     if (err) console.log("Error occured while trying to get user by id");
+  //     if (!user) console.log("something went wrong with finding user");
+
+  //     expect(user._id).toBe(userInstanceId);
+  //     expect(user.email).toBe(userInstance.email);
+  //   });
+  // });
+
+  it("can get user by email", async () => {
+    await User.getUserByEmail("unittest2@email.com", (err, user) => {
+      if (err) console.log("There was an error getting user by email");
+      if (!user) console.log("No user found");
+
+      expect(user.email).toBe("unittest2@email.com");
     });
   });
 });
+
+// all the async function calls are throwing off the order in which these tests should be run.. need to find out how to unit test properly

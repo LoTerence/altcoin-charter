@@ -57,12 +57,12 @@ module.exports.addUser = function (newUser, callback) {
 };
 
 module.exports.getUserById = function (id, callback) {
-  return User.findById(id, callback);
+  User.findById(id, callback);
 };
 
 module.exports.getUserByEmail = function (email, callback) {
   const query = { email: email };
-  User.findOne(query, callback);
+  return User.findOne(query, callback);
 };
 
 module.exports.changeUserPassword = function (
