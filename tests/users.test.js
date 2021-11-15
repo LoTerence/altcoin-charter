@@ -85,17 +85,18 @@ describe("User model and services - adding a user", () => {
 let userInstanceId;
 
 const addUsers = async () => {
-  const addedUser = await User.addUser(userInstance);
-  userInstanceId = addedUser._id;
-  await User.addUser(userInstance2);
+  const addedUser1 = await User.addUser(userInstance1);
+  userInstanceId = addedUser1._id.toString();
+  const addedUser2 = await User.addUser(userInstance2);
+  return { addedUser1, addedUser2 };
 };
 
 // example of User instance
-const userInstance = new User({
+const userInstance1 = new User({
   email: "unittest2@email.com",
   password: "anotherpassword",
   watchList: [],
-  username: "WUT?",
+  username: "WUT",
 });
 
 // const userInstanceId = userInstance._id;
@@ -108,28 +109,39 @@ const userInstance2 = new User({
 });
 
 describe("User model and services - service functions", () => {
-  beforeEach(async () => {
-    await addUsers();
-  });
-
-  // it("can get user by id", async () => {
-  //   await User.getUserById(userInstanceId, (err, user) => {
-  //     if (err) console.log("Error occured while trying to get user by id");
-  //     if (!user) console.log("something went wrong with finding user");
-
-  //     expect(user._id).toBe(userInstanceId);
-  //     expect(user.email).toBe(userInstance.email);
-  //   });
+  // beforeEach(async () => {
+  //   await addUsers();
   // });
 
   it("can get user by email", async () => {
-    await User.getUserByEmail("unittest2@email.com", (err, user) => {
+    const { addedUser1 } = await addUsers();
+
+    await User.getUserByEmail(addedUser1.email, (err, user) => {
       if (err) console.log("There was an error getting user by email");
       if (!user) console.log("No user found");
 
-      expect(user.email).toBe("unittest2@email.com");
+      expect(user._id).toStrictEqual(addedUser1._id);
+      expect(user.email).toBe(addedUser1.email);
     });
   });
+
+  it("can get user by id", async () => {
+    const { addedUser1 } = await addUsers();
+
+    await User.findById(addedUser1.id, (err, user) => {
+      if (err) console.log("Error occured while trying to get user by id");
+      if (!user) console.log("No user found");
+
+      // expect(user._id).toBe(userInstanceId);
+      expect(user.email).toBe(addedUser1.email);
+    });
+  });
+
+  // it("Should return null if a document with provided ID could not be found", async () => {
+  //   const result = await product.findById("1234567890123");
+  //   expect(result).toBeNull();
+  // });
 });
 
 // all the async function calls are throwing off the order in which these tests should be run.. need to find out how to unit test properly
+// seems like mongodb-memory-server doesnt work with findbyid
