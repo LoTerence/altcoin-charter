@@ -12,8 +12,8 @@ import {
   selectHistData,
 } from "../../../_store/reducers/histDataSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { TrashIcon } from "../../icons";
 
 const CoinLi = (props) => {
   const dispatch = useDispatch();
@@ -21,8 +21,6 @@ const CoinLi = (props) => {
   const deletingCoinId = useSelector(selectWatchList).deletingCoinId;
   const activeCoin = useSelector(selectHistData).activeCoin;
   const COIN = props.coin;
-
-  const removeIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 
   function handleDeleteCoin() {
     dispatch(deleteCoinWLAction(COIN, COIN.Id));
@@ -43,7 +41,7 @@ const CoinLi = (props) => {
 
     return (
       <span className="remove-icon" onClick={() => handleDeleteCoin()}>
-        {removeIcon}
+        <TrashIcon />
       </span>
     );
   }
