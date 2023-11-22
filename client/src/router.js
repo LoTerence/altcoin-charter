@@ -4,11 +4,11 @@ import OAuthCallback from "./_components/auth/OAuthCallback";
 import Signin from "./_components/auth/Signin";
 import Signout from "./_components/auth/Signout";
 import Signup from "./_components/auth/Signup";
-import ContactUs from "./_components/pages/ContactUs";
-import ErrorPage from "./_components/pages/ErrorPage";
-import Feature from "./_components/pages/Feature";
-import PrivacyPolicy from "./_components/pages/PrivacyPolicy";
-import Settings from "./_components/pages/Settings";
+import ContactUs from "./pages/ContactUs";
+import ErrorPage from "./pages/ErrorPage";
+import Feature from "./pages/Feature";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Settings from "./pages/Settings";
 import Header from "./_components/universal/Header";
 import Footer from "./_components/universal/Footer";
 

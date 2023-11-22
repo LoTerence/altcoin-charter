@@ -5,17 +5,14 @@
 
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import WatchList from "../charter/watchlist/WatchList";
-import PriceChart from "../charter/PriceChart";
-import CoinInfo from "../charter/CoinInfo";
-import TimeFrameList from "../charter/TimeFrameList";
-import CoinNameInfo from "../charter/CoinNameInfo";
-import PrivateRoute from "../auth/PrivateRoute";
+import WatchList from "../_components/charter/watchlist/WatchList";
+import PriceChart from "../_components/charter/PriceChart";
+import CoinInfo from "../_components/charter/CoinInfo";
+import TimeFrameList from "../_components/charter/TimeFrameList";
+import CoinNameInfo from "../_components/charter/CoinNameInfo";
+import PrivateRoute from "../_components/auth/PrivateRoute";
 
-import {
-  setActiveCoin,
-  setTimeFrame,
-} from "../../_store/reducers/histDataSlice";
+import { setActiveCoin, setTimeFrame } from "../_store/reducers/histDataSlice";
 
 export default function Feature() {
   const dispatch = useDispatch();
