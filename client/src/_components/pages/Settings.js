@@ -1,9 +1,11 @@
 /* Settings.js
- *  Component that shows allows user to change name, email, or password
+ *  Component that allows user to change name, email, or password
  */
+// TODO: refactor this entire page, its a mess
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as EmailValidator from "email-validator";
 import {
   getProfile,
   changeNameAction,
@@ -13,7 +15,8 @@ import {
   changeEmailAlert,
   selectAuth,
 } from "../../_store/reducers/authSlice";
-import * as EmailValidator from "email-validator";
+import PrivateRoute from "../auth/PrivateRoute";
+import Layout from "../universal/Layout";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -32,11 +35,11 @@ const Settings = () => {
   const [deleteAccountAlert, setDeleteAccountAlert] = useState("");
   const [daForm, setDAform] = useState(false);
 
-  useEffect(() => {
-    if (profile.email === "") {
-      dispatch(getProfile());
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (profile.email === "") {
+  //     dispatch(getProfile());
+  //   }
+  // }, [dispatch]);
 
   async function handleNameChangeButton(e) {
     e.preventDefault();
@@ -389,4 +392,14 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+const PrivateSettings = () => {
+  return (
+    <PrivateRoute>
+      <Layout>
+        <Settings />
+      </Layout>
+    </PrivateRoute>
+  );
+};
+
+export default PrivateSettings;

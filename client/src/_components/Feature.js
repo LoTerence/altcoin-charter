@@ -5,12 +5,13 @@
 
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
 import WatchList from "./charter/watchlist/WatchList";
 import PriceChart from "./charter/PriceChart";
 import CoinInfo from "./charter/CoinInfo";
 import TimeFrameList from "./charter/TimeFrameList";
 import CoinNameInfo from "./charter/CoinNameInfo";
+import PrivateRoute from "./auth/PrivateRoute";
+import Layout from "./universal/Layout";
 
 import { setActiveCoin, setTimeFrame } from "../_store/reducers/histDataSlice";
 
@@ -23,12 +24,14 @@ export default function Feature() {
   });
 
   return (
-    <div>
-      <CoinNameInfo />
-      <TimeFrameList />
-      <PriceChart />
-      <CoinInfo />
-      <WatchList />
-    </div>
+    <PrivateRoute>
+      <Layout>
+        <CoinNameInfo />
+        <TimeFrameList />
+        <PriceChart />
+        <CoinInfo />
+        <WatchList />
+      </Layout>
+    </PrivateRoute>
   );
 }
