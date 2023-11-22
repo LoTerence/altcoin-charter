@@ -1,5 +1,5 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import Layout from "../universal/Layout";
 
 export default () => {
   useEffect(() => {
@@ -14,5 +14,9 @@ export default () => {
   });
 
   // some text to show the user
-  return <p>Please wait...</p>;
+  return (
+    <Layout>
+      <p>Please wait...</p>
+    </Layout>
+  );
 };
