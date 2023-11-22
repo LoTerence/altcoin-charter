@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Layout from "../universal/Layout";
 
 export default () => {
   useEffect(() => {
@@ -14,9 +13,5 @@ export default () => {
   });
 
   // some text to show the user
-  return (
-    <Layout>
-      <p>Please wait...</p>
-    </Layout>
-  );
+  return <p>Please wait...</p>;
 };

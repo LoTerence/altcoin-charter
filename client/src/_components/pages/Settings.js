@@ -16,7 +16,6 @@ import {
   selectAuth,
 } from "../../_store/reducers/authSlice";
 import PrivateRoute from "../auth/PrivateRoute";
-import Layout from "../universal/Layout";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -395,9 +394,7 @@ const Settings = () => {
 const PrivateSettings = () => {
   return (
     <PrivateRoute>
-      <Layout>
-        <Settings />
-      </Layout>
+      <Settings />
     </PrivateRoute>
   );
 };

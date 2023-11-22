@@ -1,8 +1,18 @@
 import React from "react";
-import Charter from "./charter";
+import { Outlet } from "react-router-dom";
+import Header from "./universal/Header";
+import Footer from "./universal/Footer";
 
-function Root() {
-  return <Charter />;
-}
+const Root = () => {
+  return (
+    <>
+      <Header />
+      <main className="container">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+};
 
 export default Root;

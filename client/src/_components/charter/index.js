@@ -5,7 +5,6 @@
 
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Layout from "../universal/Layout";
 
 import CoinUList from "./CoinUList";
 import PriceChart from "./PriceChart";
@@ -27,12 +26,12 @@ export default function Charter() {
   });
 
   return (
-    <Layout>
+    <>
       <CoinNameInfo />
       <TimeFrameList />
       <PriceChart />
       <CoinInfo />
       <CoinUList />
-    </Layout>
+    </>
   );
 }
