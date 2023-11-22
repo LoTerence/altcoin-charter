@@ -14,8 +14,8 @@ import {
   deleteAccountAction,
   changeEmailAlert,
   selectAuth,
-} from "../../_store/reducers/authSlice";
-import PrivateRoute from "../auth/PrivateRoute";
+} from "../_store/reducers/authSlice";
+import PrivateRoute from "../_components/auth/PrivateRoute";
 
 const Settings = () => {
   const dispatch = useDispatch();
