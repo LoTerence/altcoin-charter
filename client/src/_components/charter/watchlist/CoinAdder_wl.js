@@ -133,7 +133,7 @@ const CoinAdder_wl = () => {
 
   return (
     <div className="col-md-4 col-sm-6 col-12 p-2">
-      <label>Add new coin:</label>
+      <div>Add new coin:</div>
       <form>
         <div className="form-floating d-flex">
           <input
