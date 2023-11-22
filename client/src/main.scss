@@ -1,3 +1,113 @@
+.google-button {
+  color: white !important;
+  background-color: #dd4b39 !important;
+  width: 100%;
+  transition: brightness 0.15s ease-in-out;
+}
+
+.fb-button {
+  color: white !important;
+  background-color: #3b5998 !important;
+  width: 100%;
+  transition: brightness 0.15s ease-in-out;
+}
+
+.google-button:hover,
+.fb-button:hover {
+  filter: brightness(90%);
+}
+
+.coin-li {
+  border: 1px solid #bced91;
+  border-left: 10px solid #bced91;
+  border-radius: 0px;
+  background: #fafafa;
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: .65rem;
+  position: relative;
+}
+
+.coin-li:hover {
+    filter: brightness(90%);
+    cursor: pointer;
+}
+
+.coin-li:focus {
+  box-shadow: 0 0 5px 4px rgb(155, 228, 155);
+  outline: 0;
+}
+
+.coin-li-active {
+  border: 2px solid #006A4E;
+  border-left: 10px solid #006A4E;
+  border-radius: 0px;
+  background: rgb(68, 136, 68);
+  color: white;
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: .9rem;
+  position: relative;
+}
+
+.coin-li-active:hover {
+  filter: brightness(90%);
+  cursor: pointer;
+}
+
+.remove-icon {
+  opacity: 75%;
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: .65rem;
+}
+
+.remove-icon:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.coin-info-loading {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #fafafa;
+  opacity: 95%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.suggestions{
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  
+}
+
+.suggestion{
+  cursor:pointer;
+  padding-left: 5px;
+}
+
+.suggestion:hover{
+  background-color: silver;
+}
+
+.add-button {
+  z-index: 1020;
+}
+
+.add-button-loading {
+  z-index: 1020;
+  opacity: 1 !important;
+  background-color: #72A68E !important;
+  border-color: #5A987B !important;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap.scss"
-
-
