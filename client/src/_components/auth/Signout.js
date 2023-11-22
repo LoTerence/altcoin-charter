@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { signOutAction } from "../../_store/reducers/authSlice";
 import { useWithRouter } from "./useWithRouter";
 import PrivateRoute from "./PrivateRoute";
-import Layout from "../universal/Layout";
 
 function Signout() {
   const dispatch = useDispatch();
@@ -14,9 +13,7 @@ function Signout() {
 
   return (
     <PrivateRoute>
-      <Layout>
-        <h1>You have been logged out</h1>
-      </Layout>
+      <h1>You have been logged out</h1>
     </PrivateRoute>
   );
 }
