@@ -1,5 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
-import Root from "./_components/Root";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import Charter from "./_components/charter";
 import OAuthCallback from "./_components/auth/OAuthCallback";
 import Signin from "./_components/auth/Signin";
@@ -10,11 +9,25 @@ import ErrorPage from "./_components/pages/ErrorPage";
 import Feature from "./_components/pages/Feature";
 import PrivacyPolicy from "./_components/pages/PrivacyPolicy";
 import Settings from "./_components/pages/Settings";
+import Header from "./_components/universal/Header";
+import Footer from "./_components/universal/Footer";
+
+const Layout = () => {
+  return (
+    <>
+      <Header />
+      <main className="container">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+};
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: Root,
+    Component: Layout,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -22,35 +35,35 @@ const router = createBrowserRouter([
         Component: Charter,
       },
       {
-        path: "/signin",
+        path: "signin",
         Component: Signin,
       },
       {
-        path: "/signup",
+        path: "signup",
         Component: Signup,
       },
       {
-        path: "/privacy-policy",
+        path: "privacy-policy",
         Component: PrivacyPolicy,
       },
       {
-        path: "/contact-us",
+        path: "contact-us",
         Component: ContactUs,
       },
       {
-        path: "/oauthcallback",
+        path: "oauthcallback",
         Component: OAuthCallback,
       },
       {
-        path: "/signout",
+        path: "signout",
         Component: Signout,
       },
       {
-        path: "/feature",
+        path: "feature",
         Component: Feature,
       },
       {
-        path: "/settings",
+        path: "settings",
         Component: Settings,
       },
     ],
