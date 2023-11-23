@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import * as EmailValidator from "email-validator";
 import {
   signInAction,
   selectAuth,
   googleSignInAction,
   fbSignInAction,
 } from "../../_store/reducers/authSlice";
-import * as EmailValidator from "email-validator";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { FacebookIcon, GoogleIcon } from "../icons";
 import { useWithRouter } from "./useWithRouter";
 
 function Signin() {
@@ -170,14 +169,14 @@ function Signin() {
             type="submit"
             onClick={(e) => handleGoogleButtonClick(e)}
           >
-            <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+            <GoogleIcon /> Sign in with Google
           </button>
           <button
             className="btn fb-button btn-lg mb-2"
             type="submit"
             onClick={(e) => handleFbButtonClick(e)}
           >
-            <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
+            <FacebookIcon /> Sign in with Facebook
           </button>
           <br />
           <p>
