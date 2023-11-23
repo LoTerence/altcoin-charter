@@ -10,7 +10,7 @@ export const coinListSlice = createSlice({
     error: "",
   },
   reducers: {
-    getCoins: (state, action) => {
+    setCoins: (state, action) => {
       state.coins = action.payload;
     },
     addCoin: (state, action) => {
@@ -31,7 +31,7 @@ export const coinListSlice = createSlice({
     setDeletingCoinId: (state, action) => {
       state.deletingCoinId = action.payload;
     },
-    coinErr: (state, action) => {
+    setError: (state, action) => {
       state.error = action.payload;
       state.reqInProgress = false;
     },
@@ -39,13 +39,18 @@ export const coinListSlice = createSlice({
 });
 
 export const {
-  getCoins,
+  setCoins,
   addCoin,
   deleteCoin,
   setReqInProgress,
   setDeletingCoinId,
-  coinErr,
+  setError,
 } = coinListSlice.actions;
+
+export default coinListSlice.reducer;
+
+// Selector that lets the rest of the app get read access to coinListSlice state
+export const selectCoinList = (state) => state.coinList;
 
 // Async thunks
 // GET COINS -- action creator that sends a list of coins from db to reducer/state
@@ -54,14 +59,14 @@ export const getCoinsAction = () => (dispatch) => {
     .get("/coins_public/coinList")
     .then((res) => {
       if (res.data.success) {
-        dispatch(getCoins(res.data.data));
+        dispatch(setCoins(res.data.data));
       } else {
-        dispatch(coinErr("Something went wrong while getting coin list"));
+        dispatch(setError("Something went wrong while getting coin list"));
       }
     })
     .catch((err) => {
       console.log(err);
-      dispatch(coinErr("Something went wrong while getting coin list"));
+      dispatch(setError("Something went wrong while getting coin list"));
     });
 };
 
@@ -91,22 +96,22 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
             if (res2.data.success) {
               dispatch(addCoin(newCoin));
             } else {
-              dispatch(coinErr(res2.data.error));
+              dispatch(setError(res2.data.error));
             }
           })
           .catch((err) => {
-            dispatch(coinErr("There was an error fetching new coin data"));
+            dispatch(setError("There was an error fetching new coin data"));
             console.log("error in posting to coins_public in addcoin action: ");
             throw err;
           });
       } else {
         //if symbol doesnt exist, dispatch an error message
-        dispatch(coinErr("A coin with that symbol does not exist"));
+        dispatch(setError("A coin with that symbol does not exist"));
       }
     })
     .catch((err) => {
       console.log("error in addCoin method api call to cryptocompare.com ");
-      dispatch(coinErr("err"));
+      dispatch(setError("err"));
     });
 };
 
@@ -122,22 +127,17 @@ export const deleteCoinAction = (coin, id) => (dispatch) => {
         dispatch(deleteCoin(sym));
         dispatch(setDeletingCoinId(""));
       } else {
-        dispatch(coinErr("Something went wrong while deleting coin"));
+        dispatch(setError("Something went wrong while deleting coin"));
         dispatch(setDeletingCoinId(""));
       }
     })
     .catch((err) => {
       console.log(err);
       dispatch(
-        coinErr(
+        setError(
           "There was an error deleting from coins_public in deleteCoin action"
         )
       );
       dispatch(setDeletingCoinId(""));
     });
 };
-
-// Selector that lets the rest of the app get read access to coinListSlice state
-export const selectCoinList = (state) => state.coinList;
-
-export default coinListSlice.reducer;

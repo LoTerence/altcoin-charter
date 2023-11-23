@@ -1,6 +1,8 @@
 // The block in the coinUList component that lets the user add a new AltCoin
 
 //TODO: add custom styling
+//TODO: load list of symbols from DB? and use a cron to update DB once a week?
+// TODO: fix the sort function, it should show the first letters the user types
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,125 +10,78 @@ import axios from "axios";
 import {
   addCoinAction,
   selectCoinList,
-  coinErr,
+  setError,
 } from "../../_store/reducers/coinListSlice";
 import { SpinnerIcon } from "../icons";
 
 const CoinAdder = () => {
   const dispatch = useDispatch();
+  const { coins, error, reqInProgress } = useSelector(selectCoinList);
   const [symbol, setSymbol] = useState("");
   const [symbols, setSymbols] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const coins = useSelector(selectCoinList).coins;
-  const errorMessage = useSelector(selectCoinList).error;
-  const reqInProgress = useSelector(selectCoinList).reqInProgress;
 
   useEffect(() => {
     const loadSymbols = async () => {
       const res = await axios.get(
         "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
       );
-      setSymbols(Object.values(res.data.Data));
+      const initialSymbols = Object.values(res.data.Data);
+      setSymbols(initialSymbols);
     };
     loadSymbols();
   }, []);
 
   const onChangeHandler = (e) => {
-    setSymbol(e);
+    const text = e.target.value;
+    setSymbol(text);
     let matches = [];
-    if (e.length > 0) {
-      matches = symbols.filter((sym) => {
-        const regex = new RegExp(`${e}`, "gi");
-        return sym.Symbol.match(regex);
-      });
+    if (text.length > 0) {
+      matches = symbols
+        .filter((sym) => {
+          const regex = new RegExp(`${text}`, "gi");
+          return sym.Symbol.match(regex);
+        })
+        .sort((a, b) => {
+          if (a.Symbol < b.Symbol) return -1;
+          if (a.Symbol > b.Symbol) return 1;
+          return 0;
+        })
+        .slice(0, 10);
     }
     setSuggestions(matches);
   };
 
-  const onSuggestHandler = (text) => {
-    setSymbol(text);
+  const onSuggestClick = (sym) => {
+    setSymbol(sym);
     setSuggestions([]);
   };
 
-  function handleBtnClick(e) {
+  const onAddButtonClick = (e) => {
     e.preventDefault();
 
     if (symbol === "") {
-      dispatch(coinErr("Input required"));
+      dispatch(setError("Input required"));
       return;
     }
 
     const iChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
     if (iChars.test(symbol)) {
-      dispatch(coinErr("No special characters allowed"));
+      dispatch(setError("No special characters allowed"));
       return;
     }
 
     const sym = symbol.toUpperCase();
 
     if (coins.some((c) => c.Symbol === sym)) {
-      dispatch(coinErr(sym + " is already in the list of coins"));
+      dispatch(setError(sym + " is already in the list of coins"));
       return;
     }
 
     dispatch(addCoinAction(sym));
     setSymbol("");
     setSuggestions([]);
-  }
-
-  function renderAddButton() {
-    if (reqInProgress) {
-      return (
-        <button
-          className="btn btn-success add-button-loading"
-          onClick={(e) => handleBtnClick(e)}
-          disabled
-        >
-          <div className="w-32">
-            <SpinnerIcon />
-          </div>
-        </button>
-      );
-    } else {
-      return (
-        <button
-          className="btn btn-success add-button"
-          onClick={(e) => handleBtnClick(e)}
-        >
-          <div className="w-32">Add</div>
-        </button>
-      );
-    }
-  }
-
-  function renderSuggestions() {
-    if (suggestions.length > 0) {
-      let suggestions_s = suggestions.sort((a, b) => {
-        return a.Id - b.Id;
-      });
-      return (
-        <div className="suggestions">
-          {suggestions_s.slice(0, 10).map((suggestion) => {
-            return (
-              <div
-                key={suggestion.Id}
-                className="suggestion"
-                onClick={() => onSuggestHandler(suggestion.Symbol)}
-              >
-                {suggestion.FullName}
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-  }
-
-  function renderAlert() {
-    if (errorMessage) {
-      return <div className="alert alert-danger">{errorMessage}</div>;
-    }
-  }
+  };
 
   return (
     <div className="col-md-4 col-sm-6 col-12 p-2">
@@ -140,7 +95,7 @@ const CoinAdder = () => {
             className="form-control form-control-sm"
             placeholder="Altcoin Symbol, i.e. BTC, LTC..."
             value={symbol}
-            onChange={(e) => onChangeHandler(e.target.value)}
+            onChange={(e) => onChangeHandler(e)}
             autoComplete="off"
             onBlur={() => {
               setTimeout(() => {
@@ -151,15 +106,55 @@ const CoinAdder = () => {
           <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput">
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
-
-          {renderAddButton()}
+          <AddButton loading={reqInProgress} onClick={onAddButtonClick} />
         </div>
-        {renderSuggestions()}
+        <SuggestionsDropdown
+          suggestions={suggestions}
+          onClick={onSuggestClick}
+        />
       </form>
 
-      {renderAlert()}
+      {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
 };
 
 export default CoinAdder;
+
+const AddButton = ({ loading, onClick }) => {
+  return (
+    <>
+      {loading ? (
+        <button className="btn btn-success add-button-loading" disabled>
+          <div className="w-32">
+            <SpinnerIcon />
+          </div>
+        </button>
+      ) : (
+        <button className="btn btn-success add-button" onClick={onClick}>
+          <div className="w-32">Add</div>
+        </button>
+      )}
+    </>
+  );
+};
+
+const SuggestionsDropdown = ({ suggestions, onClick }) => {
+  return (
+    <>
+      {suggestions.length > 0 && (
+        <div className="suggestions">
+          {suggestions.map((s) => (
+            <div
+              key={s.Id}
+              className="suggestion"
+              onClick={() => onClick(s.Symbol)}
+            >
+              {s.FullName}
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
+};

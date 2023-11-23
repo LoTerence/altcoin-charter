@@ -11,7 +11,7 @@ import CoinAdder from "./CoinAdder";
 
 const CoinUList = () => {
   const dispatch = useDispatch();
-  const coins = useSelector(selectCoinList).coins;
+  const { coins } = useSelector(selectCoinList);
 
   useEffect(() => {
     dispatch(getCoinsAction());
@@ -22,7 +22,6 @@ const CoinUList = () => {
       {coins.map((coin) => (
         <CoinLi key={coin.Id} coin={coin} />
       ))}
-
       <CoinAdder />
     </div>
   );
