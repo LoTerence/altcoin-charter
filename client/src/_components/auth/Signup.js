@@ -3,9 +3,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
 import * as EmailValidator from "email-validator";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useWithRouter } from "./useWithRouter";
+// import { FacebookIcon, GoogleIcon } from "../icons";
 
 function Signup() {
   const dispatch = useDispatch();
@@ -146,10 +145,10 @@ function Signup() {
             <hr className="my-4" />
           </form>
           {/* <button className="btn google-button btn-lg mb-2" type="submit">
-            <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+            <GoogleIcon /> Sign in with Google
           </button>
           <button className="btn fb-button btn-lg mb-2" type="submit">
-            <FontAwesomeIcon icon={faFacebook} /> Sign in with Facebook
+            <FacebookIcon /> Sign in with Facebook
           </button> */}
           <br />
           <p>
