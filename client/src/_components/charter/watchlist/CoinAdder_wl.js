@@ -10,8 +10,7 @@ import {
   selectWatchList,
   coinErrWL,
 } from "../../../_store/reducers/watchListSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { SpinnerIcon } from "../../icons";
 
 const CoinAdder_wl = () => {
   const dispatch = useDispatch();
@@ -83,11 +82,9 @@ const CoinAdder_wl = () => {
           onClick={(e) => handleBtnClick(e)}
           disabled
         >
-          <FontAwesomeIcon
-            icon={faCircleNotch}
-            className="fa-spin"
-            style={{ width: "37px" }}
-          />
+          <div className="w-32">
+            <SpinnerIcon />
+          </div>
         </button>
       );
     } else {
@@ -96,7 +93,7 @@ const CoinAdder_wl = () => {
           className="btn btn-success add-button"
           onClick={(e) => handleBtnClick(e)}
         >
-          Add
+          <div className="w-32">Add</div>
         </button>
       );
     }

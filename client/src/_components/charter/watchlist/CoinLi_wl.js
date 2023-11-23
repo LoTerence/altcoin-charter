@@ -11,9 +11,7 @@ import {
   setActiveCoin,
   selectHistData,
 } from "../../../_store/reducers/histDataSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { TrashIcon } from "../../icons";
+import { SpinnerIcon, TrashIcon } from "../../icons";
 
 const CoinLi = (props) => {
   const dispatch = useDispatch();
@@ -34,9 +32,7 @@ const CoinLi = (props) => {
 
   function renderDeleteButton() {
     if (COIN.Id === deletingCoinId) {
-      return (
-        <FontAwesomeIcon icon={faCircleNotch} className="remove-icon fa-spin" />
-      );
+      return <SpinnerIcon className="w-16 remove-icon" />;
     }
 
     return (
