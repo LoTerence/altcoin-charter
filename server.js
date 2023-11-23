@@ -9,7 +9,7 @@ const connectDB = require("./config/database");
 
 // allows project to read from .env
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config({ path: "./config/.env" });
+  dotenv.config();
 }
 
 // Instantiate express server
