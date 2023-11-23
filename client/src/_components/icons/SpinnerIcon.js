@@ -1,4 +1,3 @@
-/* From FontAwesome arrow-notch */
 const SpinnerIcon = ({ className }) => {
   return (
     <svg
