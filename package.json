@@ -5,7 +5,7 @@
   "main": "server.js",
   "homepage": "https://altcoin-charter.herokuapp.com/",
   "engines": {
-    "node": "14.17.4"
+    "node": "20.9.0"
   },
   "scripts": {
     "client-install": "cd client && npm install",
