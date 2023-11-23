@@ -9,17 +9,7 @@ component that will display the active coin's day's data including current price
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectHistData } from "../../_store/reducers/histDataSlice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-
-const infoStyle = {
-  border: "1px solid gold",
-  borderRadius: "0px",
-  background: "#fafafa",
-  margin: ".5rem 0",
-  padding: "10px 10px",
-  position: "relative",
-};
+import { SpinnerIcon } from "../icons";
 
 const CoinInfo = () => {
   const activeCoin = useSelector(selectHistData).activeCoin;
@@ -40,21 +30,14 @@ const CoinInfo = () => {
     if (fetchHistInProgress || fetchCoinInProgress) {
       return (
         <div className="coin-info-loading">
-          <FontAwesomeIcon
-            icon={faCircleNotch}
-            className="fa-spin fa-3x"
-            // style={{ width: "2rem" }}
-          />
+          <SpinnerIcon className="w-32 h-32" />
         </div>
       );
     }
   }
 
   return (
-    <div
-      className="d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap"
-      style={infoStyle}
-    >
+    <div className="coin-info d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap">
       {renderLoading()}
       <div className="p-2 flex-fill">
         <p>{activeCoin.CoinName}'s current Price:</p>

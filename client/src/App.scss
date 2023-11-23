@@ -17,6 +17,30 @@
   filter: brightness(90%);
 }
 
+.w-8 {
+  width: 0.5em;
+}
+
+.h-8 {
+  height: 0.5em;
+}
+
+.w-16 {
+  width: 1em;
+}
+
+.w-32 {
+  width: 2em;
+}
+
+.h-16 {
+  height: 1em;
+}
+
+.h-32 {
+  height: 2em;
+}
+
 .coin-li {
   border: 1px solid #bced91;
   border-left: 10px solid #bced91;
@@ -24,13 +48,13 @@
   background: #fafafa;
   margin: 5px;
   padding: 5px 10px;
-  font-size: .65rem;
+  font-size: 0.65rem;
   position: relative;
 }
 
 .coin-li:hover {
-    filter: brightness(90%);
-    cursor: pointer;
+  filter: brightness(90%);
+  cursor: pointer;
 }
 
 .coin-li:focus {
@@ -39,14 +63,14 @@
 }
 
 .coin-li-active {
-  border: 2px solid #006A4E;
-  border-left: 10px solid #006A4E;
+  border: 2px solid #006a4e;
+  border-left: 10px solid #006a4e;
   border-radius: 0px;
   background: rgb(68, 136, 68);
   color: white;
   margin: 5px;
   padding: 5px 10px;
-  font-size: .9rem;
+  font-size: 0.9rem;
   position: relative;
 }
 
@@ -60,12 +84,21 @@
   position: absolute;
   top: 3px;
   right: 5px;
-  font-size: .65rem;
+  font-size: 0.65rem;
 }
 
 .remove-icon:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.coin-info {
+  border: 1px solid gold;
+  border-radius: 0px;
+  background: #fafafa;
+  margin: 0.5rem 0;
+  padding: 10px 10px;
+  position: relative;
 }
 
 .coin-info-loading {
@@ -83,19 +116,18 @@
   align-items: center;
 }
 
-.suggestions{
+.suggestions {
   border-right: 1px solid black;
   border-left: 1px solid black;
   border-bottom: 1px solid black;
-  
 }
 
-.suggestion{
-  cursor:pointer;
+.suggestion {
+  cursor: pointer;
   padding-left: 5px;
 }
 
-.suggestion:hover{
+.suggestion:hover {
   background-color: silver;
 }
 
@@ -106,8 +138,24 @@
 .add-button-loading {
   z-index: 1020;
   opacity: 1 !important;
-  background-color: #72A68E !important;
-  border-color: #5A987B !important;
+  background-color: #72a68e !important;
+  border-color: #5a987b !important;
 }
 
-@import "../node_modules/bootstrap/scss/bootstrap.scss"
+.spinner-icon {
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
