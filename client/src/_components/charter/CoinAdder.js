@@ -52,6 +52,9 @@ const CoinAdder = () => {
     setSuggestions(matches);
   };
 
+  // const onSuggestClick = (e) => {
+  //   e.stopPropagation();
+  //   const sym = e.target.value;
   const onSuggestClick = (sym) => {
     setSymbol(sym);
     setSuggestions([]);
@@ -89,21 +92,21 @@ const CoinAdder = () => {
       <form>
         <div className="form-floating d-flex">
           <input
-            name="symbol"
-            id="addNewCoinInput"
-            type="string"
-            className="form-control form-control-sm"
-            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
-            value={symbol}
-            onChange={(e) => onChangeHandler(e)}
             autoComplete="off"
+            className="form-control form-control-sm"
+            id="addNewCoinInput"
+            name="symbol"
             onBlur={() => {
               setTimeout(() => {
                 setSuggestions([]);
               }, 100);
             }}
+            onChange={(e) => onChangeHandler(e)}
+            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+            type="string"
+            value={symbol}
           />
-          <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput">
+          <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
           <AddButton isLoading={reqInProgress} onClick={onAddButtonClick} />
@@ -146,9 +149,11 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
         <div className="suggestions">
           {suggestions.map((s) => (
             <div
-              key={s.Id}
               className="suggestion"
-              onClick={() => onClick(s.Symbol)}
+              key={s.Id}
+              onClick={(e) => onClick(s.Symbol)}
+              // onClick={(e) => onClick(e)}
+              // value={s.Symbol}
             >
               {s.FullName}
             </div>
