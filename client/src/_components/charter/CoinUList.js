@@ -1,6 +1,6 @@
 // Component for the unordered list of coins: CoinUList
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCoinsAction,

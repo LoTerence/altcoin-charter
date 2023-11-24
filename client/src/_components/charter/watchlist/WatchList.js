@@ -3,9 +3,8 @@
  * personal watchlist
  */
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   getCoinsWLAction,
   selectWatchList,
@@ -16,8 +15,8 @@ import CoinAdder from "./CoinAdder_wl";
 
 const WatchList = () => {
   const dispatch = useDispatch();
-  const profile = useSelector(selectAuth).userProfile;
-  const coins = useSelector(selectWatchList).coins;
+  const { userProfile } = useSelector(selectAuth);
+  const { coins } = useSelector(selectWatchList);
 
   useEffect(() => {
     dispatch(getCoinsWLAction());
@@ -25,9 +24,9 @@ const WatchList = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <>
       <p>
-        <b>{profile.email}</b>
+        <b>{userProfile.email}</b>
       </p>
       <p>
         Your personal watchlist of coins: Coins you add to this list will be
@@ -39,7 +38,7 @@ const WatchList = () => {
         ))}
         <CoinAdder />
       </div>
-    </div>
+    </>
   );
 };
 
