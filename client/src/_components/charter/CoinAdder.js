@@ -1,10 +1,10 @@
-// The block in the coinUList component that lets the user add a new AltCoin
+/* The block in the coinUList component that lets the user add a new AltCoin */
 
 //TODO: add custom styling
 //TODO: load list of symbols from DB? and use a cron to update DB once a week?
 // TODO: fix the sort function, it should show the first letters the user types
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
@@ -106,7 +106,7 @@ const CoinAdder = () => {
           <label style={{ opacity: "0.5" }} htmlFor="addNewCoinInput">
             Altcoin Symbol, i.e. BTC, LTC...
           </label>
-          <AddButton loading={reqInProgress} onClick={onAddButtonClick} />
+          <AddButton isLoading={reqInProgress} onClick={onAddButtonClick} />
         </div>
         <SuggestionsDropdown
           suggestions={suggestions}
@@ -121,10 +121,10 @@ const CoinAdder = () => {
 
 export default CoinAdder;
 
-const AddButton = ({ loading, onClick }) => {
+const AddButton = ({ isLoading, onClick }) => {
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <button className="btn btn-success add-button-loading" disabled>
           <div className="w-32">
             <SpinnerIcon />

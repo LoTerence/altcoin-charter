@@ -3,7 +3,6 @@ timeFrameList.js
 component that displays buttons for selecting active time frame
 The default time frame is day
 */
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setTimeFrame,
@@ -18,15 +17,13 @@ const m1px = {
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
-  const activeCoin = useSelector(selectHistData).activeCoin;
-  const activeTimeframe = useSelector(selectHistData).activeTimeframe;
+  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
 
   // tf is a string representing the timeframe (1hour, 12hours, 1day, 1week, 1month, 3months, 1year)
   const handleClickEvent = (e, tf) => {
     e.preventDefault();
     dispatch(setTimeFrame(tf));
     if (activeCoin) {
-      // this.props.getHistData(this.props.activeCoin, tf);
       dispatch(getHistData(activeCoin, tf));
     }
   };

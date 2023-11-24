@@ -1,5 +1,7 @@
-// a <li> element modified to display coins: coinLi
-import React from "react";
+/* 
+a <li> element modified to display coins: coinLi 
+- like a coin Card
+*/
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCoinAction,
@@ -27,6 +29,7 @@ const CoinLi = ({ coin }) => {
 
   const handleSetActiveCoin = (e) => {
     e.stopPropagation();
+    if (isActive) return;
     dispatch(setActiveCoin(coin));
     dispatch(getCoinData(coin));
     dispatch(getHistData(coin, activeTimeframe));
