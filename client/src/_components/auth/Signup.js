@@ -16,7 +16,7 @@ function Signup() {
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
 
-  if (authSelector.authenticated) {
+  if (authSelector.isAuthenticated) {
     return <Navigate to={"/feature"} />;
   }
 

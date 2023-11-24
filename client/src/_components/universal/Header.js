@@ -16,7 +16,7 @@ const publicNavs = [
 ];
 
 function Header() {
-  const isAuthenticated = useSelector(selectAuth).authenticated;
+  const { isAuthenticated } = useSelector(selectAuth);
   const navs = isAuthenticated ? authNavs : publicNavs;
 
   return (

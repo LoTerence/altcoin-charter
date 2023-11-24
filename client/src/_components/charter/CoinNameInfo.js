@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 import { selectHistData } from "../../_store/reducers/histDataSlice";
 
 const CoinNameInfo = () => {
-  const { activeCoin, activeTimeframe } =
-    useSelector(selectHistData).activeCoin;
+  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
 
-  if (!activeCoin || !activeCoin.Name) {
+  if (!activeCoin || !activeCoin.CoinName) {
     return <h1>Chart</h1>;
   }
 
