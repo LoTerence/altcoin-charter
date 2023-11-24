@@ -12,17 +12,18 @@ export const authSlice = createSlice({
       email: "",
       _id: "",
     },
+    isAuthenticated: false,
   },
   reducers: {
     authenticate: (state) => {
       state.error = "";
-      state.authenticated = true;
+      state.isAuthenticated = true;
     },
     unauthenticate: (state) => {
-      state.authenticated = false;
+      state.isAuthenticated = false;
     },
     authError: (state, action) => {
-      state.authenticated = false;
+      state.isAuthenticated = false;
       state.error = action.payload;
     },
     updateProfile: (state, action) => {
