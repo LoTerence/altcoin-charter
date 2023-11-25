@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getCoinsAction,
+  fetchCoins,
   selectCoinList,
 } from "../../_store/reducers/coinListSlice";
 import CoinLi from "./CoinLi";
@@ -14,7 +14,7 @@ const CoinUList = () => {
   const { coins } = useSelector(selectCoinList);
 
   useEffect(() => {
-    dispatch(getCoinsAction());
+    dispatch(fetchCoins());
   }, [dispatch]);
 
   return (

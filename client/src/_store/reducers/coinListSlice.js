@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const initialState = {
+  coins: [],
+  deletingCoinId: null,
+  error: null,
+  reqInProgress: false,
+};
+
 export const coinListSlice = createSlice({
   name: "coinList",
-  initialState: {
-    coins: [],
-    reqInProgress: false,
-    deletingCoinId: "",
-    error: "",
-  },
+  initialState,
   reducers: {
     setCoins: (state, action) => {
       state.coins = action.payload;
@@ -17,16 +19,13 @@ export const coinListSlice = createSlice({
       const newCoin = action.payload;
       state.coins.push(newCoin);
       state.reqInProgress = false;
-      state.error = "";
+      state.error = null;
     },
     deleteCoin: (state, action) => {
       const sym = action.payload;
       const coinsArr = state.coins;
       state.coins = coinsArr.filter((c) => c.Symbol !== sym);
-      state.error = "";
-    },
-    setReqInProgress: (state, action) => {
-      state.reqInProgress = action.payload;
+      state.error = null;
     },
     setDeletingCoinId: (state, action) => {
       state.deletingCoinId = action.payload;
@@ -34,6 +33,9 @@ export const coinListSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
       state.reqInProgress = false;
+    },
+    setReqInProgress: (state, action) => {
+      state.reqInProgress = action.payload;
     },
   },
 });
@@ -54,7 +56,7 @@ export const selectCoinList = (state) => state.coinList;
 
 // Async thunks
 // GET COINS -- action creator that sends a list of coins from db to reducer/state
-export const getCoinsAction = () => (dispatch) => {
+export const fetchCoins = () => (dispatch) => {
   axios
     .get("/coins_public/coinList")
     .then((res) => {
@@ -72,6 +74,7 @@ export const getCoinsAction = () => (dispatch) => {
 
 // ADD COIN method
 // TODO(if you want): add by coinname as well as symbol
+// TODO: refactor axios here. Should separate the verifying the symbol exists and the posting to db into two separate functions
 export const addCoinAction = (newCoinSymbol) => (dispatch) => {
   dispatch(setReqInProgress(true));
 
@@ -110,7 +113,9 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
       }
     })
     .catch((err) => {
-      console.log("error in addCoin method api call to cryptocompare.com ");
+      console.log(
+        "error in addCoinAction method api call to cryptocompare.com"
+      );
       dispatch(setError("err"));
     });
 };
@@ -119,16 +124,14 @@ export const addCoinAction = (newCoinSymbol) => (dispatch) => {
 export const deleteCoinAction = (coin, id) => (dispatch) => {
   dispatch(setDeletingCoinId(id));
 
-  const sym = coin.Symbol;
+  const symbol = coin.Symbol;
   axios
-    .delete("/coins_public/coinList/" + sym)
+    .delete("/coins_public/coinList/" + symbol)
     .then((res) => {
       if (res.data.success) {
-        dispatch(deleteCoin(sym));
-        dispatch(setDeletingCoinId(""));
+        dispatch(deleteCoin(symbol));
       } else {
         dispatch(setError("Something went wrong while deleting coin"));
-        dispatch(setDeletingCoinId(""));
       }
     })
     .catch((err) => {
@@ -138,6 +141,8 @@ export const deleteCoinAction = (coin, id) => (dispatch) => {
           "There was an error deleting from coins_public in deleteCoin action"
         )
       );
-      dispatch(setDeletingCoinId(""));
+    })
+    .finally(() => {
+      dispatch(setDeletingCoinId(null));
     });
 };
