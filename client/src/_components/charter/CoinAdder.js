@@ -108,8 +108,7 @@ const CoinAdder = () => {
           onClick={onSuggestClick}
         />
       </form>
-
-      {error && <div className="alert alert-danger">{error}</div>}
+      <ErrorMessage error={error} />
     </div>
   );
 };
@@ -178,4 +177,8 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
       )}
     </>
   );
+};
+
+const ErrorMessage = ({ error }) => {
+  return <>{error && <div className="alert alert-danger">{error}</div>}</>;
 };
