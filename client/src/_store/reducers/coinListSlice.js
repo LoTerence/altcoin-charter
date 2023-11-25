@@ -22,11 +22,6 @@ export const coinListSlice = createSlice({
     setCoins: (state, action) => {
       state.coins = action.payload;
     },
-    addCoin: (state, action) => {
-      const newCoin = action.payload;
-      state.coins.push(newCoin);
-      state.error = null;
-    },
     deleteCoin: (state, action) => {
       const sym = action.payload;
       const coinsArr = state.coins;
@@ -54,7 +49,6 @@ export const coinListSlice = createSlice({
         state.error = "Something went wrong while getting coin list";
       })
       .addCase(addNewCoin.fulfilled, (state, action) => {
-        console.log(action);
         const newCoin = action.payload;
         state.coins.push(newCoin);
         state.error = null;
@@ -62,7 +56,7 @@ export const coinListSlice = createSlice({
   },
 });
 
-export const { setCoins, addCoin, deleteCoin, setDeletingCoinId, setError } =
+export const { setCoins, deleteCoin, setDeletingCoinId, setError } =
   coinListSlice.actions;
 
 export default coinListSlice.reducer;
@@ -103,9 +97,7 @@ export const addNewCoin = createAsyncThunk(
 
     const res = await axios.post("/coins_public/coinList", newCoin);
     if (!res.data.success) {
-      console.log(
-        "error in posting to coins_public in addcoin action:There was an error posting new coin data "
-      );
+      console.log("error in posting to coins_public in addNewCoin action ");
       throw new Error("There was an error posting new coin data");
     }
 
