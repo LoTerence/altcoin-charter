@@ -32,7 +32,7 @@ const CoinAdder = () => {
     loadSymbols();
   }, []);
 
-  const onChangeHandler = (e) => {
+  const handleInputChange = (e) => {
     const text = e.target.value;
     setSymbol(text);
     let matches = [];
@@ -85,29 +85,22 @@ const CoinAdder = () => {
     setSuggestions([]);
   };
 
+  const handleBlur = () => {
+    setTimeout(() => {
+      setSuggestions([]);
+    }, 100);
+  };
+
   return (
     <div className="col-md-4 col-sm-6 col-12 p-2">
       <div>Add new coin:</div>
       <form>
         <div className="form-floating d-flex">
-          <input
-            autoComplete="off"
-            className="form-control form-control-sm"
-            id="addNewCoinInput"
-            name="symbol"
-            onBlur={() => {
-              setTimeout(() => {
-                setSuggestions([]);
-              }, 100);
-            }}
-            onChange={(e) => onChangeHandler(e)}
-            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
-            type="string"
+          <SymbolInput
+            onBlur={handleBlur}
+            onChange={handleInputChange}
             value={symbol}
           />
-          <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
-            Altcoin Symbol, i.e. BTC, LTC...
-          </label>
           <AddButton isLoading={reqInProgress} onClick={onAddButtonClick} />
         </div>
         <SuggestionsDropdown
@@ -122,6 +115,27 @@ const CoinAdder = () => {
 };
 
 export default CoinAdder;
+
+const SymbolInput = ({ onBlur, onChange, value }) => {
+  return (
+    <>
+      <input
+        autoComplete="off"
+        className="form-control form-control-sm"
+        id="addNewCoinInput"
+        name="symbol"
+        onBlur={onBlur}
+        onChange={(e) => onChange(e)}
+        placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+        type="string"
+        value={value}
+      />
+      <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
+        Altcoin Symbol, i.e. BTC, LTC...
+      </label>
+    </>
+  );
+};
 
 const AddButton = ({ isLoading, onClick }) => {
   return (
