@@ -2,6 +2,9 @@
  * component that adds a new coin to watchlist
  */
 
+// TODO: refactor so this is not a different component than CoinAdder..
+// they both use a lot of the same logic, the only difference is the redux slice
+
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -50,8 +53,10 @@ const CoinAdder_wl = () => {
     setSuggestions(matches);
   };
 
-  const onSuggestClick = (sym) => {
-    setSymbol(sym);
+  const onSuggestClick = (e) => {
+    e.stopPropagation();
+    const symbol = e.target.getAttribute("value");
+    setSymbol(symbol);
     setSuggestions([]);
   };
 
@@ -120,7 +125,11 @@ const AddButton = ({ isLoading, onClick }) => {
   return (
     <>
       {isLoading ? (
-        <button className="btn btn-success add-button-loading" disabled>
+        <button
+          className="btn btn-success add-button-loading"
+          disabled
+          type="button"
+        >
           <div className="w-32">
             <SpinnerIcon />
           </div>
@@ -144,6 +153,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
               key={s.Id}
               className="suggestion"
               onClick={() => onClick(s.Symbol)}
+              value={s.Symbol}
             >
               {s.FullName}
             </div>

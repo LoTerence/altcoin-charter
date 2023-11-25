@@ -1,8 +1,8 @@
 /* The block in the coinUList component that lets the user add a new AltCoin */
 
+// TODO: fix the sort function, it should show the first letters the user types
 //TODO: add custom styling
 //TODO: load list of symbols from DB? and use a cron to update DB once a week?
-// TODO: fix the sort function, it should show the first letters the user types
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,11 +52,10 @@ const CoinAdder = () => {
     setSuggestions(matches);
   };
 
-  // const onSuggestClick = (e) => {
-  //   e.stopPropagation();
-  //   const sym = e.target.value;
-  const onSuggestClick = (sym) => {
-    setSymbol(sym);
+  const onSuggestClick = (e) => {
+    e.stopPropagation();
+    const symbol = e.target.getAttribute("value");
+    setSymbol(symbol);
     setSuggestions([]);
   };
 
@@ -128,7 +127,11 @@ const AddButton = ({ isLoading, onClick }) => {
   return (
     <>
       {isLoading ? (
-        <button className="btn btn-success add-button-loading" disabled>
+        <button
+          className="btn btn-success add-button-loading"
+          disabled
+          type="button"
+        >
           <div className="w-32">
             <SpinnerIcon />
           </div>
@@ -151,9 +154,8 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
             <div
               className="suggestion"
               key={s.Id}
-              onClick={(e) => onClick(s.Symbol)}
-              // onClick={(e) => onClick(e)}
-              // value={s.Symbol}
+              onClick={(e) => onClick(e)}
+              value={s.Symbol}
             >
               {s.FullName}
             </div>
