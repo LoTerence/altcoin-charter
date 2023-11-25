@@ -1,11 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
+// TODO: add ts types for status
+// initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
 
 const initialState = {
   coins: [],
   deletingCoinId: null,
   error: null,
   reqInProgress: false,
+  status: "idle",
 };
 
 export const coinListSlice = createSlice({
@@ -38,6 +42,20 @@ export const coinListSlice = createSlice({
       state.reqInProgress = action.payload;
     },
   },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchCoins.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCoins.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.coins = action.payload;
+      })
+      .addCase(fetchCoins.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = "Something went wrong while getting coin list";
+      });
+  },
 });
 
 export const {
@@ -54,23 +72,15 @@ export default coinListSlice.reducer;
 // Selector that lets the rest of the app get read access to coinListSlice state
 export const selectCoinList = (state) => state.coinList;
 
-// Async thunks
-// GET COINS -- action creator that sends a list of coins from db to reducer/state
-export const fetchCoins = () => (dispatch) => {
-  axios
-    .get("/coins_public/coinList")
-    .then((res) => {
-      if (res.data.success) {
-        dispatch(setCoins(res.data.data));
-      } else {
-        dispatch(setError("Something went wrong while getting coin list"));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch(setError("Something went wrong while getting coin list"));
-    });
-};
+// ------------------------------------------------ Async thunks ------------------------------------------------
+// fetchCoins -- fetch coins from db
+export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
+  const res = await axios.get("/coins_public/coinList");
+  if (!res.data.success) {
+    throw new Error("Something went wrong while getting coin list");
+  }
+  return res.data.data;
+});
 
 // ADD COIN method
 // TODO(if you want): add by coinname as well as symbol
