@@ -5,15 +5,20 @@ This is the Redux state slice for cryptocoin chart's historical data
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const initialState = {
+  activeCoin: {},
+  activeTimeframe: "1day",
+  coinData: null,
+  error: null,
+  fetchHistInProgress: false,
+  fetchCoinInProgress: false,
+  histData: null,
+  // status: "idle" | "loading" | "succeeded" | "failed",
+};
+
 export const histDataSlice = createSlice({
   name: "histData",
-  initialState: {
-    activeCoin: {},
-    activeTimeframe: "1day",
-    fetchHistInProgress: false,
-    fetchCoinInProgress: false,
-    error: "",
-  },
+  initialState,
   reducers: {
     setHistData: (state, action) => {
       state.histData = action.payload;
@@ -35,7 +40,7 @@ export const histDataSlice = createSlice({
     setFetchCoinInProgress: (state, action) => {
       state.fetchCoinInProgress = action.payload;
     },
-    histDataErr: (state, action) => {
+    setError: (state, action) => {
       state.error = action.payload;
     },
   },
@@ -48,7 +53,7 @@ export const {
   setActiveCoin,
   setFetchHistInProgress,
   setFetchCoinInProgress,
-  histDataErr,
+  setError,
 } = histDataSlice.actions;
 
 // Async thunks
@@ -107,11 +112,12 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
       console.log(
         "error in getHistData method api call to cryptocompare.com: \n" + err
       );
-      dispatch(histDataErr("error fetching data from cryptocompare.com"));
+      dispatch(setError("error fetching data from cryptocompare.com"));
       dispatch(setFetchHistInProgress(false));
     });
 };
 
+// TODO: move coin data logic and state to coinInfo component?
 // Get the coin data from the cryptocompare api and save it to coinData
 export const getCoinData = (coin) => (dispatch) => {
   dispatch(setFetchCoinInProgress(true));
@@ -133,7 +139,7 @@ export const getCoinData = (coin) => (dispatch) => {
     })
     .catch((err) => {
       console.log("error in getCoinData function api request: \n" + err);
-      dispatch(histDataErr("error fetching data from cryptocompare.com"));
+      dispatch(setError("error fetching data from cryptocompare.com"));
       dispatch(setFetchCoinInProgress(false));
     });
 };
