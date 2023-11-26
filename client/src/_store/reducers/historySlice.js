@@ -6,14 +6,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // TODO: use error, setError, to show fetch errors in the CoinInfo component
-// TODO: change activeCoin to activeCoinId to save memory
-// TODO: typescript would make it clear what each data field is supposed to be.
+// TODO: implement typescript would make it clear what each data field is supposed to be.
 //  - idk if activeTimeframe is supposed to be an obj or a str
+//  - status: "idle" | "loading" | "succeeded" | "failed",
 
-// status: "idle" | "loading" | "succeeded" | "failed",
+// TODO: move coin info logic and state to coinInfo component?
 
 const initialState = {
-  activeCoin: {},
+  activeCoinId: null,
   activeTimeframe: "1day",
   coinInfo: null,
   error: null,
@@ -25,8 +25,8 @@ export const historySlice = createSlice({
   name: "history",
   initialState,
   reducers: {
-    setActiveCoin: (state, action) => {
-      state.activeCoin = action.payload;
+    setActiveCoinId: (state, action) => {
+      state.activeCoinId = action.payload;
     },
     setCoinInfo: (state, action) => {
       state.coinInfo = action.payload;
@@ -52,13 +52,14 @@ export const {
   setHistData,
   setCoinInfo,
   setTimeFrame,
-  setActiveCoin,
+  setActiveCoinId,
   setError,
   setStatus,
 } = historySlice.actions;
 
 // Async thunks
 // get the historical data from the cryptocompare api and save it to histData
+// TODO: I only need the coin.Name
 export const getHistData = (coin, timeframe) => (dispatch) => {
   dispatch(setStatus("loading"));
   let histo;
@@ -118,8 +119,8 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
     });
 };
 
-// TODO: move coin data logic and state to coinInfo component?
 // Get the coin data from the cryptocompare api and save it to coinInfo
+// TODO: I only need the coin.Name
 export const fetchCoinInfo = (coin) => (dispatch) => {
   dispatch(setStatus("loading"));
   axios

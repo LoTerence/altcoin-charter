@@ -9,6 +9,7 @@ import {
   selectHistory,
   setTimeFrame,
 } from "../../_store/reducers/historySlice";
+import { useActiveCoin } from "../hooks";
 
 const timeframeOpts = [
   { id: 0, value: "1hour", text: "1Hr" },
@@ -22,7 +23,8 @@ const timeframeOpts = [
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistory);
+  const activeCoin = useActiveCoin();
+  const { activeTimeframe } = useSelector(selectHistory);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
