@@ -52,7 +52,7 @@ export const {
 } = watchListSlice.actions;
 
 // Async thunks
-// getCoins action
+// get initial personal watch list from the db
 export const getCoinsWLAction = () => (dispatch) => {
   axios
     .get("/users/watchlist", {

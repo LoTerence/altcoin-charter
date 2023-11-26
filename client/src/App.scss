@@ -1,21 +1,4 @@
-.google-button {
-  color: white !important;
-  background-color: #dd4b39 !important;
-  width: 100%;
-  transition: brightness 0.15s ease-in-out;
-}
-
-.fb-button {
-  color: white !important;
-  background-color: #3b5998 !important;
-  width: 100%;
-  transition: brightness 0.15s ease-in-out;
-}
-
-.google-button:hover,
-.fb-button:hover {
-  filter: brightness(90%);
-}
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 .w-8 {
   width: 0.5em;
@@ -39,6 +22,29 @@
 
 .h-32 {
   height: 2em;
+}
+
+.m1px {
+  margin: 1px;
+}
+
+.google-button {
+  color: white !important;
+  background-color: #dd4b39 !important;
+  width: 100%;
+  transition: brightness 0.15s ease-in-out;
+}
+
+.fb-button {
+  color: white !important;
+  background-color: #3b5998 !important;
+  width: 100%;
+  transition: brightness 0.15s ease-in-out;
+}
+
+.google-button:hover,
+.fb-button:hover {
+  filter: brightness(90%);
 }
 
 .coin-li {
@@ -158,4 +164,6 @@
   }
 }
 
-@import "../node_modules/bootstrap/scss/bootstrap.scss";
+.border-grey {
+  border-color: #ccc;
+}

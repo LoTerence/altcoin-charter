@@ -1,5 +1,7 @@
-// a <li> element modified to display coins: coinLi
-import React from "react";
+/* 
+a <li> element modified to display coins: coinLi 
+- like a coin Card
+*/
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCoinWLAction,
@@ -13,46 +15,40 @@ import {
 } from "../../../_store/reducers/histDataSlice";
 import { SpinnerIcon, TrashIcon } from "../../icons";
 
-const CoinLi = (props) => {
+const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const tf = useSelector(selectHistData).activeTimeframe;
-  const deletingCoinId = useSelector(selectWatchList).deletingCoinId;
-  const activeCoin = useSelector(selectHistData).activeCoin;
-  const COIN = props.coin;
+  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+  const { deletingCoinId } = useSelector(selectWatchList);
+  const isDeleting = coin.Id === deletingCoinId;
+  const isActive = coin.Id == activeCoin.Id;
 
-  function handleDeleteCoin() {
-    dispatch(deleteCoinWLAction(COIN, COIN.Id));
+  function handleDeleteCoin(e) {
+    e.stopPropagation();
+    dispatch(deleteCoinWLAction(coin, coin.Id));
   }
 
-  function handleSetActiveCoin() {
-    dispatch(setActiveCoin(COIN));
-    dispatch(getCoinData(COIN));
-    dispatch(getHistData(COIN, tf));
-  }
-
-  function renderDeleteButton() {
-    if (COIN.Id === deletingCoinId) {
-      return <SpinnerIcon className="w-16 remove-icon" />;
-    }
-
-    return (
-      <span className="remove-icon" onClick={() => handleDeleteCoin()}>
-        <TrashIcon />
-      </span>
-    );
+  function handleSetActiveCoin(e) {
+    e.stopPropagation();
+    if (isActive) return;
+    dispatch(setActiveCoin(coin));
+    dispatch(getCoinData(coin));
+    dispatch(getHistData(coin, activeTimeframe));
   }
 
   return (
     <div className="col-md-4 col-sm-6 col-12">
-      <div
-        className={COIN == activeCoin ? "coin-li-active" : "coin-li"}
-        tabIndex="0"
-      >
-        <div onClick={() => handleSetActiveCoin()}>
-          <h5>{COIN.Name}</h5>
-          <p>{COIN.CoinName} price history, day's change</p>
+      <div className={isActive ? "coin-li-active" : "coin-li"} tabIndex="0">
+        <div onClick={(e) => handleSetActiveCoin(e)}>
+          <h5>{coin.Name}</h5>
+          <p>{coin.CoinName} price history, day's change</p>
         </div>
-        {renderDeleteButton()}
+        {isDeleting ? (
+          <SpinnerIcon className="w-16 remove-icon" />
+        ) : (
+          <span className="remove-icon" onClick={(e) => handleDeleteCoin(e)}>
+            <TrashIcon />
+          </span>
+        )}
       </div>
     </div>
   );
