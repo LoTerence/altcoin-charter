@@ -24,8 +24,17 @@ const LoadingOverlay = ({ isLoading }) => {
 
 const CoinInfo = () => {
   const activeCoin = useActiveCoin();
-  const { coinInfo, status } = useSelector(selectHistory);
+  const { coinInfo, error, status } = useSelector(selectHistory);
   const isLoading = status === "loading";
+
+  if (error) {
+    return (
+      <div className="alert alert-danger">
+        <LoadingOverlay isLoading={isLoading} />
+        {error}
+      </div>
+    );
+  }
 
   if (!activeCoin || !coinInfo || !activeCoin.CoinName) {
     return (
