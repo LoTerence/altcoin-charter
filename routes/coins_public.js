@@ -10,6 +10,6 @@ const {
 
 router.route("/coinList").get(getCoinList).post(addCoin);
 
-router.delete("/coinList/:coin_symbol", deleteCoin);
+router.delete("/coinList/:id", deleteCoin);
 
 module.exports = router;
