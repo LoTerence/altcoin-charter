@@ -10,7 +10,6 @@ Fix it so that coinList always shows up */
 
 const initialState = {
   coins: [],
-  deletingCoinId: null,
   error: null,
   status: "idle",
 };
@@ -21,15 +20,6 @@ export const coinListSlice = createSlice({
   reducers: {
     setCoins: (state, action) => {
       state.coins = action.payload;
-    },
-    deleteCoin: (state, action) => {
-      const sym = action.payload;
-      const coinsArr = state.coins;
-      state.coins = coinsArr.filter((c) => c.Symbol !== sym);
-      state.error = null;
-    },
-    setDeletingCoinId: (state, action) => {
-      state.deletingCoinId = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -52,19 +42,24 @@ export const coinListSlice = createSlice({
         const newCoin = action.payload;
         state.coins.push(newCoin);
         state.error = null;
+      })
+      .addCase(deleteCoinThunk.fulfilled, (state, action) => {
+        const sym = action.payload;
+        const coinsArr = state.coins;
+        state.coins = coinsArr.filter((c) => c.Symbol !== sym);
+        state.error = null;
       });
   },
 });
 
-export const { setCoins, deleteCoin, setDeletingCoinId, setError } =
-  coinListSlice.actions;
+export const { setCoins, setDeletingCoinId, setError } = coinListSlice.actions;
 
 export default coinListSlice.reducer;
 
 // Selector that lets the rest of the app get read access to coinListSlice state
 export const selectCoinList = (state) => state.coinList;
 
-// ------------------------------------------------ Async thunks ------------------------------------------------
+// ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
   const res = await axios.get("/coins_public/coinList");
@@ -105,29 +100,16 @@ export const addNewCoin = createAsyncThunk(
   }
 );
 
-// DELETE COIN
-export const deleteCoinAction = (coin, id) => (dispatch) => {
-  dispatch(setDeletingCoinId(id));
-
-  const symbol = coin.Symbol;
-  axios
-    .delete("/coins_public/coinList/" + symbol)
-    .then((res) => {
-      if (res.data.success) {
-        dispatch(deleteCoin(symbol));
-      } else {
-        dispatch(setError("Something went wrong while deleting coin"));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch(
-        setError(
-          "There was an error deleting from coins_public in deleteCoin action"
-        )
-      );
-    })
-    .finally(() => {
-      dispatch(setDeletingCoinId(null));
-    });
-};
+// deleteCoinThunk -- delete coin from the db
+// TODO: refactor to delete by id instead of coin or symbol
+export const deleteCoinThunk = createAsyncThunk(
+  "coinList/deleteCoinThunk",
+  async (coin) => {
+    const symbol = coin.Symbol;
+    const res = await axios.delete("/coins_public/coinList/" + symbol);
+    if (!res.data.success) {
+      throw new Error("Something went wrong while deleting coin");
+    }
+    return symbol;
+  }
+);
