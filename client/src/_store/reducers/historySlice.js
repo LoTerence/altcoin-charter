@@ -5,62 +5,62 @@ This is the Redux state slice for cryptocoin chart's historical data
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// TODO: use error, setError, to show fetch errors in the CoinInfo component
+// TODO: change activeCoin to activeCoinId to save memory
+// TODO: typescript would make it clear what each data field is supposed to be.
+//  - idk if activeTimeframe is supposed to be an obj or a str
+
 // status: "idle" | "loading" | "succeeded" | "failed",
 
 const initialState = {
   activeCoin: {},
   activeTimeframe: "1day",
-  coinData: null,
+  coinInfo: null,
   error: null,
-  fetchHistInProgress: false,
-  fetchCoinInProgress: false,
   histData: null,
+  status: "idle",
 };
 
 export const historySlice = createSlice({
   name: "history",
   initialState,
   reducers: {
-    setHistData: (state, action) => {
-      state.histData = action.payload;
-      state.fetchHistInProgress = false;
-    },
-    setCoinData: (state, action) => {
-      state.coinData = action.payload;
-      state.fetchCoinInProgress = false;
-    },
-    setTimeFrame: (state, action) => {
-      state.activeTimeframe = action.payload;
-    },
     setActiveCoin: (state, action) => {
       state.activeCoin = action.payload;
     },
-    setFetchHistInProgress: (state, action) => {
-      state.fetchHistInProgress = action.payload;
-    },
-    setFetchCoinInProgress: (state, action) => {
-      state.fetchCoinInProgress = action.payload;
+    setCoinInfo: (state, action) => {
+      state.coinInfo = action.payload;
+      state.status = "idle";
     },
     setError: (state, action) => {
       state.error = action.payload;
+    },
+    setHistData: (state, action) => {
+      state.histData = action.payload;
+      state.status = "idle";
+    },
+    setStatus: (state, action) => {
+      state.status = action.payload;
+    },
+    setTimeFrame: (state, action) => {
+      state.activeTimeframe = action.payload;
     },
   },
 });
 
 export const {
   setHistData,
-  setCoinData,
+  setCoinInfo,
   setTimeFrame,
   setActiveCoin,
-  setFetchHistInProgress,
-  setFetchCoinInProgress,
   setError,
+  setStatus,
 } = historySlice.actions;
 
 // Async thunks
 // get the historical data from the cryptocompare api and save it to histData
 export const getHistData = (coin, timeframe) => (dispatch) => {
-  dispatch(setFetchHistInProgress(true));
+  dispatch(setStatus("loading"));
   let histo;
   switch (timeframe) {
     case "1hour":
@@ -114,20 +114,20 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
         "error in getHistData method api call to cryptocompare.com: \n" + err
       );
       dispatch(setError("error fetching data from cryptocompare.com"));
-      dispatch(setFetchHistInProgress(false));
+      dispatch(setStatus("idle"));
     });
 };
 
 // TODO: move coin data logic and state to coinInfo component?
-// Get the coin data from the cryptocompare api and save it to coinData
-export const getCoinData = (coin) => (dispatch) => {
-  dispatch(setFetchCoinInProgress(true));
+// Get the coin data from the cryptocompare api and save it to coinInfo
+export const fetchCoinInfo = (coin) => (dispatch) => {
+  dispatch(setStatus("loading"));
   axios
     .get(
       `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coin.Name}&tsym=USD&e=CCCAGG`
     )
     .then((res) => {
-      let coindata = {
+      let info = {
         currentPrice: res.data.DISPLAY.PRICE,
         pctChange: res.data.DISPLAY.CHANGEPCT24HOUR,
         open: res.data.DISPLAY.OPEN24HOUR,
@@ -136,12 +136,12 @@ export const getCoinData = (coin) => (dispatch) => {
         usdChange: res.data.DISPLAY.CHANGE24HOUR,
       };
 
-      dispatch(setCoinData(coindata));
+      dispatch(setCoinInfo(info));
     })
     .catch((err) => {
-      console.log("error in getCoinData function api request: \n" + err);
+      console.log("error in fetchCoinInfo function api request: \n" + err);
       dispatch(setError("error fetching data from cryptocompare.com"));
-      dispatch(setFetchCoinInProgress(false));
+      dispatch(setStatus("idle"));
     });
 };
 

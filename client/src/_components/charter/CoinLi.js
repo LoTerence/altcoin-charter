@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
-  getCoinData,
+  fetchCoinInfo,
   getHistData,
   setActiveCoin,
   selectHistory,
@@ -37,7 +37,7 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoin(coin));
-    dispatch(getCoinData(coin));
+    dispatch(fetchCoinInfo(coin));
     dispatch(getHistData(coin, activeTimeframe));
   };
 

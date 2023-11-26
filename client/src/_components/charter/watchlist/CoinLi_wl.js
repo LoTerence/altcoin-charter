@@ -8,7 +8,7 @@ import {
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
 import {
-  getCoinData,
+  fetchCoinInfo,
   getHistData,
   setActiveCoin,
   selectHistory,
@@ -31,7 +31,7 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoin(coin));
-    dispatch(getCoinData(coin));
+    dispatch(fetchCoinInfo(coin));
     dispatch(getHistData(coin, activeTimeframe));
   }
 

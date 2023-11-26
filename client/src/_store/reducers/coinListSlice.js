@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 /* TODO: dev mode bug
-In dev mode, the [initialState.status: "idle"] always makes it so that when a new file is saved, no coins show up.
-Fix it so that coinList always shows up */
+In dev mode, the [initialState.status: "idle"] sometimes makes it so that when 
+  a code file is saved, no coins show up. Fix it so that coinList always shows up */
 
 // TODO: add ts types for status
 // initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -53,11 +53,6 @@ export const coinListSlice = createSlice({
 });
 
 export const { setCoins, setDeletingCoinId, setError } = coinListSlice.actions;
-
-export default coinListSlice.reducer;
-
-// Selector that lets the rest of the app get read access to coinListSlice state
-export const selectCoinList = (state) => state.coinList;
 
 // ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
@@ -112,3 +107,8 @@ export const deleteCoin = createAsyncThunk(
     return _id;
   }
 );
+
+// Selector that lets the rest of the app get read access to coinListSlice state
+export const selectCoinList = (state) => state.coinList;
+
+export default coinListSlice.reducer;
