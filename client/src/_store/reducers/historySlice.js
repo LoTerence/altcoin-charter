@@ -5,6 +5,8 @@ This is the Redux state slice for cryptocoin chart's historical data
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// status: "idle" | "loading" | "succeeded" | "failed",
+
 const initialState = {
   activeCoin: {},
   activeTimeframe: "1day",
@@ -13,11 +15,10 @@ const initialState = {
   fetchHistInProgress: false,
   fetchCoinInProgress: false,
   histData: null,
-  // status: "idle" | "loading" | "succeeded" | "failed",
 };
 
-export const histDataSlice = createSlice({
-  name: "histData",
+export const historySlice = createSlice({
+  name: "history",
   initialState,
   reducers: {
     setHistData: (state, action) => {
@@ -54,7 +55,7 @@ export const {
   setFetchHistInProgress,
   setFetchCoinInProgress,
   setError,
-} = histDataSlice.actions;
+} = historySlice.actions;
 
 // Async thunks
 // get the historical data from the cryptocompare api and save it to histData
@@ -145,6 +146,6 @@ export const getCoinData = (coin) => (dispatch) => {
 };
 
 // Selector
-export const selectHistData = (state) => state.histData;
+export const selectHistory = (state) => state.history;
 
-export default histDataSlice.reducer;
+export default historySlice.reducer;

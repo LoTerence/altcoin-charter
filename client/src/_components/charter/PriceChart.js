@@ -3,18 +3,17 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
-import React from "react";
 import { useSelector } from "react-redux";
-import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { selectHistory } from "../../_store/reducers/historySlice";
 import {
-  LineChart,
-  Line,
-  Label,
   CartesianGrid,
+  Label,
+  Line,
+  LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  ResponsiveContainer,
 } from "recharts";
 
 let formatterUSD = new Intl.NumberFormat("en-US", {
@@ -24,9 +23,7 @@ let formatterUSD = new Intl.NumberFormat("en-US", {
 
 // PriceChart Component
 const PriceChart = () => {
-  const histData = useSelector(selectHistData).histData;
-  const activeCoin = useSelector(selectHistData).activeCoin;
-  const activeTimeframe = useSelector(selectHistData).activeTimeframe;
+  const { activeCoin, activeTimeframe, histData } = useSelector(selectHistory);
 
   const formatXAxis = (tick) => {
     const d = new Date(tick * 1000);

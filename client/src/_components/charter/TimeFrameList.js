@@ -5,10 +5,10 @@ TimeFrameList.js
 */
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setTimeFrame,
   getHistData,
-  selectHistData,
-} from "../../_store/reducers/histDataSlice";
+  selectHistory,
+  setTimeFrame,
+} from "../../_store/reducers/historySlice";
 
 const timeframeOpts = [
   { id: 0, value: "1hour", text: "1Hr" },
@@ -22,7 +22,7 @@ const timeframeOpts = [
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+  const { activeCoin, activeTimeframe } = useSelector(selectHistory);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
