@@ -9,16 +9,16 @@ import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
   fetchCoinInfo,
   getHistData,
-  setActiveCoin,
+  setActiveCoinId,
   selectHistory,
 } from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistory);
-  const isActive = coin.Id == activeCoin.Id;
+  const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
+  const isActive = coin._id === activeCoinId;
 
   const handleDeleteCoin = async (e) => {
     e.stopPropagation();
@@ -36,7 +36,7 @@ const CoinLi = ({ coin }) => {
   const handleSetActiveCoin = (e) => {
     e.stopPropagation();
     if (isActive) return;
-    dispatch(setActiveCoin(coin));
+    dispatch(setActiveCoinId(coin._id));
     dispatch(fetchCoinInfo(coin));
     dispatch(getHistData(coin, activeTimeframe));
   };

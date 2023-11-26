@@ -11,7 +11,7 @@ import CoinInfo from "./CoinInfo";
 import TimeFrameList from "./TimeFrameList";
 import CoinNameInfo from "./CoinNameInfo";
 import {
-  setActiveCoin,
+  setActiveCoinId,
   setTimeFrame,
 } from "../../_store/reducers/historySlice";
 
@@ -19,7 +19,7 @@ export default function Charter() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveCoin({}));
+    dispatch(setActiveCoinId(null));
     dispatch(setTimeFrame("1day"));
   });
 

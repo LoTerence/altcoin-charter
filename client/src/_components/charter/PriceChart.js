@@ -3,6 +3,10 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
+// TODO: refactor this entire component
+// - move formatterUSD to /lib
+// - refactor formatXAxis, move switch case out of the component into its own function (deriveTickDate)
+
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import {
@@ -21,16 +25,15 @@ let formatterUSD = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-// PriceChart Component
 const PriceChart = () => {
-  const { activeCoin, activeTimeframe, histData } = useSelector(selectHistory);
+  const { activeCoinId, activeTimeframe, histData } =
+    useSelector(selectHistory);
 
   const formatXAxis = (tick) => {
     const d = new Date(tick * 1000);
     let tickDate = 0;
     switch (activeTimeframe) {
       case "1hour":
-        // tickDate = d.getHours() + ":" + d.getMinutes();
         tickDate = d.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -92,7 +95,7 @@ const PriceChart = () => {
     return formatterUSD.format(val);
   };
 
-  if (!histData || !activeCoin || !activeCoin.Name) {
+  if (!histData || !activeCoinId) {
     return <p>Please select a coin from the list below</p>;
   }
 
