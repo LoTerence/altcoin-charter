@@ -69,3 +69,15 @@ module.exports.deleteCoinBySymbol = (symbol) => {
     throw err;
   }
 };
+
+// @desc delete a coin by id
+// @param id - the id of the coin that will be deleted
+module.exports.deleteCoinById = (id) => {
+  try {
+    const query = { _id: id };
+    return Coin.findOneAndDelete(query);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};

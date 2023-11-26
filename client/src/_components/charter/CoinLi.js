@@ -2,9 +2,10 @@
 a <li> element modified to display coins: coinLi 
 - like a coin Card
 */
+// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCoinThunk, setError } from "../../_store/reducers/coinListSlice";
+import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
   getCoinData,
   getHistData,
@@ -23,7 +24,7 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     try {
       setDeleteReqStatus("pending");
-      await dispatch(deleteCoinThunk(coin)).unwrap();
+      await dispatch(deleteCoin(coin._id)).unwrap();
     } catch (err) {
       console.error("Failed to delete the coin: ", err);
       setError("Something went wrong while deleting coin");

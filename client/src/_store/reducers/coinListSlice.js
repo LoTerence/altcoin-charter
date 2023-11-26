@@ -43,10 +43,10 @@ export const coinListSlice = createSlice({
         state.coins.push(newCoin);
         state.error = null;
       })
-      .addCase(deleteCoinThunk.fulfilled, (state, action) => {
-        const sym = action.payload;
+      .addCase(deleteCoin.fulfilled, (state, action) => {
+        const _id = action.payload;
         const coinsArr = state.coins;
-        state.coins = coinsArr.filter((c) => c.Symbol !== sym);
+        state.coins = coinsArr.filter((c) => c._id !== _id);
         state.error = null;
       });
   },
@@ -66,7 +66,8 @@ export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
   if (!res.data.success) {
     throw new Error("Something went wrong while getting coin list");
   }
-  return res.data.data;
+  const coins = res.data.data;
+  return coins;
 });
 
 // TODO: add by coinname as well as symbol
@@ -84,10 +85,10 @@ export const addNewCoin = createAsyncThunk(
 
     const cryptoData = cryptocompareRes.data.Data[newCoinSymbol];
     const newCoin = {
+      CoinName: cryptoData.CoinName,
       Id: cryptoData.Id,
       Name: cryptoData.Name,
       Symbol: cryptoData.Symbol,
-      CoinName: cryptoData.CoinName,
     };
 
     const res = await axios.post("/coins_public/coinList", newCoin);
@@ -96,20 +97,18 @@ export const addNewCoin = createAsyncThunk(
       throw new Error("There was an error posting new coin data");
     }
 
-    return newCoin;
+    const coin = res.data.data;
+    return coin;
   }
 );
 
-// deleteCoinThunk -- delete coin from the db
-// TODO: refactor to delete by id instead of coin or symbol
-export const deleteCoinThunk = createAsyncThunk(
-  "coinList/deleteCoinThunk",
-  async (coin) => {
-    const symbol = coin.Symbol;
-    const res = await axios.delete("/coins_public/coinList/" + symbol);
+export const deleteCoin = createAsyncThunk(
+  "coinList/deleteCoin",
+  async (_id) => {
+    const res = await axios.delete(`/coins_public/coinList/${_id}`);
     if (!res.data.success) {
       throw new Error("Something went wrong while deleting coin");
     }
-    return symbol;
+    return _id;
   }
 );
