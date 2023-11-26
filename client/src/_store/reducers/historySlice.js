@@ -4,7 +4,6 @@ historySlice.js - redux state slice for storing the cryptocoin chart's historica
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-// TODO: use error, setError, to show fetch errors in the CoinInfo component
 // TODO: implement typescript would make it clear what each data field is supposed to be.
 //  - idk if activeTimeframe is supposed to be an obj or a str
 //  - status: "idle" | "loading" | "succeeded" | "failed",
@@ -61,11 +60,11 @@ export const historySlice = createSlice({
 
 export const {
   setHistData,
-  setCoinInfo,
-  setTimeFrame,
   setActiveCoinId,
+  setCoinInfo,
   setError,
   setStatus,
+  setTimeFrame,
 } = historySlice.actions;
 
 // Async thunks
