@@ -2,11 +2,9 @@
 a <li> element modified to display coins: coinLi 
 - like a coin Card
 */
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteCoinAction,
-  selectCoinList,
-} from "../../_store/reducers/coinListSlice";
+import { deleteCoinThunk, setError } from "../../_store/reducers/coinListSlice";
 import {
   getCoinData,
   getHistData,
@@ -17,14 +15,21 @@ import { SpinnerIcon, TrashIcon } from "../icons";
 
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const { deletingCoinId } = useSelector(selectCoinList);
   const { activeCoin, activeTimeframe } = useSelector(selectHistData);
-  const isDeleting = coin.Id === deletingCoinId;
   const isActive = coin.Id == activeCoin.Id;
+  const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
 
-  const handleDeleteCoin = (e) => {
+  const handleDeleteCoin = async (e) => {
     e.stopPropagation();
-    dispatch(deleteCoinAction(coin, coin.Id));
+    try {
+      setDeleteReqStatus("pending");
+      await dispatch(deleteCoinThunk(coin)).unwrap();
+    } catch (err) {
+      console.error("Failed to delete the coin: ", err);
+      setError("Something went wrong while deleting coin");
+    } finally {
+      setDeleteReqStatus("idle");
+    }
   };
 
   const handleSetActiveCoin = (e) => {
@@ -42,15 +47,26 @@ const CoinLi = ({ coin }) => {
           <h5>{coin.Name}</h5>
           <p>{coin.CoinName} price history, day's change</p>
         </div>
-        {isDeleting ? (
-          <SpinnerIcon className="w-16 remove-icon" />
-        ) : (
-          <span className="remove-icon" onClick={(e) => handleDeleteCoin(e)}>
-            <TrashIcon />
-          </span>
-        )}
+        <DeleteButton
+          isLoading={deleteReqStatus === "pending"}
+          onClick={handleDeleteCoin}
+        />
       </div>
     </div>
+  );
+};
+
+const DeleteButton = ({ isLoading, onClick }) => {
+  return (
+    <>
+      {isLoading ? (
+        <SpinnerIcon className="w-16 remove-icon" />
+      ) : (
+        <span className="remove-icon" onClick={(e) => onClick(e)}>
+          <TrashIcon />
+        </span>
+      )}
+    </>
   );
 };
 
