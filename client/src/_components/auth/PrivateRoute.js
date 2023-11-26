@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
 
 function PrivateRoute({ children }) {
-  const isAuthenticated = useSelector(selectAuth).authenticated;
+  const { isAuthenticated } = useSelector(selectAuth);
 
   return isAuthenticated ? children : <Navigate to="/signin" />;
 }

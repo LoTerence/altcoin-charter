@@ -1,9 +1,8 @@
 /*
-timeFrameList.js
-component that displays buttons for selecting active time frame
-The default time frame is day
+TimeFrameList.js
+  Component that displays buttons for selecting active time frame
+  The default time frame is day
 */
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setTimeFrame,
@@ -11,175 +10,29 @@ import {
   selectHistData,
 } from "../../_store/reducers/histDataSlice";
 
-const m1px = {
-  margin: "1px",
-  borderColor: "#ccc",
-};
+const timeframeOpts = [
+  { id: 0, value: "1hour", text: "1Hr" },
+  { id: 1, value: "12hours", text: "12Hrs" },
+  { id: 2, value: "1day", text: "Day" },
+  { id: 3, value: "1week", text: "Week" },
+  { id: 4, value: "1month", text: "Month" },
+  { id: 5, value: "3months", text: "3months" },
+  { id: 6, value: "1year", text: "Year" },
+];
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
-  const activeCoin = useSelector(selectHistData).activeCoin;
-  const activeTimeframe = useSelector(selectHistData).activeTimeframe;
+  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
 
-  // tf is a string representing the timeframe (1hour, 12hours, 1day, 1week, 1month, 3months, 1year)
-  const handleClickEvent = (e, tf) => {
+  const handleButtonClick = (e) => {
     e.preventDefault();
-    dispatch(setTimeFrame(tf));
+    const timeframe = e.target.value;
+    if (activeTimeframe === timeframe) return;
+    dispatch(setTimeFrame(timeframe));
     if (activeCoin) {
-      // this.props.getHistData(this.props.activeCoin, tf);
-      dispatch(getHistData(activeCoin, tf));
+      dispatch(getHistData(activeCoin, timeframe));
     }
   };
-
-  const buttonList = [
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "1hour")}
-      key={0}
-    >
-      1Hr
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm "
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "12hours")}
-      key={1}
-    >
-      12Hrs
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "1day")}
-      key={2}
-    >
-      Day
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "1week")}
-      key={3}
-    >
-      Week
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "1month")}
-      key={4}
-    >
-      Month
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "3months")}
-      key={5}
-    >
-      3months
-    </button>,
-    <button
-      className="btn btn-outline-dark btn-sm"
-      style={m1px}
-      onClick={(e) => handleClickEvent(e, "1year")}
-      key={6}
-    >
-      Year
-    </button>,
-  ];
-
-  // tfl is timeframe list
-  let tfl = buttonList;
-  switch (activeTimeframe) {
-    case "1hour":
-      tfl[0] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "1hour")}
-          key={0}
-        >
-          1Hr
-        </button>
-      );
-      break;
-    case "12hours":
-      tfl[1] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "12hours")}
-          key={1}
-        >
-          12Hrs
-        </button>
-      );
-      break;
-    case "1day":
-      tfl[2] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "1day")}
-          key={2}
-        >
-          Day
-        </button>
-      );
-      break;
-    case "1week":
-      tfl[3] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "1week")}
-          key={3}
-        >
-          Week
-        </button>
-      );
-      break;
-    case "1month":
-      tfl[4] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "1month")}
-          key={4}
-        >
-          Month
-        </button>
-      );
-      break;
-    case "3months":
-      tfl[5] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "3months")}
-          key={5}
-        >
-          3months
-        </button>
-      );
-      break;
-    case "1year":
-      tfl[6] = (
-        <button
-          className="btn btn-success btn-sm"
-          style={m1px}
-          onClick={(e) => handleClickEvent(e, "1year")}
-          key={6}
-        >
-          Year
-        </button>
-      );
-      break;
-    default:
-      tfl = <p>Error in timeFrameList component switch case</p>;
-  }
 
   return (
     <div
@@ -187,8 +40,22 @@ const TimeFrameList = () => {
       role="group"
       aria-label="Timeframes button group"
     >
-      {tfl.map((btn) => {
-        return btn;
+      {timeframeOpts.map((opt) => {
+        const { id, text, value } = opt;
+        const isActive = activeTimeframe === value;
+        return (
+          <button
+            className={`m1px border-grey btn btn-md ${
+              isActive ? "btn-success" : "btn-outline-dark"
+            }`}
+            disabled={isActive}
+            key={id}
+            onClick={(e) => handleButtonClick(e)}
+            value={value}
+          >
+            {text}
+          </button>
+        );
       })}
     </div>
   );
