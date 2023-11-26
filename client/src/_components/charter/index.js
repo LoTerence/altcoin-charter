@@ -13,7 +13,7 @@ import CoinNameInfo from "./CoinNameInfo";
 import {
   setActiveCoin,
   setTimeFrame,
-} from "../../_store/reducers/histDataSlice";
+} from "../../_store/reducers/historySlice";
 
 export default function Charter() {
   const dispatch = useDispatch();

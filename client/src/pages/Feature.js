@@ -12,7 +12,7 @@ import TimeFrameList from "../_components/charter/TimeFrameList";
 import CoinNameInfo from "../_components/charter/CoinNameInfo";
 import PrivateRoute from "../_components/auth/PrivateRoute";
 
-import { setActiveCoin, setTimeFrame } from "../_store/reducers/histDataSlice";
+import { setActiveCoin, setTimeFrame } from "../_store/reducers/historySlice";
 
 export default function Feature() {
   const dispatch = useDispatch();

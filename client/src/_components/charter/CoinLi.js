@@ -10,13 +10,13 @@ import {
   getCoinData,
   getHistData,
   setActiveCoin,
-  selectHistData,
-} from "../../_store/reducers/histDataSlice";
+  selectHistory,
+} from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+  const { activeCoin, activeTimeframe } = useSelector(selectHistory);
   const isActive = coin.Id == activeCoin.Id;
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
 

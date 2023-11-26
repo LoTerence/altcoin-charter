@@ -6,7 +6,7 @@ component that will display the active coin's day's data including current price
 
 // TODO: add twitter button?
 import { useSelector } from "react-redux";
-import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { selectHistory } from "../../_store/reducers/historySlice";
 import { SpinnerIcon } from "../icons";
 
 const LoadingOverlay = ({ isLoading }) => {
@@ -23,7 +23,7 @@ const LoadingOverlay = ({ isLoading }) => {
 
 const CoinInfo = () => {
   const { activeCoin, coinData, fetchHistInProgress, fetchCoinInProgress } =
-    useSelector(selectHistData);
+    useSelector(selectHistory);
   const isLoading = fetchHistInProgress || fetchCoinInProgress;
 
   if (!activeCoin || !coinData || !activeCoin.Name) {
