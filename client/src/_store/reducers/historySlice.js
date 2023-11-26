@@ -1,16 +1,13 @@
 /* 
-This is the Redux state slice for cryptocoin chart's historical data 
+historySlice.js - redux state slice for storing the cryptocoin chart's historical data 
 */
-
-import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // TODO: use error, setError, to show fetch errors in the CoinInfo component
 // TODO: implement typescript would make it clear what each data field is supposed to be.
 //  - idk if activeTimeframe is supposed to be an obj or a str
 //  - status: "idle" | "loading" | "succeeded" | "failed",
-
-// TODO: move coin info logic and state to coinInfo component?
 
 const initialState = {
   activeCoinId: null,
@@ -45,6 +42,20 @@ export const historySlice = createSlice({
     setTimeFrame: (state, action) => {
       state.activeTimeframe = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchCoinInfo.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCoinInfo.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.coinInfo = action.payload;
+      })
+      .addCase(fetchCoinInfo.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = "Error: something went wrong, please try again later 😢";
+      });
   },
 });
 
@@ -120,31 +131,26 @@ export const getHistData = (coin, timeframe) => (dispatch) => {
 };
 
 // Get the coin data from the cryptocompare api and save it to coinInfo
-// TODO: I only need the coin.Name
-export const fetchCoinInfo = (coin) => (dispatch) => {
-  dispatch(setStatus("loading"));
-  axios
-    .get(
+export const fetchCoinInfo = createAsyncThunk(
+  "history/fetchCoinInfo",
+  async (coin) => {
+    const cryptocompareRes = await axios.get(
       `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coin.Name}&tsym=USD&e=CCCAGG`
-    )
-    .then((res) => {
-      let info = {
-        currentPrice: res.data.DISPLAY.PRICE,
-        pctChange: res.data.DISPLAY.CHANGEPCT24HOUR,
-        open: res.data.DISPLAY.OPEN24HOUR,
-        high: res.data.DISPLAY.HIGH24HOUR,
-        low: res.data.DISPLAY.LOW24HOUR,
-        usdChange: res.data.DISPLAY.CHANGE24HOUR,
-      };
+    );
+    const data = cryptocompareRes.data.DISPLAY;
 
-      dispatch(setCoinInfo(info));
-    })
-    .catch((err) => {
-      console.log("error in fetchCoinInfo function api request: \n" + err);
-      dispatch(setError("error fetching data from cryptocompare.com"));
-      dispatch(setStatus("idle"));
-    });
-};
+    const info = {
+      currentPrice: data.PRICE,
+      pctChange: data.CHANGEPCT24HOUR,
+      open: data.OPEN24HOUR,
+      high: data.HIGH24HOUR,
+      low: data.LOW24HOUR,
+      usdChange: data.CHANGE24HOUR,
+    };
+
+    return info;
+  }
+);
 
 // Selector
 export const selectHistory = (state) => state.history;
