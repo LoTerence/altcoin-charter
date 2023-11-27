@@ -3,8 +3,6 @@ a <li> element modified to display coins: coinLi
 - like a coin Card
 */
 // TODO: bug: typing and pressing enter does not clear the suggestions dropdown
-
-// TODO: fix button styling
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
@@ -46,7 +44,7 @@ const CoinLi = ({ coin }) => {
   };
 
   return (
-    <div className="col-md-4 col-sm-6 col-12">
+    <div className="col-md-4 col-sm-6 col-12 relative">
       <button
         className={isActive ? "coin-li-isActive" : "coin-li"}
         tabIndex="0"
@@ -54,26 +52,24 @@ const CoinLi = ({ coin }) => {
       >
         <h5>{coin.Name}</h5>
         <p>{coin.CoinName} price history, day&apos;s change</p>
-        <DeleteButton
-          isLoading={deleteReqStatus === "pending"}
-          onClick={handleDeleteCoin}
-        />
       </button>
+      <DeleteButton
+        isLoading={deleteReqStatus === "pending"}
+        onClick={handleDeleteCoin}
+      />
     </div>
   );
 };
 
 const DeleteButton = ({ isLoading, onClick }) => {
   return (
-    <>
-      {isLoading ? (
-        <SpinnerIcon className="w-16 remove-icon" />
-      ) : (
-        <button className="remove-icon" onClick={(e) => onClick(e)}>
-          <TrashIcon />
-        </button>
-      )}
-    </>
+    <button
+      className="remove-icon"
+      onClick={(e) => onClick(e)}
+      disabled={isLoading}
+    >
+      {isLoading ? <SpinnerIcon className="w-16" /> : <TrashIcon />}
+    </button>
   );
 };
 
