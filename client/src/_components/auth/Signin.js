@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as EmailValidator from "email-validator";
@@ -9,7 +9,6 @@ import {
   fbSignInAction,
 } from "../../_store/reducers/authSlice";
 import { FacebookIcon, GoogleIcon } from "../icons";
-import { useWithRouter } from "./useWithRouter";
 
 function Signin() {
   const dispatch = useDispatch();
@@ -189,4 +188,4 @@ function Signin() {
   );
 }
 
-export default useWithRouter(Signin);
+export default Signin;

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
-export default () => {
+const OAuthCallback = () => {
   useEffect(() => {
     // get the URL parameters which will include the auth token
     const params = window.location.search;
@@ -15,3 +15,5 @@ export default () => {
   // some text to show the user
   return <p>Please wait...</p>;
 };
+
+export default OAuthCallback;

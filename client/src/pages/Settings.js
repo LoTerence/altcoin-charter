@@ -3,11 +3,10 @@
  */
 // TODO: refactor this entire page, its a mess
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as EmailValidator from "email-validator";
 import {
-  getProfile,
   changeNameAction,
   changeEmailAction,
   changePasswordAction,
@@ -33,12 +32,6 @@ const Settings = () => {
   const [newPasswordAlert, setNewPasswordAlert] = useState("");
   const [deleteAccountAlert, setDeleteAccountAlert] = useState("");
   const [daForm, setDAform] = useState(false);
-
-  // useEffect(() => {
-  //   if (profile.email === "") {
-  //     dispatch(getProfile());
-  //   }
-  // }, [dispatch]);
 
   async function handleNameChangeButton(e) {
     e.preventDefault();
