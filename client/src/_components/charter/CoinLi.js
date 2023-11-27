@@ -48,14 +48,12 @@ const CoinLi = ({ coin }) => {
   return (
     <div className="col-md-4 col-sm-6 col-12">
       <button
-        className={isActive ? "coin-li-active" : "coin-li"}
+        className={isActive ? "coin-li-isActive" : "coin-li"}
         tabIndex="0"
         onClick={(e) => handleSetActiveCoin(e)}
       >
-        <div>
-          <h5>{coin.Name}</h5>
-          <p>{coin.CoinName} price history, day&apos;s change</p>
-        </div>
+        <h5>{coin.Name}</h5>
+        <p>{coin.CoinName} price history, day&apos;s change</p>
         <DeleteButton
           isLoading={deleteReqStatus === "pending"}
           onClick={handleDeleteCoin}
