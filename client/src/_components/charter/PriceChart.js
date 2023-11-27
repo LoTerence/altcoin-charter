@@ -3,83 +3,29 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
-import React from "react";
 import { useSelector } from "react-redux";
-import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { selectHistory } from "../../_store/reducers/historySlice";
 import {
-  LineChart,
-  Line,
-  Label,
   CartesianGrid,
+  Label,
+  Line,
+  LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  ResponsiveContainer,
 } from "recharts";
+import { getTickDateString } from "../../lib/timeframe";
+import formatterUSD from "../../lib/formatterUSD";
 
-let formatterUSD = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
-// PriceChart Component
 const PriceChart = () => {
-  const histData = useSelector(selectHistData).histData;
-  const activeCoin = useSelector(selectHistData).activeCoin;
-  const activeTimeframe = useSelector(selectHistData).activeTimeframe;
+  const { activeCoinId, activeTimeframe, historicalData } =
+    useSelector(selectHistory);
 
   const formatXAxis = (tick) => {
-    const d = new Date(tick * 1000);
-    let tickDate = 0;
-    switch (activeTimeframe) {
-      case "1hour":
-        // tickDate = d.getHours() + ":" + d.getMinutes();
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "12hours":
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "1day":
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "1week":
-        tickDate = d.toLocaleDateString([], {
-          weekday: "short",
-          month: "2-digit",
-          day: "2-digit",
-        });
-        break;
-      case "1month":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          day: "numeric",
-        });
-        break;
-      case "3months":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          day: "numeric",
-        });
-        break;
-      case "1year":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          year: "numeric",
-        });
-        break;
-      default:
-        console.log("error in formatXAxis timeframe cases");
-    }
-    return tickDate;
+    const date = new Date(tick * 1000);
+    const tickDateString = getTickDateString(activeTimeframe, date);
+    return tickDateString;
   };
 
   const formatYAxis = (tick) => {
@@ -95,7 +41,7 @@ const PriceChart = () => {
     return formatterUSD.format(val);
   };
 
-  if (!histData || !activeCoin || !activeCoin.Name) {
+  if (!historicalData || !activeCoinId) {
     return <p>Please select a coin from the list below</p>;
   }
 
@@ -103,7 +49,7 @@ const PriceChart = () => {
     <div className="">
       <ResponsiveContainer width={"100%"} height={500}>
         <LineChart
-          data={histData}
+          data={historicalData}
           margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
         >
           <CartesianGrid />

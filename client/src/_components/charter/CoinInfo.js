@@ -6,7 +6,8 @@ component that will display the active coin's day's data including current price
 
 // TODO: add twitter button?
 import { useSelector } from "react-redux";
-import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { selectHistory } from "../../_store/reducers/historySlice";
+import { useActiveCoin } from "../hooks";
 import { SpinnerIcon } from "../icons";
 
 const LoadingOverlay = ({ isLoading }) => {
@@ -22,11 +23,20 @@ const LoadingOverlay = ({ isLoading }) => {
 };
 
 const CoinInfo = () => {
-  const { activeCoin, coinData, fetchHistInProgress, fetchCoinInProgress } =
-    useSelector(selectHistData);
-  const isLoading = fetchHistInProgress || fetchCoinInProgress;
+  const activeCoin = useActiveCoin();
+  const { coinInfo, error, status } = useSelector(selectHistory);
+  const isLoading = status === "loading";
 
-  if (!activeCoin || !coinData || !activeCoin.Name) {
+  if (error) {
+    return (
+      <div className="alert alert-danger">
+        <LoadingOverlay isLoading={isLoading} />
+        {error}
+      </div>
+    );
+  }
+
+  if (!activeCoin || !coinInfo || !activeCoin.CoinName) {
     return (
       <div className="alert alert-warning">
         <LoadingOverlay isLoading={isLoading} />
@@ -40,16 +50,16 @@ const CoinInfo = () => {
       <LoadingOverlay isLoading={isLoading} />
       <div className="p-2 flex-fill">
         <p>{activeCoin.CoinName}'s current Price:</p>
-        <h1>{coinData.currentPrice}</h1>
-        <p>{coinData.pctChange}% change today</p>
+        <h1>{coinInfo.currentPrice}</h1>
+        <p>{coinInfo.pctChange}% change today</p>
       </div>
       <div className="p-2 flex-fill">
-        <p>Today's Open: {coinData.open}</p>
-        <p>Change: {coinData.usdChange}</p>
+        <p>Today's Open: {coinInfo.open}</p>
+        <p>Change: {coinInfo.usdChange}</p>
       </div>
       <div className="p-2 flex-fill">
-        <p>Today's High: {coinData.high}</p>
-        <p>Today's Low: {coinData.low}</p>
+        <p>Today's High: {coinInfo.high}</p>
+        <p>Today's Low: {coinInfo.low}</p>
       </div>
     </div>
   );

@@ -5,24 +5,19 @@ TimeFrameList.js
 */
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fetchHistory,
+  selectHistory,
   setTimeFrame,
-  getHistData,
-  selectHistData,
-} from "../../_store/reducers/histDataSlice";
+} from "../../_store/reducers/historySlice";
+import { useActiveCoin } from "../hooks";
+import { initTimeframeOpts } from "../../lib/timeframe";
 
-const timeframeOpts = [
-  { id: 0, value: "1hour", text: "1Hr" },
-  { id: 1, value: "12hours", text: "12Hrs" },
-  { id: 2, value: "1day", text: "Day" },
-  { id: 3, value: "1week", text: "Week" },
-  { id: 4, value: "1month", text: "Month" },
-  { id: 5, value: "3months", text: "3months" },
-  { id: 6, value: "1year", text: "Year" },
-];
+const timeframeOpts = initTimeframeOpts();
 
 const TimeFrameList = () => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+  const activeCoin = useActiveCoin();
+  const { activeTimeframe } = useSelector(selectHistory);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -30,7 +25,7 @@ const TimeFrameList = () => {
     if (activeTimeframe === timeframe) return;
     dispatch(setTimeFrame(timeframe));
     if (activeCoin) {
-      dispatch(getHistData(activeCoin, timeframe));
+      dispatch(fetchHistory({ coinSymbol: activeCoin.Symbol, timeframe }));
     }
   };
 

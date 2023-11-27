@@ -9,23 +9,23 @@ import CoinUList from "./CoinUList";
 import PriceChart from "./PriceChart";
 import CoinInfo from "./CoinInfo";
 import TimeFrameList from "./TimeFrameList";
-import CoinNameInfo from "./CoinNameInfo";
+import ChartTitle from "./ChartTitle";
 import {
-  setActiveCoin,
+  setActiveCoinId,
   setTimeFrame,
-} from "../../_store/reducers/histDataSlice";
+} from "../../_store/reducers/historySlice";
 
 export default function Charter() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveCoin({}));
+    dispatch(setActiveCoinId(null));
     dispatch(setTimeFrame("1day"));
   });
 
   return (
     <>
-      <CoinNameInfo />
+      <ChartTitle />
       <TimeFrameList />
       <PriceChart />
       <CoinInfo />

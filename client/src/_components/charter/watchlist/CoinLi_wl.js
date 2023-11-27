@@ -8,19 +8,19 @@ import {
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
 import {
-  getCoinData,
-  getHistData,
-  setActiveCoin,
-  selectHistData,
-} from "../../../_store/reducers/histDataSlice";
+  fetchCoinInfo,
+  fetchHistory,
+  setActiveCoinId,
+  selectHistory,
+} from "../../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../../icons";
 
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+  const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const { deletingCoinId } = useSelector(selectWatchList);
   const isDeleting = coin.Id === deletingCoinId;
-  const isActive = coin.Id == activeCoin.Id;
+  const isActive = coin.Id === activeCoinId;
 
   function handleDeleteCoin(e) {
     e.stopPropagation();
@@ -30,9 +30,11 @@ const CoinLi = ({ coin }) => {
   function handleSetActiveCoin(e) {
     e.stopPropagation();
     if (isActive) return;
-    dispatch(setActiveCoin(coin));
-    dispatch(getCoinData(coin));
-    dispatch(getHistData(coin, activeTimeframe));
+    dispatch(setActiveCoinId(coin._id));
+    dispatch(fetchCoinInfo(coin.Symbol));
+    dispatch(
+      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+    );
   }
 
   return (
