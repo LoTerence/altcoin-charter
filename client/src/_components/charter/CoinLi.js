@@ -7,18 +7,18 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
-  getCoinData,
-  getHistData,
-  setActiveCoin,
-  selectHistData,
-} from "../../_store/reducers/histDataSlice";
+  fetchCoinInfo,
+  fetchHistory,
+  setActiveCoinId,
+  selectHistory,
+} from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
-  const isActive = coin.Id == activeCoin.Id;
+  const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
+  const isActive = coin._id === activeCoinId;
 
   const handleDeleteCoin = async (e) => {
     e.stopPropagation();
@@ -36,9 +36,11 @@ const CoinLi = ({ coin }) => {
   const handleSetActiveCoin = (e) => {
     e.stopPropagation();
     if (isActive) return;
-    dispatch(setActiveCoin(coin));
-    dispatch(getCoinData(coin));
-    dispatch(getHistData(coin, activeTimeframe));
+    dispatch(setActiveCoinId(coin._id));
+    dispatch(fetchCoinInfo(coin.Symbol));
+    dispatch(
+      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+    );
   };
 
   return (

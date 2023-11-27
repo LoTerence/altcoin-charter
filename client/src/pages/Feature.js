@@ -9,22 +9,22 @@ import WatchList from "../_components/charter/watchlist/WatchList";
 import PriceChart from "../_components/charter/PriceChart";
 import CoinInfo from "../_components/charter/CoinInfo";
 import TimeFrameList from "../_components/charter/TimeFrameList";
-import CoinNameInfo from "../_components/charter/CoinNameInfo";
+import ChartTitle from "../_components/charter/ChartTitle";
 import PrivateRoute from "../_components/auth/PrivateRoute";
 
-import { setActiveCoin, setTimeFrame } from "../_store/reducers/histDataSlice";
+import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 
 export default function Feature() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveCoin({}));
+    dispatch(setActiveCoinId(null));
     dispatch(setTimeFrame("1day"));
   });
 
   return (
     <PrivateRoute>
-      <CoinNameInfo />
+      <ChartTitle />
       <TimeFrameList />
       <PriceChart />
       <CoinInfo />

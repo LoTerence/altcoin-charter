@@ -1,9 +1,11 @@
 // Component that displays the name and symbol of the active COIN
 import { useSelector } from "react-redux";
-import { selectHistData } from "../../_store/reducers/histDataSlice";
+import { selectHistory } from "../../_store/reducers/historySlice";
+import { useActiveCoin } from "../hooks";
 
-const CoinNameInfo = () => {
-  const { activeCoin, activeTimeframe } = useSelector(selectHistData);
+const ChartTitle = () => {
+  const { activeTimeframe } = useSelector(selectHistory);
+  const activeCoin = useActiveCoin();
 
   if (!activeCoin || !activeCoin.CoinName) {
     return <h1>Chart</h1>;
@@ -16,4 +18,4 @@ const CoinNameInfo = () => {
   );
 };
 
-export default CoinNameInfo;
+export default ChartTitle;
