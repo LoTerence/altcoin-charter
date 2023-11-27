@@ -9,7 +9,7 @@ import CoinUList from "./CoinUList";
 import PriceChart from "./PriceChart";
 import CoinInfo from "./CoinInfo";
 import TimeFrameList from "./TimeFrameList";
-import CoinNameInfo from "./CoinNameInfo";
+import ChartTitle from "./ChartTitle";
 import {
   setActiveCoinId,
   setTimeFrame,
@@ -25,7 +25,7 @@ export default function Charter() {
 
   return (
     <>
-      <CoinNameInfo />
+      <ChartTitle />
       <TimeFrameList />
       <PriceChart />
       <CoinInfo />
