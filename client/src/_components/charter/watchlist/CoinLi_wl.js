@@ -31,7 +31,7 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
-    dispatch(fetchCoinInfo(coin));
+    dispatch(fetchCoinInfo(coin.Symbol));
     dispatch(
       fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
     );
