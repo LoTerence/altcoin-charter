@@ -1,5 +1,13 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
+button {
+  all: unset;
+}
+
+.block {
+  display: block;
+}
+
 .w-8 {
   width: 0.5em;
 }
@@ -14,6 +22,14 @@
 
 .w-32 {
   width: 2em;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .h-16 {
@@ -48,14 +64,15 @@
 }
 
 .coin-li {
-  border: 1px solid #bced91;
-  border-left: 10px solid #bced91;
-  border-radius: 0px;
   background: #fafafa;
+  border-color: #bced91;
+  border-style: solid;
+  border-width: 1px 1px 1px 10px;
+  display: block;
   margin: 5px;
   padding: 5px 10px;
-  font-size: 0.65rem;
   position: relative;
+  width: calc(100% - 40px);
 }
 
 .coin-li:hover {
@@ -68,19 +85,20 @@
   outline: 0;
 }
 
-.coin-li-active {
-  border: 2px solid #006a4e;
-  border-left: 10px solid #006a4e;
-  border-radius: 0px;
-  background: rgb(68, 136, 68);
+.coin-li-isActive {
+  background: #448844;
+  border-color: #006a4e;
+  border-style: solid;
+  border-width: 2px 2px 2px 10px;
   color: white;
+  display: block;
   margin: 5px;
   padding: 5px 10px;
-  font-size: 0.9rem;
   position: relative;
+  width: calc(100% - 40px);
 }
 
-.coin-li-active:hover {
+.coin-li-isActive:hover {
   filter: brightness(90%);
   cursor: pointer;
 }

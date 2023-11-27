@@ -68,7 +68,7 @@ const CoinAdder_wl = () => {
       return;
     }
 
-    const iChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
     if (iChars.test(symbol)) {
       dispatch(coinErrWL("No special characters allowed"));
       return;
@@ -147,18 +147,18 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   return (
     <>
       {suggestions.length > 0 && (
-        <div className="suggestions">
+        <select className="suggestions">
           {suggestions.map((s) => (
-            <div
+            <option
               key={s.Id}
               className="suggestion"
               onClick={() => onClick(s.Symbol)}
               value={s.Symbol}
             >
               {s.FullName}
-            </div>
+            </option>
           ))}
-        </div>
+        </select>
       )}
     </>
   );
