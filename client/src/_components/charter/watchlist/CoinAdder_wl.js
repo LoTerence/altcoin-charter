@@ -147,7 +147,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   return (
     <>
       {suggestions.length > 0 && (
-        <select className="suggestions">
+        <div className="suggestions">
           {suggestions.map((s) => (
             <option
               key={s.Id}
@@ -158,7 +158,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
               {s.FullName}
             </option>
           ))}
-        </select>
+        </div>
       )}
     </>
   );

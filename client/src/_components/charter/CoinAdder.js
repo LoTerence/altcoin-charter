@@ -152,7 +152,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   return (
     <>
       {suggestions.length > 0 && (
-        <selection className="suggestions">
+        <div className="suggestions">
           {suggestions.map((s) => (
             <option
               className="suggestion"
@@ -163,7 +163,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
               {s.FullName}
             </option>
           ))}
-        </selection>
+        </div>
       )}
     </>
   );
