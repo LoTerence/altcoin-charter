@@ -3,6 +3,7 @@ historySlice.js - redux state slice for storing the cryptocoin chart's historica
 */
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getHisto } from "../../lib/timeframe";
 
 // TODO: implement typescript would make it clear what each data field is supposed to be.
 //  - idk if activeTimeframe is supposed to be an obj or a str
@@ -78,32 +79,8 @@ export const {
 export const fetchHistory = createAsyncThunk(
   "history/fetchHistory",
   async ({ coinSymbol, timeframe }) => {
-    let histo;
-    switch (timeframe) {
-      case "1hour":
-        histo = { timeUnit: "histominute", limit: 60 };
-        break;
-      case "12hours":
-        histo = { timeUnit: "histominute", limit: 144 };
-        break;
-      case "1day":
-        histo = { timeUnit: "histominute", limit: 288 };
-        break;
-      case "1week":
-        histo = { timeUnit: "histohour", limit: 168 };
-        break;
-      case "1month":
-        histo = { timeUnit: "histoday", limit: 31 };
-        break;
-      case "3months":
-        histo = { timeUnit: "histoday", limit: 92 };
-        break;
-      case "1year":
-        histo = { timeUnit: "histoday", limit: 365 };
-        break;
-      default:
-        console.log("error in fetchHistory function in timeframe cases");
-    }
+    const histo = getHisto(timeframe);
+
     const cryptocompareRes = await axios.get(
       `https://min-api.cryptocompare.com/data/${histo.timeUnit}?fsym=${coinSymbol}&tsym=USD&limit=${histo.limit}`
     );

@@ -5,7 +5,6 @@ This component uses Uber's react-vis library for data visualization / programmin
 
 // TODO: refactor this entire component
 // - move formatterUSD to /lib
-// - refactor formatXAxis, move switch case out of the component into its own function (deriveTickDate)
 
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
@@ -19,6 +18,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { getTickDateString } from "../../lib/timeframe";
 
 let formatterUSD = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -30,56 +30,9 @@ const PriceChart = () => {
     useSelector(selectHistory);
 
   const formatXAxis = (tick) => {
-    const d = new Date(tick * 1000);
-    let tickDate = 0;
-    switch (activeTimeframe) {
-      case "1hour":
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "12hours":
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "1day":
-        tickDate = d.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        break;
-      case "1week":
-        tickDate = d.toLocaleDateString([], {
-          weekday: "short",
-          month: "2-digit",
-          day: "2-digit",
-        });
-        break;
-      case "1month":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          day: "numeric",
-        });
-        break;
-      case "3months":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          day: "numeric",
-        });
-        break;
-      case "1year":
-        tickDate = d.toLocaleDateString([], {
-          month: "short",
-          year: "numeric",
-        });
-        break;
-      default:
-        console.log("error in formatXAxis timeframe cases");
-    }
-    return tickDate;
+    const date = new Date(tick * 1000);
+    const tickDateString = getTickDateString(activeTimeframe, date);
+    return tickDateString;
   };
 
   const formatYAxis = (tick) => {
