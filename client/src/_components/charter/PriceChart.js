@@ -3,9 +3,6 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
-// TODO: refactor this entire component
-// - move formatterUSD to /lib
-
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import {
@@ -19,11 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { getTickDateString } from "../../lib/timeframe";
-
-let formatterUSD = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+import formatterUSD from "../../lib/formatterUSD";
 
 const PriceChart = () => {
   const { activeCoinId, activeTimeframe, historicalData } =
