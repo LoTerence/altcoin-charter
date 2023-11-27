@@ -2,8 +2,7 @@
  * component that adds a new coin to watchlist
  */
 
-// TODO: refactor so this is not a different component than CoinAdder..
-// they both use a lot of the same logic, the only difference is the redux slice
+// TODO: refactor so this is not a different component than CoinAdder
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +16,8 @@ import { SpinnerIcon } from "../../icons";
 
 const CoinAdder_wl = () => {
   const dispatch = useDispatch();
-  const { coins, error, reqInProgress } = useSelector(selectWatchList);
+  const { coins, error } = useSelector(selectWatchList);
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [symbol, setSymbol] = useState("");
   const [symbols, setSymbols] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
@@ -33,57 +33,44 @@ const CoinAdder_wl = () => {
     loadSymbols();
   }, []);
 
-  const onChangeHandler = (e) => {
+  const handleInputChange = (e) => {
     const text = e.target.value;
     setSymbol(text);
-    let matches = [];
-    if (text.length > 0) {
-      matches = symbols
-        .filter((sym) => {
-          const regex = new RegExp(`${text}`, "gi");
-          return sym.Symbol.match(regex);
-        })
-        .sort((a, b) => {
-          if (a.Symbol < b.Symbol) return -1;
-          if (a.Symbol > b.Symbol) return 1;
-          return 0;
-        })
-        .slice(0, 10);
-    }
+    const matches = deriveSuggestions(text, symbols);
     setSuggestions(matches);
   };
 
-  const onSuggestClick = (e) => {
+  const handleSuggestClick = (e) => {
     e.stopPropagation();
     const symbol = e.target.getAttribute("value");
     setSymbol(symbol);
     setSuggestions([]);
   };
 
-  const onAddButtonClick = (e) => {
+  const handleAddButtonClick = async (e) => {
     e.preventDefault();
-
-    if (symbol === "") {
-      dispatch(setError("Input required"));
+    const newSymbol = symbol.toUpperCase();
+    const validation = validateSymbol(newSymbol, coins);
+    if (!validation.isValid) {
+      dispatch(setError(validation.message));
       return;
     }
-
-    const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
-    if (iChars.test(symbol)) {
-      dispatch(setError("No special characters allowed"));
-      return;
+    try {
+      setAddRequestStatus("pending");
+      await dispatch(addNewCoin(newSymbol)).unwrap();
+      setSymbol("");
+    } catch (err) {
+      console.error("Failed to save the coin: ", err);
+      dispatch(setError("Error posting new coin"));
+    } finally {
+      setAddRequestStatus("idle");
     }
+  };
 
-    const sym = symbol.toUpperCase();
-
-    if (coins.some((c) => c.Symbol === sym)) {
-      dispatch(setError(sym + " is already in your watchlist"));
-      return;
-    }
-
-    dispatch(addNewCoin(sym));
-    setSymbol("");
-    setSuggestions([]);
+  const handleBlur = () => {
+    setTimeout(() => {
+      setSuggestions([]);
+    }, 100);
   };
 
   return (
@@ -91,33 +78,48 @@ const CoinAdder_wl = () => {
       <div>Add new coin:</div>
       <form>
         <div className="form-floating d-flex">
-          <input
-            autoComplete="off"
-            className="form-control form-control-sm"
-            id="addNewCoinInput"
-            name="symbol"
-            onBlur={() => {
-              setTimeout(() => {
-                setSuggestions([]);
-              }, 100);
-            }}
-            onChange={(e) => onChangeHandler(e)}
-            placeholder="Altcoin Symbol, i.e. BTC, LTC..."
-            type="string"
+          <SymbolInput
+            disabled={addRequestStatus === "pending"}
+            onBlur={handleBlur}
+            onChange={handleInputChange}
             value={symbol}
           />
-          <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
-            Altcoin Symbol, i.e. BTC, LTC...
-          </label>
-          <AddButton isLoading={reqInProgress} onClick={onAddButtonClick} />
+          <AddButton
+            isLoading={addRequestStatus === "pending"}
+            onClick={handleAddButtonClick}
+          />
         </div>
         <SuggestionsDropdown
           suggestions={suggestions}
-          onClick={onSuggestClick}
+          onClick={handleSuggestClick}
         />
       </form>
-      {error && <div className="alert alert-danger">{error}</div>}
+      <ErrorMessage error={error} />
     </div>
+  );
+};
+
+export default CoinAdder_wl;
+
+const SymbolInput = ({ disabled, onBlur, onChange, value }) => {
+  return (
+    <>
+      <input
+        autoComplete="off"
+        className="form-control form-control-sm"
+        disabled={disabled}
+        id="addNewCoinInput"
+        name="symbol"
+        onBlur={onBlur}
+        onChange={(e) => onChange(e)}
+        placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+        type="string"
+        value={value}
+      />
+      <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
+        Altcoin Symbol, i.e. BTC, LTC...
+      </label>
+    </>
   );
 };
 
@@ -152,7 +154,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
             <option
               key={s.Id}
               className="suggestion"
-              onClick={() => onClick(s.Symbol)}
+              onClick={(e) => onClick(e)}
               value={s.Symbol}
             >
               {s.FullName}
@@ -164,4 +166,41 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   );
 };
 
-export default CoinAdder_wl;
+const ErrorMessage = ({ error }) => {
+  return <>{error && <div className="alert alert-danger">{error}</div>}</>;
+};
+
+// validates a new symbol
+// @param coins: list of coins to make sure the Symbol is not already in the coinlist
+const validateSymbol = (newSymbol, coins) => {
+  const symbol = newSymbol.toUpperCase();
+  if (symbol === "") {
+    return { isValid: false, message: "Input required" };
+  }
+  const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
+  if (iChars.test(symbol)) {
+    return { isValid: false, message: "No special characters allowed" };
+  }
+  const isListed = coins.some((c) => c.Symbol === symbol);
+  if (isListed) {
+    return {
+      isValid: false,
+      message: `${symbol} is already in the list of coins`,
+    };
+  }
+  return { isValid: true };
+};
+
+const deriveSuggestions = (text, symbols) => {
+  if (text.length === 0) return [];
+  const regex = new RegExp(`^${text}`, "gi");
+  const matches = symbols
+    .filter((s) => s.Symbol.match(regex))
+    .sort((a, b) => {
+      if (a.Symbol < b.Symbol) return -1;
+      if (a.Symbol > b.Symbol) return 1;
+      return 0;
+    })
+    .slice(0, 10);
+  return matches;
+};
