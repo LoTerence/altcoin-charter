@@ -152,18 +152,18 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   return (
     <>
       {suggestions.length > 0 && (
-        <div className="suggestions">
+        <selection className="suggestions">
           {suggestions.map((s) => (
-            <div
+            <option
               className="suggestion"
               key={s.Id}
               onClick={(e) => onClick(e)}
               value={s.Symbol}
             >
               {s.FullName}
-            </div>
+            </option>
           ))}
-        </div>
+        </selection>
       )}
     </>
   );
@@ -180,7 +180,7 @@ const validateSymbol = (newSymbol, coins) => {
   if (symbol === "") {
     return { isValid: false, message: "Input required" };
   }
-  const iChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+  const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
   if (iChars.test(symbol)) {
     return { isValid: false, message: "No special characters allowed" };
   }

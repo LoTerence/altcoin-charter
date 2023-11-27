@@ -49,17 +49,17 @@ const CoinInfo = () => {
     <div className="coin-info d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap">
       <LoadingOverlay isLoading={isLoading} />
       <div className="p-2 flex-fill">
-        <p>{activeCoin.CoinName}'s current Price:</p>
+        <p>{activeCoin.CoinName}&apos;s current Price:</p>
         <h1>{coinInfo.currentPrice}</h1>
         <p>{coinInfo.pctChange}% change today</p>
       </div>
       <div className="p-2 flex-fill">
-        <p>Today's Open: {coinInfo.open}</p>
+        <p>Today&apos;s Open: {coinInfo.open}</p>
         <p>Change: {coinInfo.usdChange}</p>
       </div>
       <div className="p-2 flex-fill">
-        <p>Today's High: {coinInfo.high}</p>
-        <p>Today's Low: {coinInfo.low}</p>
+        <p>Today&apos;s High: {coinInfo.high}</p>
+        <p>Today&apos;s Low: {coinInfo.low}</p>
       </div>
     </div>
   );

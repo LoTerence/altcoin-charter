@@ -1,4 +1,3 @@
-import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticate } from "./_store/reducers/authSlice";

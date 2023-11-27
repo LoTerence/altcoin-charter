@@ -1,13 +1,13 @@
 import authReducer from "./authSlice";
 import coinListReducer from "./coinListSlice";
-import historyuReducer from "./historySlice";
+import historyReducer from "./historySlice";
 import watchListReducer from "./watchListSlice";
 
 const rootReducer = {
   reducer: {
     auth: authReducer,
     coinList: coinListReducer,
-    history: historyuReducer,
+    history: historyReducer,
     watchList: watchListReducer,
   },
 };

@@ -1,9 +1,11 @@
-/* feature.js
- *  component where the main app will live. Authenticated users can save
+/**
+ * Feature.js
+ *
+ * Component where the main app will live. Authenticated users can save
  * and view data on a personal watchlist of coins here.
  */
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import WatchList from "../_components/charter/watchlist/WatchList";
 import PriceChart from "../_components/charter/PriceChart";
@@ -16,7 +18,6 @@ import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 
 export default function Feature() {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(setActiveCoinId(null));
     dispatch(setTimeFrame("1day"));

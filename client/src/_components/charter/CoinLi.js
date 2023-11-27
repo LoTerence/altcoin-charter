@@ -3,6 +3,8 @@ a <li> element modified to display coins: coinLi
 - like a coin Card
 */
 // TODO: bug: typing and pressing enter does not clear the suggestions dropdown
+
+// TODO: fix button styling
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
@@ -45,16 +47,20 @@ const CoinLi = ({ coin }) => {
 
   return (
     <div className="col-md-4 col-sm-6 col-12">
-      <div className={isActive ? "coin-li-active" : "coin-li"} tabIndex="0">
-        <div onClick={(e) => handleSetActiveCoin(e)}>
+      <button
+        className={isActive ? "coin-li-active" : "coin-li"}
+        tabIndex="0"
+        onClick={(e) => handleSetActiveCoin(e)}
+      >
+        <div>
           <h5>{coin.Name}</h5>
-          <p>{coin.CoinName} price history, day's change</p>
+          <p>{coin.CoinName} price history, day&apos;s change</p>
         </div>
         <DeleteButton
           isLoading={deleteReqStatus === "pending"}
           onClick={handleDeleteCoin}
         />
-      </div>
+      </button>
     </div>
   );
 };
@@ -65,9 +71,9 @@ const DeleteButton = ({ isLoading, onClick }) => {
       {isLoading ? (
         <SpinnerIcon className="w-16 remove-icon" />
       ) : (
-        <span className="remove-icon" onClick={(e) => onClick(e)}>
+        <button className="remove-icon" onClick={(e) => onClick(e)}>
           <TrashIcon />
-        </span>
+        </button>
       )}
     </>
   );
