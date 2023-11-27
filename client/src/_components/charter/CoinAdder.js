@@ -35,7 +35,6 @@ const CoinAdder = () => {
   const handleInputChange = (e) => {
     const text = e.target.value;
     setSymbol(text);
-
     const matches = deriveSuggestions(text, symbols);
     setSuggestions(matches);
   };
@@ -49,15 +48,12 @@ const CoinAdder = () => {
 
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
-
     const newSymbol = symbol.toUpperCase();
-
     const validation = validateSymbol(newSymbol, coins);
     if (!validation.isValid) {
       dispatch(setError(validation.message));
       return;
     }
-
     try {
       setAddRequestStatus("pending");
       await dispatch(addNewCoin(newSymbol)).unwrap();
