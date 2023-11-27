@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 /* TODO: dev mode bug
 In dev mode, the [initialState.status: "idle"] sometimes makes it so that when 
@@ -52,7 +52,7 @@ export const coinListSlice = createSlice({
   },
 });
 
-export const { setCoins, setDeletingCoinId, setError } = coinListSlice.actions;
+export const { setCoins, setError } = coinListSlice.actions;
 
 // ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
@@ -70,15 +70,16 @@ export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
 export const addNewCoin = createAsyncThunk(
   "coinList/addNewCoin",
   async (newCoinSymbol) => {
+    const sym = newCoinSymbol.toUpperCase();
     const cryptocompareRes = await axios.get(
       "https://min-api.cryptocompare.com/data/all/coinlist"
     );
-    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[newCoinSymbol]);
+    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
     if (!doesCryptoExist) {
       throw new Error("A coin with that symbol does not exist");
     }
 
-    const cryptoData = cryptocompareRes.data.Data[newCoinSymbol];
+    const cryptoData = cryptocompareRes.data.Data[sym];
     const newCoin = {
       CoinName: cryptoData.CoinName,
       Id: cryptoData.Id,

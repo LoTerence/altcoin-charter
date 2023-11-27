@@ -6,7 +6,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getCoinsWLAction,
+  fetchWatchlist,
   selectWatchList,
 } from "../../../_store/reducers/watchListSlice";
 import { getProfile, selectAuth } from "../../../_store/reducers/authSlice";
@@ -19,7 +19,7 @@ const WatchList = () => {
   const { coins } = useSelector(selectWatchList);
 
   useEffect(() => {
-    dispatch(getCoinsWLAction());
+    dispatch(fetchWatchlist());
     dispatch(getProfile());
   }, [dispatch]);
 

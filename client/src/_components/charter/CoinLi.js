@@ -1,7 +1,3 @@
-/* 
-a <li> element modified to display coins: coinLi 
-- like a coin Card
-*/
 // TODO: bug: typing and pressing enter does not clear the suggestions dropdown
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

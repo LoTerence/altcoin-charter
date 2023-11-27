@@ -9,9 +9,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
-  addCoinWLAction,
+  addNewCoin,
   selectWatchList,
-  coinErrWL,
+  setError,
 } from "../../../_store/reducers/watchListSlice";
 import { SpinnerIcon } from "../../icons";
 
@@ -64,24 +64,24 @@ const CoinAdder_wl = () => {
     e.preventDefault();
 
     if (symbol === "") {
-      dispatch(coinErrWL("Input required"));
+      dispatch(setError("Input required"));
       return;
     }
 
     const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
     if (iChars.test(symbol)) {
-      dispatch(coinErrWL("No special characters allowed"));
+      dispatch(setError("No special characters allowed"));
       return;
     }
 
     const sym = symbol.toUpperCase();
 
     if (coins.some((c) => c.Symbol === sym)) {
-      dispatch(coinErrWL(sym + " is already in your watchlist"));
+      dispatch(setError(sym + " is already in your watchlist"));
       return;
     }
 
-    dispatch(addCoinWLAction(sym));
+    dispatch(addNewCoin(sym));
     setSymbol("");
     setSuggestions([]);
   };
