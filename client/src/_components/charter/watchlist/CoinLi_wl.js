@@ -39,19 +39,21 @@ const CoinLi = ({ coin }) => {
 
   return (
     <div className="col-md-4 col-sm-6 col-12">
-      <div className={isActive ? "coin-li-active" : "coin-li"} tabIndex="0">
-        <div onClick={(e) => handleSetActiveCoin(e)}>
-          <h5>{coin.Name}</h5>
-          <p>{coin.CoinName} price history, day's change</p>
-        </div>
+      <button
+        className={isActive ? "coin-li-isActive" : "coin-li"}
+        tabIndex="0"
+        onClick={(e) => handleSetActiveCoin(e)}
+      >
+        <h5>{coin.Name}</h5>
+        <p>{coin.CoinName} price history, day&apos;s change</p>
         {isDeleting ? (
           <SpinnerIcon className="w-16 remove-icon" />
         ) : (
-          <span className="remove-icon" onClick={(e) => handleDeleteCoin(e)}>
+          <button className="remove-icon" onClick={(e) => handleDeleteCoin(e)}>
             <TrashIcon />
-          </span>
+          </button>
         )}
-      </div>
+      </button>
     </div>
   );
 };
