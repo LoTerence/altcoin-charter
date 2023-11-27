@@ -99,12 +99,11 @@ export const fetchHistory = createAsyncThunk(
 );
 
 // Get the coin data from the cryptocompare api and save it to coinInfo
-// TODO: I only need the coin.Symbol
 export const fetchCoinInfo = createAsyncThunk(
   "history/fetchCoinInfo",
-  async (coin) => {
+  async (coinSymbol) => {
     const cryptocompareRes = await axios.get(
-      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coin.Name}&tsym=USD&e=CCCAGG`
+      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=CCCAGG`
     );
     const data = cryptocompareRes.data.DISPLAY;
 
