@@ -286,7 +286,7 @@ exports.delCoinFromWatchlist = async (req, res) => {
       return res.json({ success: false, msg: "User not found" });
     }
 
-    user.watchList = user.watchList.filter((e) => e.Symbol !== req.body.Symbol);
+    user.watchList = user.watchList.filter((c) => c.Id !== req.body.Id);
 
     user.save((err) => {
       if (err) {

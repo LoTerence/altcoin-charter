@@ -1,12 +1,13 @@
-/* 
-a <li> element modified to display coins: coinLi 
-- like a coin Card
-*/
+// TODO: refactor so that this is the same component as coinLi
+
+// TODO:
+// [] fix `dispatch(setActiveCoinId(coin._id));`,
+// [] fix `const isActive = coin.Id === activeCoinId;`,
+// - right now watchlist coins dont have ._id
+// - will need to redesign the database to fix that
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteCoinWLAction,
-  selectWatchList,
-} from "../../../_store/reducers/watchListSlice";
+import { deleteCoin, setError } from "../../../_store/reducers/watchListSlice";
 import {
   fetchCoinInfo,
   fetchHistory,
@@ -18,14 +19,23 @@ import { SpinnerIcon, TrashIcon } from "../../icons";
 const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
-  const { deletingCoinId } = useSelector(selectWatchList);
-  const isDeleting = coin.Id === deletingCoinId;
+  const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
   const isActive = coin.Id === activeCoinId;
 
-  function handleDeleteCoin(e) {
+  console.log(coin);
+
+  const handleDeleteCoin = async (e) => {
     e.stopPropagation();
-    dispatch(deleteCoinWLAction(coin, coin.Id));
-  }
+    try {
+      setDeleteReqStatus("pending");
+      await dispatch(deleteCoin(coin.Id));
+    } catch (err) {
+      console.error("Failed to delete the coin from watchlist: ", err);
+      setError("Something went wrong while deleting coin");
+    } finally {
+      setDeleteReqStatus("idle");
+    }
+  };
 
   function handleSetActiveCoin(e) {
     e.stopPropagation();
@@ -38,7 +48,7 @@ const CoinLi = ({ coin }) => {
   }
 
   return (
-    <div className="col-md-4 col-sm-6 col-12">
+    <div className="col-md-4 col-sm-6 col-12 relative">
       <button
         className={isActive ? "coin-li-isActive" : "coin-li"}
         tabIndex="0"
@@ -46,15 +56,24 @@ const CoinLi = ({ coin }) => {
       >
         <h5>{coin.Name}</h5>
         <p>{coin.CoinName} price history, day&apos;s change</p>
-        {isDeleting ? (
-          <SpinnerIcon className="w-16 remove-icon" />
-        ) : (
-          <button className="remove-icon" onClick={(e) => handleDeleteCoin(e)}>
-            <TrashIcon />
-          </button>
-        )}
       </button>
+      <DeleteButton
+        isLoading={deleteReqStatus === "pending"}
+        onClick={handleDeleteCoin}
+      />
     </div>
+  );
+};
+
+const DeleteButton = ({ isLoading, onClick }) => {
+  return (
+    <button
+      className="remove-icon"
+      onClick={(e) => onClick(e)}
+      disabled={isLoading}
+    >
+      {isLoading ? <SpinnerIcon className="w-16" /> : <TrashIcon />}
+    </button>
   );
 };
 
