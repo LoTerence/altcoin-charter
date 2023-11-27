@@ -1,4 +1,5 @@
 // TODO: refactor so that this is the same component as coinLi
+// TODO: figure out why one reload makes this component reload like 16 times
 
 // TODO:
 // [] fix `dispatch(setActiveCoinId(coin._id));`,
@@ -21,6 +22,7 @@ const CoinLi = ({ coin }) => {
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
   const isActive = coin.Id === activeCoinId;
+  // const isActive = coin._id === activeCoinId;
 
   console.log(coin);
 
