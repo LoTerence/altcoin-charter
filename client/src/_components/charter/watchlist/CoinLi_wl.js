@@ -9,7 +9,7 @@ import {
 } from "../../../_store/reducers/watchListSlice";
 import {
   fetchCoinInfo,
-  getHistData,
+  fetchHistory,
   setActiveCoinId,
   selectHistory,
 } from "../../../_store/reducers/historySlice";
@@ -32,7 +32,9 @@ const CoinLi = ({ coin }) => {
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
     dispatch(fetchCoinInfo(coin));
-    dispatch(getHistData(coin, activeTimeframe));
+    dispatch(
+      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+    );
   }
 
   return (

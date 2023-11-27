@@ -5,7 +5,7 @@ TimeFrameList.js
 */
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getHistData,
+  fetchHistory,
   selectHistory,
   setTimeFrame,
 } from "../../_store/reducers/historySlice";
@@ -32,7 +32,7 @@ const TimeFrameList = () => {
     if (activeTimeframe === timeframe) return;
     dispatch(setTimeFrame(timeframe));
     if (activeCoin) {
-      dispatch(getHistData(activeCoin, timeframe));
+      dispatch(fetchHistory({ coinSymbol: activeCoin.Symbol, timeframe }));
     }
   };
 

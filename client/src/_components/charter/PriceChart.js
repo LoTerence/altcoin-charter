@@ -26,7 +26,7 @@ let formatterUSD = new Intl.NumberFormat("en-US", {
 });
 
 const PriceChart = () => {
-  const { activeCoinId, activeTimeframe, histData } =
+  const { activeCoinId, activeTimeframe, historicalData } =
     useSelector(selectHistory);
 
   const formatXAxis = (tick) => {
@@ -95,7 +95,7 @@ const PriceChart = () => {
     return formatterUSD.format(val);
   };
 
-  if (!histData || !activeCoinId) {
+  if (!historicalData || !activeCoinId) {
     return <p>Please select a coin from the list below</p>;
   }
 
@@ -103,7 +103,7 @@ const PriceChart = () => {
     <div className="">
       <ResponsiveContainer width={"100%"} height={500}>
         <LineChart
-          data={histData}
+          data={historicalData}
           margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
         >
           <CartesianGrid />
