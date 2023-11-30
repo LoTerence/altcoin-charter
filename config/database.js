@@ -4,14 +4,11 @@ const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       dbName: "altcoin-charter",
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
     });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
-    console.log(`Error: ${err.message}`);
+    console.error(`Error: ${err.message}`);
     process.exit(1);
   }
 };
