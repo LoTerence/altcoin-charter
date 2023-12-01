@@ -1,21 +1,16 @@
-/* The block in the coinUList component that lets the user add a new AltCoin */
+/*
+ * The block in the coinUList component that lets the user add a new AltCoin
+ */
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { SpinnerIcon } from "../icons";
 
 // TODO: add custom styling, right now its all bootstrap
 // TODO: load list of symbols from DB? and use a cron to update DB once a week? or load symbols in redux?
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import {
-  addNewCoin,
-  selectCoinList,
-  setError,
-} from "../../_store/reducers/coinListSlice";
-import { SpinnerIcon } from "../icons";
-
-const CoinAdder = () => {
+const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const dispatch = useDispatch();
-  const { coins, error } = useSelector(selectCoinList);
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [symbol, setSymbol] = useState("");
   const [symbols, setSymbols] = useState([]);

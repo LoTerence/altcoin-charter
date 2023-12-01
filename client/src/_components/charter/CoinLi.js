@@ -1,7 +1,5 @@
-// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
   fetchCoinInfo,
   fetchHistory,
@@ -10,7 +8,10 @@ import {
 } from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
-const CoinLi = ({ coin }) => {
+// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
+// TODO: figure out why one reload makes this component reload like 16 times
+
+const CoinLi = ({ coin, deleteCoin, setError }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
@@ -23,7 +24,7 @@ const CoinLi = ({ coin }) => {
       await dispatch(deleteCoin(coin._id)).unwrap();
     } catch (err) {
       console.error("Failed to delete the coin: ", err);
-      setError("Something went wrong while deleting coin");
+      dispatch(setError("Something went wrong while deleting coin"));
     } finally {
       setDeleteReqStatus("idle");
     }
