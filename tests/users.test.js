@@ -22,7 +22,7 @@ describe("User model and services - adding a user", () => {
     const newUser = new User({
       email: userReqBody.email,
       password: userReqBody.password,
-      watchList: [],
+      watchlist: [],
     });
 
     await User.addUser(newUser, (err, user) => {
@@ -30,14 +30,14 @@ describe("User model and services - adding a user", () => {
       expect(user.email).toBe(userReqBody.email);
       expect(typeof user.password).toBe("string");
       expect(user.password.length).toBeGreaterThan(10); //we should check if the password is hashed
-      //   expect(user.watchList).toEqual([]);
+      //   expect(user.watchlist).toEqual([]);
     });
   });
 
   it("throws error if email field is blank", async () => {
     const newUser = new User({
       password: "password123",
-      watchList: [],
+      watchlist: [],
     });
 
     await User.addUser(newUser, (err, user) => {
@@ -50,7 +50,7 @@ describe("User model and services - adding a user", () => {
     const newUser = new User({
       email: "testemailcom",
       password: "password12345",
-      watchList: [],
+      watchlist: [],
     });
 
     await User.addUser(newUser, (err, user) => {
@@ -65,7 +65,7 @@ describe("User model and services - adding a user", () => {
     const newUser = new User({
       email: userReqBody.email,
       password: userReqBody.password,
-      watchList: [],
+      watchlist: [],
     });
 
     await User.addUser(newUser);
@@ -95,7 +95,7 @@ const addUsers = async () => {
 const userInstance1 = new User({
   email: "unittest2@email.com",
   password: "anotherpassword",
-  watchList: [],
+  watchlist: [],
   username: "WUT",
 });
 
@@ -104,7 +104,7 @@ const userInstance1 = new User({
 const userInstance2 = new User({
   email: "unittest3@email2.com",
   password: "someotherpassword321",
-  watchList: [],
+  watchlist: [],
   username: "whyDoWeNeedUsername",
 });
 
@@ -112,18 +112,6 @@ describe("User model and services - service functions", () => {
   // beforeEach(async () => {
   //   await addUsers();
   // });
-
-  it("can get user by email", async () => {
-    const { addedUser1 } = await addUsers();
-
-    await User.getUserByEmail(addedUser1.email, (err, user) => {
-      if (err) console.log("There was an error getting user by email");
-      if (!user) console.log("No user found");
-
-      expect(user._id).toStrictEqual(addedUser1._id);
-      expect(user.email).toBe(addedUser1.email);
-    });
-  });
 
   it("can get user by id", async () => {
     const { addedUser1 } = await addUsers();

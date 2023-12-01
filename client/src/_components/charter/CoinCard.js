@@ -1,13 +1,5 @@
-/* 
-a <li> element modified to display coins: coinLi 
-- like a coin Card
-*/
-// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
-
-// TODO: fix button styling
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCoin, setError } from "../../_store/reducers/coinListSlice";
 import {
   fetchCoinInfo,
   fetchHistory,
@@ -16,7 +8,10 @@ import {
 } from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
-const CoinLi = ({ coin }) => {
+// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
+// TODO: figure out why one reload makes this component reload like 16 times
+
+const CoinCard = ({ coin, deleteCoin, setError }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
@@ -29,7 +24,7 @@ const CoinLi = ({ coin }) => {
       await dispatch(deleteCoin(coin._id)).unwrap();
     } catch (err) {
       console.error("Failed to delete the coin: ", err);
-      setError("Something went wrong while deleting coin");
+      dispatch(setError("Something went wrong while deleting coin"));
     } finally {
       setDeleteReqStatus("idle");
     }
@@ -39,42 +34,40 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
-    dispatch(fetchCoinInfo(coin.Symbol));
+    dispatch(fetchCoinInfo(coin.symbol));
     dispatch(
-      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+      fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
     );
   };
 
   return (
-    <div className="col-md-4 col-sm-6 col-12">
+    <div className="col-md-4 col-sm-6 col-12 relative">
       <button
         className={isActive ? "coin-li-isActive" : "coin-li"}
         tabIndex="0"
         onClick={(e) => handleSetActiveCoin(e)}
       >
-        <h5>{coin.Name}</h5>
-        <p>{coin.CoinName} price history, day&apos;s change</p>
-        <DeleteButton
-          isLoading={deleteReqStatus === "pending"}
-          onClick={handleDeleteCoin}
-        />
+        <h5>{coin.name}</h5>
+        <p>{coin.coinName} price history, day&apos;s change</p>
       </button>
+      <DeleteButton
+        isLoading={deleteReqStatus === "pending"}
+        onClick={handleDeleteCoin}
+      />
     </div>
   );
 };
 
 const DeleteButton = ({ isLoading, onClick }) => {
   return (
-    <>
-      {isLoading ? (
-        <SpinnerIcon className="w-16 remove-icon" />
-      ) : (
-        <button className="remove-icon" onClick={(e) => onClick(e)}>
-          <TrashIcon />
-        </button>
-      )}
-    </>
+    <button
+      className="remove-icon"
+      onClick={(e) => onClick(e)}
+      disabled={isLoading}
+    >
+      {isLoading ? <SpinnerIcon className="w-16" /> : <TrashIcon />}
+    </button>
   );
 };
 
-export default CoinLi;
+export default CoinCard;

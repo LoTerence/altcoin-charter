@@ -1,41 +1,30 @@
-/* The block in the coinUList component that lets the user add a new AltCoin */
-
-// TODO: add custom styling, right now its all bootstrap
-// TODO: load list of symbols from DB? and use a cron to update DB once a week? or load symbols in redux?
-
+/*
+ * The block that lets the user add a new AltCoin
+ */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import {
-  addNewCoin,
-  selectCoinList,
-  setError,
-} from "../../_store/reducers/coinListSlice";
 import { SpinnerIcon } from "../icons";
+import {
+  fetchSymbols,
+  selectSymbols,
+} from "../../_store/reducers/symbolsSlice";
 
-const CoinAdder = () => {
+const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const dispatch = useDispatch();
-  const { coins, error } = useSelector(selectCoinList);
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [symbol, setSymbol] = useState("");
-  const [symbols, setSymbols] = useState([]);
+  const { status, symbols } = useSelector(selectSymbols);
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    const loadSymbols = async () => {
-      const res = await axios.get(
-        "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
-      );
-      const initialSymbols = Object.values(res.data.Data);
-      setSymbols(initialSymbols);
-    };
-    loadSymbols();
-  }, []);
+    if (status === "idle") {
+      dispatch(fetchSymbols());
+    }
+  }, [dispatch, status]);
 
   const handleInputChange = (e) => {
     const text = e.target.value;
     setSymbol(text);
-
     const matches = deriveSuggestions(text, symbols);
     setSuggestions(matches);
   };
@@ -49,15 +38,12 @@ const CoinAdder = () => {
 
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
-
     const newSymbol = symbol.toUpperCase();
-
     const validation = validateSymbol(newSymbol, coins);
     if (!validation.isValid) {
       dispatch(setError(validation.message));
       return;
     }
-
     try {
       setAddRequestStatus("pending");
       await dispatch(addNewCoin(newSymbol)).unwrap();
@@ -115,12 +101,12 @@ const SymbolInput = ({ disabled, onBlur, onChange, value }) => {
         name="symbol"
         onBlur={onBlur}
         onChange={(e) => onChange(e)}
-        placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+        placeholder="Altcoin symbol, i.e. BTC, LTC..."
         type="string"
         value={value}
       />
       <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
-        Altcoin Symbol, i.e. BTC, LTC...
+        Altcoin symbol, i.e. BTC, LTC...
       </label>
     </>
   );
@@ -152,7 +138,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   return (
     <>
       {suggestions.length > 0 && (
-        <selection className="suggestions">
+        <div className="suggestions">
           {suggestions.map((s) => (
             <option
               className="suggestion"
@@ -163,7 +149,7 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
               {s.FullName}
             </option>
           ))}
-        </selection>
+        </div>
       )}
     </>
   );
@@ -174,7 +160,7 @@ const ErrorMessage = ({ error }) => {
 };
 
 // validates a new symbol
-// @param coins: list of coins to make sure the Symbol is not already in the coinlist
+// @param coins: list of coins to make sure the symbol is not already in the coinlist
 const validateSymbol = (newSymbol, coins) => {
   const symbol = newSymbol.toUpperCase();
   if (symbol === "") {
@@ -184,7 +170,7 @@ const validateSymbol = (newSymbol, coins) => {
   if (iChars.test(symbol)) {
     return { isValid: false, message: "No special characters allowed" };
   }
-  const isListed = coins.some((c) => c.Symbol === symbol);
+  const isListed = coins.some((c) => c.symbol === symbol);
   if (isListed) {
     return {
       isValid: false,
@@ -199,11 +185,7 @@ const deriveSuggestions = (text, symbols) => {
   const regex = new RegExp(`^${text}`, "gi");
   const matches = symbols
     .filter((s) => s.Symbol.match(regex))
-    .sort((a, b) => {
-      if (a.Symbol < b.Symbol) return -1;
-      if (a.Symbol > b.Symbol) return 1;
-      return 0;
-    })
+    .sort((a, b) => a.Symbol.localeCompare(b.Symbol))
     .slice(0, 10);
   return matches;
 };

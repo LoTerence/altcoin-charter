@@ -44,6 +44,10 @@ button {
   margin: 1px;
 }
 
+.relative {
+  position: relative;
+}
+
 .google-button {
   color: white !important;
   background-color: #dd4b39 !important;
@@ -71,7 +75,6 @@ button {
   display: block;
   margin: 5px;
   padding: 5px 10px;
-  position: relative;
   width: calc(100% - 40px);
 }
 
@@ -94,7 +97,6 @@ button {
   display: block;
   margin: 5px;
   padding: 5px 10px;
-  position: relative;
   width: calc(100% - 40px);
 }
 
@@ -106,8 +108,8 @@ button {
 .remove-icon {
   opacity: 75%;
   position: absolute;
-  top: 3px;
-  right: 5px;
+  top: 6px;
+  right: 8px;
   font-size: 0.65rem;
 }
 

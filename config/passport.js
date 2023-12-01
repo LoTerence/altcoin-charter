@@ -15,16 +15,15 @@ passport.use(User.createStrategy());
 
 passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
-    User.getUserById(jwt_payload.data._id, (err, user) => {
-      if (err) {
-        return done(err, false);
-      }
-      if (user) {
-        return done(null, user);
-      } else {
+    try {
+      const user = await User.findById(jwt_payload.data._id);
+      if (!user) {
         return done(null, false, { message: "User id not found" });
       }
-    });
+      done(null, user);
+    } catch (err) {
+      done(err, false);
+    }
   })
 );
 
@@ -32,10 +31,13 @@ passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    return done(null, user);
+  } catch (err) {
+    return done(err, false);
+  }
 });
 
 // < --------------- OAuth2.0 strategies ------------------- >
