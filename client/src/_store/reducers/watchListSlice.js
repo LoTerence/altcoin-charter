@@ -56,7 +56,7 @@ export const fetchWatchlist = createAsyncThunk(
     const res = await axios.get("/users/watchlist", {
       headers: { authorization: localStorage.getItem("token") },
     });
-    const watchlist = res.data;
+    const watchlist = res.data.data;
     return watchlist;
   }
 );
