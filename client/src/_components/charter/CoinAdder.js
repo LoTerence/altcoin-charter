@@ -195,11 +195,7 @@ const deriveSuggestions = (text, symbols) => {
   const regex = new RegExp(`^${text}`, "gi");
   const matches = symbols
     .filter((s) => s.Symbol.match(regex))
-    .sort((a, b) => {
-      if (a.symbol < b.symbol) return -1;
-      if (a.symbol > b.symbol) return 1;
-      return 0;
-    })
+    .sort((a, b) => a.Symbol.localeCompare(b.Symbol))
     .slice(0, 10);
   return matches;
 };
