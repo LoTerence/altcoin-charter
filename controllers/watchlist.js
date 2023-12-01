@@ -28,8 +28,8 @@ const addCoin = async (req, res) => {
 
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
-    let newCoin = await Coin.findOne({ Symbol: data.Symbol });
-    if (!newCoin._id) {
+    let newCoin = await Coin.findOne({ symbol: data.symbol });
+    if (!newCoin?._id) {
       newCoin = await Coin.create(data);
     }
 
