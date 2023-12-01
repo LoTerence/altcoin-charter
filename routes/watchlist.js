@@ -7,7 +7,7 @@ const {
   removeCoinById,
 } = require("../controllers/watchlist");
 
-router.route("/public").get(getPublicCoins).post(addCoin);
+router.route("/public").get(getPublicCoins).put(addCoin);
 
 router.delete("/public/:id", removeCoinById);
 

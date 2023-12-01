@@ -87,7 +87,7 @@ export const addNewCoin = createAsyncThunk(
       Symbol: cryptoData.Symbol,
     };
 
-    const res = await axios.post("/watchlist/public", newCoin);
+    const res = await axios.put("/watchlist/public", newCoin);
     if (!res.data.success) {
       console.log("error in posting to coins_public in addNewCoin action ");
       throw new Error("There was an error posting new coin data");
