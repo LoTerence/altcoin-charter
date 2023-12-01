@@ -36,7 +36,7 @@ const CoinInfo = () => {
     );
   }
 
-  if (!activeCoin || !coinInfo || !activeCoin.CoinName) {
+  if (!activeCoin || !coinInfo || !activeCoin.coinName) {
     return (
       <div className="alert alert-warning">
         <LoadingOverlay isLoading={isLoading} />
@@ -49,7 +49,7 @@ const CoinInfo = () => {
     <div className="coin-info d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap">
       <LoadingOverlay isLoading={isLoading} />
       <div className="p-2 flex-fill">
-        <p>{activeCoin.CoinName}&apos;s current Price:</p>
+        <p>{activeCoin.coinName}&apos;s current Price:</p>
         <h1>{coinInfo.currentPrice}</h1>
         <p>{coinInfo.pctChange}% change today</p>
       </div>

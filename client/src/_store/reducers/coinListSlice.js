@@ -1,9 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-/* TODO: dev mode bug
-In dev mode, the [initialState.status: "idle"] sometimes makes it so that when 
-  a code file is saved, no coins show up. Fix it so that coinList always shows up */
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // TODO: add ts types for status
 // initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -45,19 +41,17 @@ export const coinListSlice = createSlice({
       })
       .addCase(deleteCoin.fulfilled, (state, action) => {
         const _id = action.payload;
-        const coinsArr = state.coins;
-        state.coins = coinsArr.filter((c) => c._id !== _id);
+        state.coins = state.coins.filter((c) => c._id !== _id);
         state.error = null;
       });
   },
 });
 
-export const { setCoins, setDeletingCoinId, setError } = coinListSlice.actions;
+export const { setCoins, setError } = coinListSlice.actions;
 
-// ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
-  const res = await axios.get("/coins_public/coinList");
+  const res = await axios.get("/watchlist/public");
   if (!res.data.success) {
     throw new Error("Something went wrong while getting coin list");
   }
@@ -70,28 +64,25 @@ export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
 export const addNewCoin = createAsyncThunk(
   "coinList/addNewCoin",
   async (newCoinSymbol) => {
+    const sym = newCoinSymbol.toUpperCase();
     const cryptocompareRes = await axios.get(
       "https://min-api.cryptocompare.com/data/all/coinlist"
     );
-    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[newCoinSymbol]);
+    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
     if (!doesCryptoExist) {
       throw new Error("A coin with that symbol does not exist");
     }
-
-    const cryptoData = cryptocompareRes.data.Data[newCoinSymbol];
-    const newCoin = {
-      CoinName: cryptoData.CoinName,
-      Id: cryptoData.Id,
-      Name: cryptoData.Name,
-      Symbol: cryptoData.Symbol,
+    const cryptoData = cryptocompareRes.data.Data[sym];
+    const data = {
+      coinName: cryptoData.CoinName,
+      cryptoCompareId: cryptoData.Id,
+      name: cryptoData.Name,
+      symbol: cryptoData.Symbol,
     };
-
-    const res = await axios.post("/coins_public/coinList", newCoin);
+    const res = await axios.put("/watchlist/public", data);
     if (!res.data.success) {
-      console.log("error in posting to coins_public in addNewCoin action ");
       throw new Error("There was an error posting new coin data");
     }
-
     const coin = res.data.data;
     return coin;
   }
@@ -100,7 +91,7 @@ export const addNewCoin = createAsyncThunk(
 export const deleteCoin = createAsyncThunk(
   "coinList/deleteCoin",
   async (_id) => {
-    const res = await axios.delete(`/coins_public/coinList/${_id}`);
+    const res = await axios.delete(`/watchlist/public/${_id}`);
     if (!res.data.success) {
       throw new Error("Something went wrong while deleting coin");
     }

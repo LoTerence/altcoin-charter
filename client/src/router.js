@@ -1,14 +1,14 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Charter from "./_components/charter";
+import Home from "./pages/Home";
+import Feature from "./pages/Feature";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Settings from "./pages/Settings";
 import OAuthCallback from "./_components/auth/OAuthCallback";
 import Signin from "./_components/auth/Signin";
 import Signout from "./_components/auth/Signout";
 import Signup from "./_components/auth/Signup";
 import ContactUs from "./pages/ContactUs";
 import ErrorPage from "./pages/ErrorPage";
-import Feature from "./pages/Feature";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Settings from "./pages/Settings";
 import Header from "./_components/universal/Header";
 import Footer from "./_components/universal/Footer";
 
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        Component: Charter,
+        Component: Home,
       },
       {
         path: "signin",

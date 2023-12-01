@@ -1,10 +1,9 @@
-// Require dependencies
-const express = require("express");
+const cors = require("cors");
 const dotenv = require("dotenv");
+const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
-const cors = require("cors"); //access the server from any domain name
 const connectDB = require("./config/database");
 
 // allows project to read from .env
@@ -31,12 +30,11 @@ app.use(
   })
 );
 
-// CORS Middleware
+// CORS Middleware: access the server from any domain name
 app.use(cors());
 /* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
-front end is running on so the server can only accept requests from the front end 
-app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
-*/
+  front end is running on so the server can only accept requests from the front end */
+// app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
 
 // Passport Middleware
 app.use(passport.initialize());
@@ -44,10 +42,11 @@ app.use(passport.session());
 require("./config/passport"); // authentication strategy
 
 // API express routing
-app.use("/coins_public", require("./routes/coins_public"));
+app.use("/coins", require("./routes/coins"));
+app.use("/watchlist", require("./routes/watchlist"));
 app.use("/users", require("./routes/users"));
 
-// <------------------------------------------  ROUTING OVER -----------------------------------------> //
+// <------------------------------------------  SERVE -----------------------------------------> //
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {

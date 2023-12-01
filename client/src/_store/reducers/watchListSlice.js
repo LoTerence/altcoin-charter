@@ -1,153 +1,115 @@
 /* 
 This is the Redux state slice for state related to the personal watchlist of a user
 */
-
-import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  coins: [],
+  error: null,
+  status: "idle",
+};
 
 export const watchListSlice = createSlice({
   name: "watchList",
-  initialState: {
-    coins: [],
-    reqInProgress: false,
-    deletingCoinId: "",
-    error: "",
-  },
+  initialState,
   reducers: {
-    setCoinsWL: (state, action) => {
+    setCoins: (state, action) => {
       state.coins = action.payload;
     },
-    addCoinWL: (state, action) => {
-      const newCoin = action.payload;
-      state.coins.push(newCoin);
-      state.reqInProgress = false;
-      state.error = "";
-    },
-    deleteCoinWL: (state, action) => {
-      const sym = action.payload;
-      const coinsArr = state.coins;
-      state.coins = coinsArr.filter((c) => c.Symbol !== sym);
-      state.error = "";
-    },
-    setReqInProgressWL: (state, action) => {
-      state.reqInProgress = action.payload;
-    },
-    setDeletingCoinIdWL: (state, action) => {
-      state.deletingCoinId = action.payload;
-    },
-    coinErrWL: (state, action) => {
+    setError: (state, action) => {
       state.error = action.payload;
-      state.reqInProgress = false;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchWatchlist.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchWatchlist.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.coins = action.payload;
+      })
+      .addCase(fetchWatchlist.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = "Something went wrong while getting personal watch list";
+      })
+      .addCase(addNewCoin.fulfilled, (state, action) => {
+        const newCoin = action.payload;
+        state.coins.push(newCoin);
+        state.error = null;
+      })
+      .addCase(deleteCoin.fulfilled, (state, action) => {
+        const _id = action.payload;
+        state.coins = state.coins.filter((c) => c._id !== _id);
+        state.error = null;
+      });
   },
 });
 
-export const {
-  setCoinsWL,
-  addCoinWL,
-  deleteCoinWL,
-  setReqInProgressWL,
-  setDeletingCoinIdWL,
-  coinErrWL,
-} = watchListSlice.actions;
+export const { setCoins, setError } = watchListSlice.actions;
 
-// Async thunks
 // get initial personal watch list from the db
-export const getCoinsWLAction = () => (dispatch) => {
-  axios
-    .get("/users/watchlist", {
+export const fetchWatchlist = createAsyncThunk(
+  "watchList/fetchWatchlist",
+  async () => {
+    const res = await axios.get("/users/watchlist", {
       headers: { authorization: localStorage.getItem("token") },
-    })
-    .then((res) => {
-      dispatch(setCoinsWL(res.data));
-    })
-    .catch((err) =>
-      dispatch(
-        coinErrWL("Error, something went wrong in watchlist-getCoins action")
-      )
+    });
+    if (!res.data.success) {
+      throw new Error("Something went wrong while getting user watch list");
+    }
+    const watchlist = res.data.data;
+    return watchlist;
+  }
+);
+
+// todo: refactor get call to https://min-api.cryptocompare.com/data/all/coinlist, its repeated a lot in the app
+export const addNewCoin = createAsyncThunk(
+  "watchList/addNewCoin",
+  async (newCoinSymbol) => {
+    const sym = newCoinSymbol.toUpperCase();
+    const cryptocompareRes = await axios.get(
+      "https://min-api.cryptocompare.com/data/all/coinlist"
     );
-};
+    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
+    if (!doesCryptoExist) {
+      throw new Error("A coin with that symbol does not exist");
+    }
+    const cryptoData = cryptocompareRes.data.Data[sym];
+    const data = {
+      coinName: cryptoData.CoinName,
+      cryptoCompareId: cryptoData.Id,
+      name: cryptoData.Name,
+      symbol: cryptoData.Symbol,
+    };
+    const config = {
+      headers: { authorization: localStorage.getItem("token") },
+    };
+    const res = await axios.put("/users/watchlist/add", data, config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    const coin = res.data.data;
+    return coin;
+  }
+);
 
-// adding a coin to watchlist action
-export const addCoinWLAction = (newCoinSymbol) => (dispatch) => {
-  dispatch(setReqInProgressWL(true));
-
-  const sym = newCoinSymbol.toUpperCase();
-
-  axios
-    .get("https://min-api.cryptocompare.com/data/all/coinlist")
-    .then((res) => {
-      if (res.data.Data[sym]) {
-        //if the symbol represents an altcoin from cryptocompare.com, add the coin to the coinlist db
-
-        const newCoin = {
-          Id: res.data.Data[sym].Id,
-          Name: res.data.Data[sym].Name,
-          Symbol: res.data.Data[sym].Symbol,
-          CoinName: res.data.Data[sym].CoinName,
-        };
-
-        axios
-          .put(
-            "/users/watchlist/addcoin",
-            { newCoin },
-            {
-              headers: { authorization: localStorage.getItem("token") },
-            }
-          )
-          .then((res2) => {
-            if (res2.data.success) {
-              dispatch(addCoinWL(newCoin));
-            } else {
-              dispatch(coinErrWL(res2.data.msg));
-            }
-          })
-          .catch((err) => {
-            console.log("Error in putting to watchlist in addcoinWL action");
-            dispatch(
-              coinErrWL("Server Error occured while adding to watchlist")
-            );
-          });
-      } else {
-        //if symbol doesnt exist, dispatch an error message
-        dispatch(coinErrWL("A coin with that symbol does not exist"));
-      }
-    })
-    .catch((err) => {
-      console.log("Error in addcoinWL action api call to cryptocompare.com");
-      dispatch(
-        coinErrWL("Error in addcoinWL action api call to cryptocompare.com")
-      );
-    });
-};
-
-// Delete coin from watchlist action
-export const deleteCoinWLAction = (coin, id) => (dispatch) => {
-  dispatch(setDeletingCoinIdWL(id));
-
-  const sym = coin.Symbol;
-  console.log("Deleting coin: " + sym);
-  axios
-    .put(
-      "/users/watchlist/delcoin",
-      { Symbol: sym },
+// remove coin from user's personal watchlist
+export const deleteCoin = createAsyncThunk(
+  "watchList/deleteCoin",
+  async (_id) => {
+    const res = await axios.put(
+      "/users/watchlist/delete",
+      { id: _id },
       { headers: { authorization: localStorage.getItem("token") } }
-    )
-    .then((res) => {
-      if (res.data.success) {
-        dispatch(deleteCoinWL(sym));
-        dispatch(setDeletingCoinIdWL(""));
-      } else {
-        dispatch(coinErrWL(res.data.msg));
-        dispatch(setDeletingCoinIdWL(""));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch(coinErrWL("There was a server error while putting to delcoin"));
-      dispatch(setDeletingCoinIdWL(""));
-    });
-};
+    );
+    if (!res.data.success) {
+      throw new Error("Something went wrong while deleting coin");
+    }
+    return _id;
+  }
+);
 
 export const selectWatchList = (state) => state.watchList;
 

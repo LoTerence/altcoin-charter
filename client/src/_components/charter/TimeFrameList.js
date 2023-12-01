@@ -25,7 +25,7 @@ const TimeFrameList = () => {
     if (activeTimeframe === timeframe) return;
     dispatch(setTimeFrame(timeframe));
     if (activeCoin) {
-      dispatch(fetchHistory({ coinSymbol: activeCoin.Symbol, timeframe }));
+      dispatch(fetchHistory({ coinSymbol: activeCoin.symbol, timeframe }));
     }
   };
 

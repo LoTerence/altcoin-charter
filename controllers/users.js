@@ -1,315 +1,296 @@
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const Coin = require("../models/Coin");
+const User = require("../models/User");
 
 // @desc Register a new user
 // @route POST /users/register
 // @access private - only the client can access
-exports.registerUser = async (req, res) => {
-  const newUser = new User({
-    email: req.body.email,
-    password: req.body.password,
-    watchList: [],
-  });
-
-  // TODO: specify unique email error instead of returning email already registered for all errors
-  User.addUser(newUser, (err, user) => {
-    if (err) {
-      console.log(err);
-      res.json({
-        success: false,
-        message: "Email already registered or not a real email",
-      });
-    } else {
-      const data = {
-        _id: user._id,
-        email: user.email,
-      };
-      const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-        expiresIn: 604800, //1 week
-      });
-      res.json({
-        success: true,
-        token: "JWT " + token,
-        message: "User registered",
-      });
-    }
-  });
+const registerUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const newUser = new User({
+      email,
+      password,
+      watchlist: [],
+    });
+    const user = await User.addUser(newUser);
+    const data = {
+      _id: user._id,
+      email: user.email,
+    };
+    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: 604800, //1 week
+    });
+    return res.status(200).json({
+      message: "User registered",
+      success: true,
+      token: `JWT ${token}`,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Email already registered or not a real email",
+      success: false,
+    });
+  }
 };
 
 // @desc Log in a new user
 // @route POST /users/authenticate
 // @access private - only the client can access
-exports.authenticateUser = async (req, res) => {
+const authenticateUser = async (req, res) => {
   const { email, password } = req.body;
-
-  User.getUserByEmail(email, async (err, user) => {
-    if (err) throw err;
+  try {
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User not found" });
+      return res.json({ message: "User not found", success: false });
     }
-
-    try {
-      const isMatch = await user.isValidPassword(password);
-      if (isMatch) {
-        const data = {
-          _id: user._id,
-          email: user.email,
-        };
-        const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-          expiresIn: 604800, //1 week
-        });
-
-        res.json({
-          success: true,
-          token: "JWT " + token,
-          message: "User logged in",
-        });
-      } else {
-        return res.json({ success: false, message: "Invalid password!" });
-      }
-    } catch (error) {
-      throw error;
+    const isMatch = user.validatePassword(password);
+    if (!isMatch) {
+      return res.json({ message: "Invalid password!", success: false });
     }
-  });
+    const data = {
+      _id: user._id,
+      email: user.email,
+    };
+    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
+      expiresIn: 604800, //1 week
+    });
+    return res.status(200).json({
+      message: "User logged in",
+      success: true,
+      token: `JWT ${token}`,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Failed to authenticate user",
+      success: false,
+    });
+  }
 };
 
 // @desc Get the user profile
 // @route GET /users/profile
 // @access private - only the client can access
-exports.getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   const { _id, email, name } = req.user;
-  res.json({ user: { _id, email, name } });
+  res.status(200).json({ user: { _id, email, name } });
 };
 
 // @desc Edit the user's name
 // @route PUT /users/profile/name
 // @access private - only the client can access
-exports.editUserName = async (req, res) => {
+const editUserName = async (req, res) => {
   const newName = req.body.newName;
-  User.getUserById(req.user._id, (err, user) => {
-    //handle errors
-    if (err) throw err;
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/users/profile/name"
-      );
-      return res.json({ success: false, message: "User not found" });
+      return res
+        .status(200)
+        .json({ message: "User not found", success: false });
     }
-
-    // check if the name is the same. If it is, nothing needs to be changed
     if (user.name === newName) {
       return res.json({
+        message: "User already had the same name",
         success: true,
-        msg: "User already had the same name",
       });
     }
-
-    // Change the name of the user
     user.name = newName;
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error changing name in routes/users.js - put(users/profile/name)",
-        });
-      }
-      res.json({ success: true, newName: user.name });
+    await user.save();
+    return res.status(200).json({ newName: user.name, success: true });
+  } catch (err) {
+    console.error(err);
+    return res.json({
+      error: "error changing name in routes/users.js - put(users/profile/name)",
+      success: false,
     });
-  });
+  }
 };
 
 // @desc Edit the user's email
 // @route PUT /users/profile/email
 // @access private - only the client can access
-exports.editUserEmail = async (req, res) => {
-  if (!req.body.hasOwnProperty("password")) {
-    console.log("req does not have password");
+const editUserEmail = async (req, res) => {
+  if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
-  const newEmail = req.body.newEmail;
-  const password = req.body.password;
-
-  User.getUserById(req.user._id, async (err, user) => {
-    //handle errors
-    if (err) throw err;
+  const { newEmail, password } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/users/profile/email"
-      );
-      return res.json({ success: false, message: "User not found" });
+      return res
+        .status(200)
+        .json({ message: "User not found", success: false });
     }
-
-    // Change the email of the user
-    try {
-      const isMatch = await user.isValidPassword(password);
-      if (isMatch) {
-        // check if the email is the same. If it is, nothing needs to be changed
-        if (user.email === newEmail) {
-          return res.json({
-            success: true,
-            message: "User already had the same email",
-          });
-        }
-
-        // change the user's email to the new email
-        user.email = newEmail;
-        user.save((err) => {
-          if (err) {
-            return res.json({
-              success: false,
-              message: "Something went wrong, please try again later",
-            });
-          }
-          return res.json({ success: true, newEmail: user.email });
-        });
-      } else {
-        // if password does not match
-        return res.json({ success: false, message: "Invalid password!" });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.json({
-        success: false,
-        message: "Something went wrong, please try again later",
+    const isMatch = user.validatePassword(password);
+    if (!isMatch) {
+      return res.json({ message: "Invalid password!", success: false });
+    }
+    if (user.email === newEmail) {
+      return res.status(200).json({
+        message: "User already has the same email",
+        success: true,
       });
     }
-  });
+    user.email = newEmail;
+    await user.save();
+    return res.status(200).json({ success: true, newEmail: user.email });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Something went wrong, please try again later",
+      success: false,
+    });
+  }
 };
 
 // @desc Edit the user's password
 // @route PUT /users/password
 // @access private - only the client can access
-exports.editUserPassword = async (req, res) => {
-  // check if req body has property for password
-  if (!req.body.hasOwnProperty("password")) {
-    console.log("req does not have password");
+const editUserPassword = async (req, res) => {
+  if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
-  User.changeUserPassword(
-    req.user._id,
-    req.body.password,
-    req.body.newPassword,
-    (err, json) => {
-      if (err) {
-        console.log(err);
-        return res.json({
-          success: false,
-          message:
-            "error editing user password in server/routes/users.js -- router.put('/users/pasword')",
-        });
-      }
-      return res.json(json);
+  try {
+    const user = await User.findById(req.user._id);
+    const isMatch = user.validatePassword(req.body.password);
+    if (!isMatch) {
+      return res.json({ message: "Invalid password!", success: false });
     }
-  );
+    await user.saveNewPassword(req.body.newPassword);
+    return res
+      .status(200)
+      .json({ message: "Password successfully changed", success: true });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Something went wrong, please try again later",
+      success: false,
+    });
+  }
 };
 
 // @desc Delete the user account by deleting the user document by id
 // @route DELETE /users/delete
 // @access private - only the client can access
-exports.deleteUser = async (req, res) => {
-  // check if req body has property for password
-  if (!req.body.hasOwnProperty("password")) {
-    console.log("req does not have password");
+const deleteUser = async (req, res) => {
+  if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
-  User.deleteUserById(req.user._id, req.body.password, (err, json) => {
-    if (err) {
-      console.log(err);
-      return res.json({
-        success: false,
-        message:
-          "error deleting user in server/routes/users.js -- router.delete('/users/delete')",
-      });
+  try {
+    const user = await User.findById(id);
+    const isMatch = user.validatePassword(password);
+    if (!isMatch) {
+      return res.json({ success: false, message: "Invalid password!" });
     }
-    return res.json(json);
-  });
+    await User.deleteOne({ _id: id });
+    return res.status(200).json({
+      success: true,
+      message: "User successfully deleted",
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: "Failed to delete user",
+      success: false,
+    });
+  }
 };
 
 // @desc Get the user's watchlist
 // @route GET /users/watchlist
 // @access private - only the client can access
-exports.getUserWatchlist = async (req, res) => {
-  res.send(req.user.watchList);
+const getUserWatchlist = async (req, res) => {
+  try {
+    const coins = await Coin.find({ _id: req.user.watchlist });
+    return res.status(200).json({
+      data: coins,
+      message: "User's list of coins successfully found",
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: "Failed to fetch data",
+      success: false,
+    });
+  }
 };
 
 // @desc Add a coin to the user's watchlist
-// @route PUT /users/watchlist/addcoin
+// @route PUT /users/watchlist/add
 // @access private - only the client can access
-exports.addCoinToWatchlist = async (req, res) => {
-  const newCoin = req.body.newCoin;
-  User.getUserById(req.user._id, (err, user) => {
-    //handle errors
-    if (err) throw err;
+const addCoinToWatchlist = async (req, res) => {
+  const data = req.body;
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-      );
-      return res.json({ success: false, message: "User not found" });
+      console.error("error: User not found')");
+      return res.status(200).json({ error: "User not found", success: false });
     }
-
-    // Check if the coin is already in the watchlist by comparing its symbol
-    if (user.watchList.filter((e) => e.Symbol === newCoin.Symbol).length) {
-      return res.json({
+    let coin = await Coin.findOne({ symbol: data.symbol });
+    if (!coin?._id) {
+      coin = await Coin.create(data);
+    }
+    const isListed = user.watchlist.some((oid) => oid.equals(coin._id));
+    if (isListed) {
+      return res.status(200).json({
+        error: "That coin is already on the list",
         success: false,
-        msg: "That coin is already on the list",
       });
     }
-
-    // update watchlist with the new coin obj from req.body, then res.json the new watchlist
-    user.watchList.push(newCoin);
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
-        });
-      }
-      res.json({ success: true, newWatchList: user.watchList });
+    user.watchlist.push(coin._id);
+    await user.save();
+    return res.status(200).json({
+      data: coin,
+      message: "Successfully added coin to user watchlist",
+      success: true,
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: "Failed to save new coin to user watchlist",
+      success: false,
+    });
+  }
 };
 
-// @desc Delete a coin from the user's watchlist
-// @route PUT /users/watchlist/delcoin
+// @desc Delete a coin from the user's watchlist by _id
+// @route PUT /users/watchlist/delete
 // @access private - only the client can access
-exports.delCoinFromWatchlist = async (req, res) => {
-  User.getUserById(req.user._id, (err, user) => {
-    //handle errors
-    if (err) throw err;
+const removeCoinFromWatchlist = async (req, res) => {
+  const oid = req.body.id;
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-      );
-      return res.json({ success: false, msg: "User not found" });
+      console.error("error: User not found')");
+      return res.status(200).json({ error: "User not found", success: false });
     }
-
-    user.watchList = user.watchList.filter((e) => e.Symbol !== req.body.Symbol);
-
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error deleting coin in routes/users.js - put(watchlist/delcoin)",
-        });
-      }
-      res.json({ success: true, newWatchList: user.watchList });
+    user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
+    await user.save();
+    return res.status(200).json({
+      data: {},
+      message: "Coin was successfully removed",
+      success: true,
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: "Failed to delete coin from user watchlist",
+      success: false,
+    });
+  }
 };
 
 // <-------------------- OAuth2.0 controllers ------------------------>
 // Google login controller
-exports.authenticateUserGoogle = async (req, res) => {
-  User.getUserById(req.user._id, (err, user) => {
-    if (err) throw err;
+const authenticateUserGoogle = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log("no user");
-      return res.json({ success: false, message: "User not found" });
+      return res.json({ message: "User not found", success: false });
     }
-
     const data = {
       _id: user._id,
       email: user.email,
@@ -317,20 +298,23 @@ exports.authenticateUserGoogle = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-
-    res.redirect(process.env.CLIENT_URL + "/oauthcallback?token=" + token);
-  });
+    return res.redirect(
+      process.env.CLIENT_URL + "/oauthcallback?token=" + token
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Auth failed", success: false });
+  }
 };
 
 // Facebook login controller
-exports.authenticateUserFacebook = async (req, res) => {
-  User.getUserById(req.user._id, (err, user) => {
-    if (err) throw err;
+const authenticateUserFacebook = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
       console.log("No user");
       return res.json({ success: false, message: "User not found" });
     }
-
     const data = {
       _id: user._id,
       email: user.email,
@@ -338,7 +322,26 @@ exports.authenticateUserFacebook = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
+    return res.redirect(
+      process.env.CLIENT_URL + "/oauthcallback?token=" + token
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Auth failed", success: false });
+  }
+};
 
-    res.redirect(process.env.CLIENT_URL + "/oauthcallback?token=" + token);
-  });
+module.exports = {
+  registerUser,
+  authenticateUser,
+  getUserProfile,
+  editUserName,
+  editUserEmail,
+  editUserPassword,
+  deleteUser,
+  getUserWatchlist,
+  addCoinToWatchlist,
+  removeCoinFromWatchlist,
+  authenticateUserGoogle,
+  authenticateUserFacebook,
 };
