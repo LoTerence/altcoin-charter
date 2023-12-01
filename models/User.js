@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const uniqueValidator = require("mongoose-unique-validator");
 const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
+const { Schema } = mongoose;
 
-//User Schema
-const UserSchema = mongoose.Schema({
-  // TODO: Add a name field and give it some functionality
+// TODO: change watchlist prop to an array of coin _ids
+// TODO: can use #match for the email validator: https://mongoosejs.com/docs/validation.html
+
+const userSchema = new Schema({
+  dateCreated: { type: Date, default: Date.now },
   email: {
     type: String,
     trim: true,
@@ -22,7 +24,7 @@ const UserSchema = mongoose.Schema({
   },
   googleid: String,
   facebookid: String,
-  name: { type: String, trim: true, uppercase: true },
+  name: { type: String, trim: true },
   password: {
     type: String,
   },
@@ -32,21 +34,18 @@ const UserSchema = mongoose.Schema({
   },
 });
 
-// pre-save validation for unique fields, returns mongoose validation error instead of E11000 error from MongoDB
-UserSchema.plugin(uniqueValidator);
-
 // passport plugins
-UserSchema.plugin(passportLocalMongoose);
-UserSchema.plugin(findOrCreate);
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 // returns true if the password param matches the hashed password of the user this method is called on
-UserSchema.methods.isValidPassword = async function (password) {
+userSchema.methods.isValidPassword = async function (password) {
   const user = this;
   const compare = bcrypt.compareSync(password, user.password);
   return compare;
 };
 
-const User = (module.exports = mongoose.model("User", UserSchema));
+const User = (module.exports = mongoose.model("User", userSchema));
 
 // ------------------------------------------ Services ------------------------------------------ //
 
