@@ -111,12 +111,12 @@ const SymbolInput = ({ disabled, onBlur, onChange, value }) => {
         name="symbol"
         onBlur={onBlur}
         onChange={(e) => onChange(e)}
-        placeholder="Altcoin Symbol, i.e. BTC, LTC..."
+        placeholder="Altcoin symbol, i.e. BTC, LTC..."
         type="string"
         value={value}
       />
       <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
-        Altcoin Symbol, i.e. BTC, LTC...
+        Altcoin symbol, i.e. BTC, LTC...
       </label>
     </>
   );
@@ -152,9 +152,9 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
           {suggestions.map((s) => (
             <option
               className="suggestion"
-              key={s.Id}
+              key={s.id}
               onClick={(e) => onClick(e)}
-              value={s.Symbol}
+              value={s.symbol}
             >
               {s.FullName}
             </option>
@@ -170,7 +170,7 @@ const ErrorMessage = ({ error }) => {
 };
 
 // validates a new symbol
-// @param coins: list of coins to make sure the Symbol is not already in the coinlist
+// @param coins: list of coins to make sure the symbol is not already in the coinlist
 const validateSymbol = (newSymbol, coins) => {
   const symbol = newSymbol.toUpperCase();
   if (symbol === "") {
@@ -180,7 +180,7 @@ const validateSymbol = (newSymbol, coins) => {
   if (iChars.test(symbol)) {
     return { isValid: false, message: "No special characters allowed" };
   }
-  const isListed = coins.some((c) => c.Symbol === symbol);
+  const isListed = coins.some((c) => c.symbol === symbol);
   if (isListed) {
     return {
       isValid: false,
@@ -194,10 +194,10 @@ const deriveSuggestions = (text, symbols) => {
   if (text.length === 0) return [];
   const regex = new RegExp(`^${text}`, "gi");
   const matches = symbols
-    .filter((s) => s.Symbol.match(regex))
+    .filter((s) => s.symbol.match(regex))
     .sort((a, b) => {
-      if (a.Symbol < b.Symbol) return -1;
-      if (a.Symbol > b.Symbol) return 1;
+      if (a.symbol < b.symbol) return -1;
+      if (a.symbol > b.symbol) return 1;
       return 0;
     })
     .slice(0, 10);

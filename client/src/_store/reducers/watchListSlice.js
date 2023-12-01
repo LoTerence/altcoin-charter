@@ -72,10 +72,10 @@ export const addNewCoin = createAsyncThunk(
     if (cryptocompareRes.data.Data[sym]) {
       const cryptoData = cryptocompareRes.data.Data[sym];
       const newCoin = {
-        Id: cryptoData.Id,
-        Name: cryptoData.Name,
-        Symbol: cryptoData.Symbol,
-        CoinName: cryptoData.CoinName,
+        cryptoCompareId: cryptoData.Id,
+        name: cryptoData.Name,
+        symbol: cryptoData.Symbol,
+        coinName: cryptoData.CoinName,
       };
 
       const res = await axios.put(
@@ -101,7 +101,7 @@ export const deleteCoin = createAsyncThunk(
   async (coinId) => {
     const res = await axios.put(
       "/users/watchlist/delcoin",
-      { Id: coinId },
+      { cryptoCompareId: coinId },
       { headers: { authorization: localStorage.getItem("token") } }
     );
     if (!res.data.success) {

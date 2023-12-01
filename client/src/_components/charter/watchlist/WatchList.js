@@ -34,7 +34,7 @@ const WatchList = () => {
       </p>
       <div className="d-flex flex-wrap">
         {coins.map((coin) => (
-          <CoinLi key={coin.Id} coin={coin} />
+          <CoinLi key={coin._id} coin={coin} />
         ))}
         <CoinAdder />
       </div>

@@ -33,9 +33,9 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
-    dispatch(fetchCoinInfo(coin.Symbol));
+    dispatch(fetchCoinInfo(coin.symbol));
     dispatch(
-      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+      fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
     );
   };
 
@@ -46,8 +46,8 @@ const CoinLi = ({ coin }) => {
         tabIndex="0"
         onClick={(e) => handleSetActiveCoin(e)}
       >
-        <h5>{coin.Name}</h5>
-        <p>{coin.CoinName} price history, day&apos;s change</p>
+        <h5>{coin.name}</h5>
+        <p>{coin.coinName} price history, day&apos;s change</p>
       </button>
       <DeleteButton
         isLoading={deleteReqStatus === "pending"}
