@@ -12,7 +12,7 @@ const {
   deleteUser,
   getUserWatchlist,
   addCoinToWatchlist,
-  delCoinFromWatchlist,
+  removeCoinFromWatchlist,
   authenticateUserGoogle,
   authenticateUserFacebook,
 } = require("../controllers/users");
@@ -99,26 +99,22 @@ router.get(
 
 // ----------------- watchlist related functions ----------------------------------///
 
-// function that gets an array of coins (watchlist) saved by the user
 router.get(
   "/watchlist",
   passport.authenticate("jwt", { session: true }),
   getUserWatchlist
 );
 
-// function that adds a new coin to watchlist
-// TODO: make a service function for adding coin to user watchlist (User.addCoinToWatchList)
 router.put(
-  "/watchlist/addcoin",
+  "/watchlist/add",
   passport.authenticate("jwt", { session: true }),
   addCoinToWatchlist
 );
 
-// function that deletes a coin from watchlist
 router.put(
-  "/watchlist/delcoin",
+  "/watchlist/delete",
   passport.authenticate("jwt", { session: true }),
-  delCoinFromWatchlist
+  removeCoinFromWatchlist
 );
 
 // ------------------- export router ---------------------///

@@ -4,7 +4,6 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 const { Schema } = mongoose;
 
-// TODO: change watchlist prop to an array of coin _ids
 // TODO: can use #match for the email validator: https://mongoosejs.com/docs/validation.html
 
 const userSchema = new Schema({
@@ -28,9 +27,8 @@ const userSchema = new Schema({
   password: {
     type: String,
   },
-  watchList: {
-    //An array of coin objects
-    type: Array,
+  watchlist: {
+    type: [Schema.Types.ObjectId],
   },
 });
 
@@ -45,7 +43,8 @@ userSchema.methods.isValidPassword = async function (password) {
   return compare;
 };
 
-const User = (module.exports = mongoose.model("User", userSchema));
+const User = mongoose.model("User", userSchema);
+module.exports = User;
 
 // ------------------------------------------ Services ------------------------------------------ //
 

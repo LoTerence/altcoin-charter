@@ -10,15 +10,15 @@ const getPublicCoins = async (req, res) => {
     const coins = await Coin.find({ _id: public.coins });
 
     return res.status(200).json({
-      success: true,
-      message: "List of coins successfully found",
       data: coins,
+      message: "List of coins successfully found",
+      success: true,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      success: false,
       error: "Failed to fetch data",
+      success: false,
     });
   }
 };
@@ -37,15 +37,15 @@ const addCoin = async (req, res) => {
     await public.save();
 
     return res.status(200).json({
-      success: true,
-      message: "Coin was successfully added",
       data: newCoin,
+      message: "Coin was successfully added",
+      success: true,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      success: false,
       error: "Failed to fetch data",
+      success: false,
     });
   }
 };
@@ -56,21 +56,21 @@ const removeCoinById = async (req, res) => {
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
 
-    const newCoins = public.coins.filter((c) => !c._id.equals(oid));
+    const newCoins = public.coins.filter((id) => !id.equals(oid));
 
     public.coins = newCoins;
     await public.save();
 
     return res.status(200).json({
-      success: true,
-      message: "Coin was successfully deleted",
       data: {},
+      message: "Coin was successfully deleted",
+      success: true,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
+      error: "Failed to delete coin",
       success: false,
-      error: "Failed to fetch data",
     });
   }
 };

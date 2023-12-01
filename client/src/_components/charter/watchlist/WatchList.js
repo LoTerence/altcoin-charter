@@ -1,4 +1,4 @@
-/* watchList.js
+/* WatchList.js
  *  Component that shows an unordered list of coins from the authenticated user's
  * personal watchlist
  */

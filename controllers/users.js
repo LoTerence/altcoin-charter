@@ -1,5 +1,6 @@
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const Coin = require("../models/Coin");
+const User = require("../models/User");
 
 // @desc Register a new user
 // @route POST /users/register
@@ -8,7 +9,7 @@ exports.registerUser = async (req, res) => {
   const newUser = new User({
     email: req.body.email,
     password: req.body.password,
-    watchList: [],
+    watchlist: [],
   });
 
   // TODO: specify unique email error instead of returning email already registered for all errors
@@ -219,9 +220,9 @@ exports.deleteUser = async (req, res) => {
     if (err) {
       console.log(err);
       return res.json({
-        success: false,
         message:
           "error deleting user in server/routes/users.js -- router.delete('/users/delete')",
+        success: false,
       });
     }
     return res.json(json);
@@ -232,72 +233,93 @@ exports.deleteUser = async (req, res) => {
 // @route GET /users/watchlist
 // @access private - only the client can access
 exports.getUserWatchlist = async (req, res) => {
-  res.send(req.user.watchList);
+  try {
+    const coins = await Coin.find({ _id: req.user.watchlist });
+
+    return res.status(200).json({
+      data: coins,
+      message: "User's list of coins successfully found",
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      error: "Failed to fetch data",
+      success: false,
+    });
+  }
 };
 
 // @desc Add a coin to the user's watchlist
-// @route PUT /users/watchlist/addcoin
+// @route PUT /users/watchlist/add
 // @access private - only the client can access
 exports.addCoinToWatchlist = async (req, res) => {
-  const newCoin = req.body.newCoin;
-  User.getUserById(req.user._id, (err, user) => {
-    //handle errors
-    if (err) throw err;
+  const data = req.body.data;
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-      );
-      return res.json({ success: false, message: "User not found" });
+      console.error("error: User not found')");
+      return res.status(200).json({ error: "User not found", success: false });
     }
 
-    // Check if the coin is already in the watchlist by comparing its symbol
-    if (user.watchList.filter((e) => e.symbol === newCoin.symbol).length) {
-      return res.json({
+    let newCoin = await Coin.findOne({ symbol: data.symbol });
+    if (!newCoin?._id) {
+      newCoin = await Coin.create(data);
+    }
+
+    const isListed = user.watchlist.some((oid) => oid.equals(newCoin._id));
+    if (isListed) {
+      return res.status(200).json({
+        error: "That coin is already on the list",
         success: false,
-        msg: "That coin is already on the list",
       });
     }
 
-    // update watchlist with the new coin obj from req.body, then res.json the new watchlist
-    user.watchList.push(newCoin);
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error saving new coin in server/routes/users.js -- router.put('/watchlist/addcoin')",
-        });
-      }
-      res.json({ success: true, newWatchList: user.watchList });
+    user.watchlist.push(newCoin._id);
+    await user.save();
+
+    return res.status(200).json({
+      message: "Successfully added coin to user's watchlist",
+      newCoin,
+      success: true,
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: "error saving new coin to user's watchlist",
+      success: false,
+    });
+  }
 };
 
-// @desc Delete a coin from the user's watchlist
-// @route PUT /users/watchlist/delcoin
+// @desc Delete a coin from the user's watchlist by _id
+// @route PUT /users/watchlist/delete
 // @access private - only the client can access
-exports.delCoinFromWatchlist = async (req, res) => {
-  User.getUserById(req.user._id, (err, user) => {
-    //handle errors
-    if (err) throw err;
+exports.removeCoinFromWatchlist = async (req, res) => {
+  const oid = req.body.id;
+
+  try {
+    const user = await User.findById(req.user._id);
     if (!user) {
-      console.log(
-        "error in server/routes/users.js -- router.put('/watchlist/addcoin')"
-      );
-      return res.json({ success: false, msg: "User not found" });
+      console.error("error: User not found')");
+      return res.status(200).json({ error: "User not found", success: false });
     }
 
-    user.watchList = user.watchList.filter((c) => c.Id !== req.body.Id);
+    user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
+    await user.save();
 
-    user.save((err) => {
-      if (err) {
-        return res.json({
-          success: false,
-          msg: "error deleting coin in routes/users.js - put(watchlist/delcoin)",
-        });
-      }
-      res.json({ success: true, newWatchList: user.watchList });
+    return res.status(200).json({
+      data: {},
+      message: "Coin was successfully removed",
+      success: true,
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      error: "Failed to delete coin from user watchlist",
+      success: false,
+    });
+  }
 };
 
 // <-------------------- OAuth2.0 controllers ------------------------>

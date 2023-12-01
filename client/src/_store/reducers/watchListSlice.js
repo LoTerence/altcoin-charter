@@ -34,11 +34,13 @@ export const watchListSlice = createSlice({
         state.error = "Something went wrong while getting personal watch list";
       })
       .addCase(addNewCoin.fulfilled, (state, action) => {
-        state.coins = action.payload;
+        const newCoin = action.payload;
+        state.coins.push(newCoin);
         state.error = null;
       })
       .addCase(deleteCoin.fulfilled, (state, action) => {
-        state.coins = action.payload;
+        const _id = action.payload;
+        state.coins = state.coins.filter((c) => c._id !== _id);
         state.error = null;
       });
   },
@@ -71,7 +73,7 @@ export const addNewCoin = createAsyncThunk(
 
     if (cryptocompareRes.data.Data[sym]) {
       const cryptoData = cryptocompareRes.data.Data[sym];
-      const newCoin = {
+      const data = {
         cryptoCompareId: cryptoData.Id,
         name: cryptoData.Name,
         symbol: cryptoData.Symbol,
@@ -79,18 +81,18 @@ export const addNewCoin = createAsyncThunk(
       };
 
       const res = await axios.put(
-        "/users/watchlist/addcoin",
-        { newCoin },
+        "/users/watchlist/add",
+        { data },
         {
           headers: { authorization: localStorage.getItem("token") },
         }
       );
 
       if (!res.data.success) {
-        throw new Error(res.data.msg);
+        throw new Error(res.data.error);
       }
 
-      return res.data.newWatchList;
+      return res.data.newCoin;
     }
   }
 );
@@ -98,16 +100,16 @@ export const addNewCoin = createAsyncThunk(
 // remove coin from user's personal watchlist
 export const deleteCoin = createAsyncThunk(
   "watchList/deleteCoin",
-  async (coinId) => {
+  async (_id) => {
     const res = await axios.put(
-      "/users/watchlist/delcoin",
-      { cryptoCompareId: coinId },
+      "/users/watchlist/delete",
+      { id: _id },
       { headers: { authorization: localStorage.getItem("token") } }
     );
     if (!res.data.success) {
-      throw new Error(res.data.msg);
+      throw new Error("Something went wrong while deleting coin");
     }
-    return res.data.newWatchList;
+    return _id;
   }
 );
 
