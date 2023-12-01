@@ -3,7 +3,6 @@
 
 // TODO:
 // [] fix `dispatch(setActiveCoinId(coin._id));`,
-// [] fix `const isActive = coin.Id === activeCoinId;`,
 // - right now watchlist coins dont have ._id
 // - will need to redesign the database to fix that
 import { useState } from "react";
@@ -21,8 +20,7 @@ const CoinLi = ({ coin }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
-  const isActive = coin.Id === activeCoinId;
-  // const isActive = coin._id === activeCoinId;
+  const isActive = coin._id === activeCoinId;
 
   console.log(coin);
 
@@ -30,7 +28,7 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     try {
       setDeleteReqStatus("pending");
-      await dispatch(deleteCoin(coin.Id));
+      await dispatch(deleteCoin(coin._id));
     } catch (err) {
       console.error("Failed to delete the coin from watchlist: ", err);
       setError("Something went wrong while deleting coin");
@@ -43,9 +41,9 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
-    dispatch(fetchCoinInfo(coin.Symbol));
+    dispatch(fetchCoinInfo(coin.symbol));
     dispatch(
-      fetchHistory({ coinSymbol: coin.Symbol, timeframe: activeTimeframe })
+      fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
     );
   }
 
@@ -56,8 +54,8 @@ const CoinLi = ({ coin }) => {
         tabIndex="0"
         onClick={(e) => handleSetActiveCoin(e)}
       >
-        <h5>{coin.Name}</h5>
-        <p>{coin.CoinName} price history, day&apos;s change</p>
+        <h5>{coin.name}</h5>
+        <p>{coin.coinName} price history, day&apos;s change</p>
       </button>
       <DeleteButton
         isLoading={deleteReqStatus === "pending"}

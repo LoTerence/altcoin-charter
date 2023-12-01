@@ -12,17 +12,17 @@ afterAll(async () => await db.closeDatabase());
 
 // complete coin example
 const coinComplete = {
-  Id: "1182",
-  Name: "BTC",
-  Symbol: "BTC",
-  CoinName: "Bitcoin",
+  cryptoCompareId: "1182",
+  name: "BTC",
+  symbol: "BTC",
+  coinName: "Bitcoin",
 };
 
 const coinComplete2 = {
-  Id: "7605",
-  Name: "ETH",
-  Symbol: "ETH",
-  CoinName: "Ethereum",
+  cryptoCompareId: "7605",
+  name: "ETH",
+  symbol: "ETH",
+  coinName: "Ethereum",
 };
 
 describe("Coin model and services", () => {});

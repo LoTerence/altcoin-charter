@@ -7,13 +7,13 @@ const ChartTitle = () => {
   const { activeTimeframe } = useSelector(selectHistory);
   const activeCoin = useActiveCoin();
 
-  if (!activeCoin || !activeCoin.CoinName) {
+  if (!activeCoin || !activeCoin.coinName) {
     return <h1>Chart</h1>;
   }
 
   return (
     <h1>
-      {activeCoin.CoinName} - {activeCoin.Symbol} - {activeTimeframe}
+      {activeCoin.coinName} - {activeCoin.symbol} - {activeTimeframe}
     </h1>
   );
 };
