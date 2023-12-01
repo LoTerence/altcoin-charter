@@ -43,6 +43,7 @@ require("./config/passport"); // authentication strategy
 
 // API express routing
 app.use("/coins_public", require("./routes/coins_public"));
+app.use("/watchlist", require("./routes/watchlist"));
 app.use("/users", require("./routes/users"));
 
 // <------------------------------------------  ROUTING OVER -----------------------------------------> //
