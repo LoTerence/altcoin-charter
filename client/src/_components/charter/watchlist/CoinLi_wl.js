@@ -1,10 +1,3 @@
-// TODO: refactor so that this is the same component as coinLi
-// TODO: figure out why one reload makes this component reload like 16 times
-
-// TODO:
-// [] fix `dispatch(setActiveCoinId(coin._id));`,
-// - right now watchlist coins dont have ._id
-// - will need to redesign the database to fix that
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCoin, setError } from "../../../_store/reducers/watchListSlice";

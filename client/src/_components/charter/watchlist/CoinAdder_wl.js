@@ -1,9 +1,3 @@
-/* coinAdder_wl.js
- * component that adds a new coin to watchlist
- */
-
-// TODO: refactor so this is not a different component than CoinAdder
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";

@@ -19,7 +19,6 @@ export const watchListSlice = createSlice({
     },
     setError: (state, action) => {
       state.error = action.payload;
-      state.reqInProgress = false;
     },
   },
   extraReducers(builder) {
