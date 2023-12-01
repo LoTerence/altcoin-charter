@@ -34,7 +34,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^8.0.2",
     "mongoose-findorcreate": "^4.0.0",
-    "passport": "^0.6.0",
+    "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
