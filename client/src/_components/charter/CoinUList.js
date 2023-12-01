@@ -1,4 +1,3 @@
-// Component for the unordered list of coins: CoinUList
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,8 +7,6 @@ import {
 import CoinLi from "./CoinLi";
 import CoinAdder from "./CoinAdder";
 
-// TODO: add a loading overlay
-
 const CoinUList = () => {
   const dispatch = useDispatch();
   const { coins, status } = useSelector(selectCoinList);
@@ -18,7 +15,7 @@ const CoinUList = () => {
     if (status === "idle") {
       dispatch(fetchCoins());
     }
-  }, [status, dispatch]);
+  }, [dispatch, status]);
 
   return (
     <>

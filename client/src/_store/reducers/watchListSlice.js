@@ -4,13 +4,15 @@ This is the Redux state slice for state related to the personal watchlist of a u
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  coins: [],
+  error: null,
+  status: "idle",
+};
+
 export const watchListSlice = createSlice({
   name: "watchList",
-  initialState: {
-    coins: [],
-    error: null,
-    status: "idle",
-  },
+  initialState,
   reducers: {
     setCoins: (state, action) => {
       state.coins = action.payload;
@@ -48,7 +50,6 @@ export const watchListSlice = createSlice({
 
 export const { setCoins, setError } = watchListSlice.actions;
 
-// Async thunks
 // get initial personal watch list from the db
 export const fetchWatchlist = createAsyncThunk(
   "watchList/fetchWatchlist",
@@ -56,12 +57,14 @@ export const fetchWatchlist = createAsyncThunk(
     const res = await axios.get("/users/watchlist", {
       headers: { authorization: localStorage.getItem("token") },
     });
+    if (!res.data.success) {
+      throw new Error("Something went wrong while getting user watch list");
+    }
     const watchlist = res.data.data;
     return watchlist;
   }
 );
 
-// add a new coin to user's personal watchlist
 // todo: refactor get call to https://min-api.cryptocompare.com/data/all/coinlist, its repeated a lot in the app
 export const addNewCoin = createAsyncThunk(
   "watchList/addNewCoin",
@@ -70,30 +73,26 @@ export const addNewCoin = createAsyncThunk(
     const cryptocompareRes = await axios.get(
       "https://min-api.cryptocompare.com/data/all/coinlist"
     );
-
-    if (cryptocompareRes.data.Data[sym]) {
-      const cryptoData = cryptocompareRes.data.Data[sym];
-      const data = {
-        cryptoCompareId: cryptoData.Id,
-        name: cryptoData.Name,
-        symbol: cryptoData.Symbol,
-        coinName: cryptoData.CoinName,
-      };
-
-      const res = await axios.put(
-        "/users/watchlist/add",
-        { data },
-        {
-          headers: { authorization: localStorage.getItem("token") },
-        }
-      );
-
-      if (!res.data.success) {
-        throw new Error(res.data.error);
-      }
-
-      return res.data.newCoin;
+    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
+    if (!doesCryptoExist) {
+      throw new Error("A coin with that symbol does not exist");
     }
+    const cryptoData = cryptocompareRes.data.Data[sym];
+    const data = {
+      coinName: cryptoData.CoinName,
+      cryptoCompareId: cryptoData.Id,
+      name: cryptoData.Name,
+      symbol: cryptoData.Symbol,
+    };
+    const config = {
+      headers: { authorization: localStorage.getItem("token") },
+    };
+    const res = await axios.put("/users/watchlist/add", data, config);
+    if (!res.data.success) {
+      throw new Error(res.data.error);
+    }
+    const coin = res.data.data;
+    return coin;
   }
 );
 

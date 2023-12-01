@@ -7,16 +7,13 @@ const User = require("../models/User");
 // @access private - only the client can access
 const registerUser = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const newUser = new User({
       email,
       password,
       watchlist: [],
     });
-
     const user = await User.addUser(newUser);
-
     const data = {
       _id: user._id,
       email: user.email,
@@ -43,17 +40,15 @@ const registerUser = async (req, res) => {
 // @access private - only the client can access
 const authenticateUser = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({ message: "User not found", success: false });
     }
-
     const isMatch = user.validatePassword(password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.json({ message: "Invalid password!", success: false });
-
+    }
     const data = {
       _id: user._id,
       email: user.email,
@@ -61,7 +56,6 @@ const authenticateUser = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-
     return res.status(200).json({
       message: "User logged in",
       success: true,
@@ -89,7 +83,6 @@ const getUserProfile = async (req, res) => {
 // @access private - only the client can access
 const editUserName = async (req, res) => {
   const newName = req.body.newName;
-
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -97,17 +90,14 @@ const editUserName = async (req, res) => {
         .status(200)
         .json({ message: "User not found", success: false });
     }
-
     if (user.name === newName) {
       return res.json({
         message: "User already had the same name",
         success: true,
       });
     }
-
     user.name = newName;
     await user.save();
-
     return res.status(200).json({ newName: user.name, success: true });
   } catch (err) {
     console.error(err);
@@ -125,9 +115,7 @@ const editUserEmail = async (req, res) => {
   if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
   const { newEmail, password } = req.body;
-
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -135,22 +123,18 @@ const editUserEmail = async (req, res) => {
         .status(200)
         .json({ message: "User not found", success: false });
     }
-
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
       return res.json({ message: "Invalid password!", success: false });
     }
-
     if (user.email === newEmail) {
       return res.status(200).json({
         message: "User already has the same email",
         success: true,
       });
     }
-
     user.email = newEmail;
     await user.save();
-
     return res.status(200).json({ success: true, newEmail: user.email });
   } catch (err) {
     console.error(err);
@@ -168,16 +152,13 @@ const editUserPassword = async (req, res) => {
   if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
   try {
     const user = await User.findById(req.user._id);
     const isMatch = user.validatePassword(req.body.password);
     if (!isMatch) {
       return res.json({ message: "Invalid password!", success: false });
     }
-
     await user.saveNewPassword(req.body.newPassword);
-
     return res
       .status(200)
       .json({ message: "Password successfully changed", success: true });
@@ -197,14 +178,12 @@ const deleteUser = async (req, res) => {
   if (!req.body?.password) {
     return res.json({ success: false, message: "No password!" });
   }
-
   try {
     const user = await User.findById(id);
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
       return res.json({ success: false, message: "Invalid password!" });
     }
-
     await User.deleteOne({ _id: id });
     return res.status(200).json({
       success: true,
@@ -225,7 +204,6 @@ const deleteUser = async (req, res) => {
 const getUserWatchlist = async (req, res) => {
   try {
     const coins = await Coin.find({ _id: req.user.watchlist });
-
     return res.status(200).json({
       data: coins,
       message: "User's list of coins successfully found",
@@ -244,39 +222,35 @@ const getUserWatchlist = async (req, res) => {
 // @route PUT /users/watchlist/add
 // @access private - only the client can access
 const addCoinToWatchlist = async (req, res) => {
-  const data = req.body.data;
+  const data = req.body;
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
       console.error("error: User not found')");
       return res.status(200).json({ error: "User not found", success: false });
     }
-
-    let newCoin = await Coin.findOne({ symbol: data.symbol });
-    if (!newCoin?._id) {
-      newCoin = await Coin.create(data);
+    let coin = await Coin.findOne({ symbol: data.symbol });
+    if (!coin?._id) {
+      coin = await Coin.create(data);
     }
-
-    const isListed = user.watchlist.some((oid) => oid.equals(newCoin._id));
+    const isListed = user.watchlist.some((oid) => oid.equals(coin._id));
     if (isListed) {
       return res.status(200).json({
         error: "That coin is already on the list",
         success: false,
       });
     }
-
-    user.watchlist.push(newCoin._id);
+    user.watchlist.push(coin._id);
     await user.save();
-
     return res.status(200).json({
-      message: "Successfully added coin to user's watchlist",
-      newCoin,
+      data: coin,
+      message: "Successfully added coin to user watchlist",
       success: true,
     });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
-      error: "error saving new coin to user's watchlist",
+      error: "Failed to save new coin to user watchlist",
       success: false,
     });
   }
@@ -287,17 +261,14 @@ const addCoinToWatchlist = async (req, res) => {
 // @access private - only the client can access
 const removeCoinFromWatchlist = async (req, res) => {
   const oid = req.body.id;
-
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
       console.error("error: User not found')");
       return res.status(200).json({ error: "User not found", success: false });
     }
-
     user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
     await user.save();
-
     return res.status(200).json({
       data: {},
       message: "Coin was successfully removed",
@@ -320,7 +291,6 @@ const authenticateUserGoogle = async (req, res) => {
     if (!user) {
       return res.json({ message: "User not found", success: false });
     }
-
     const data = {
       _id: user._id,
       email: user.email,
@@ -328,7 +298,6 @@ const authenticateUserGoogle = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
@@ -346,7 +315,6 @@ const authenticateUserFacebook = async (req, res) => {
       console.log("No user");
       return res.json({ success: false, message: "User not found" });
     }
-
     const data = {
       _id: user._id,
       email: user.email,
@@ -354,7 +322,6 @@ const authenticateUserFacebook = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
