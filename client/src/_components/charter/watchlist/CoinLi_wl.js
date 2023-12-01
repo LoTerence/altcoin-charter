@@ -22,8 +22,6 @@ const CoinLi = ({ coin }) => {
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
   const isActive = coin._id === activeCoinId;
 
-  console.log(coin);
-
   const handleDeleteCoin = async (e) => {
     e.stopPropagation();
     try {
