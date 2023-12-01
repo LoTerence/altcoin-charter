@@ -152,10 +152,10 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
         <div className="suggestions">
           {suggestions.map((s) => (
             <option
-              key={s.id}
+              key={s.Id}
               className="suggestion"
               onClick={(e) => onClick(e)}
-              value={s.symbol}
+              value={s.Symbol}
             >
               {s.FullName}
             </option>
@@ -195,7 +195,7 @@ const deriveSuggestions = (text, symbols) => {
   if (text.length === 0) return [];
   const regex = new RegExp(`^${text}`, "gi");
   const matches = symbols
-    .filter((s) => s.symbol.match(regex))
+    .filter((s) => s.Symbol.match(regex))
     .sort((a, b) => {
       if (a.symbol < b.symbol) return -1;
       if (a.symbol > b.symbol) return 1;
