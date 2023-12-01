@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
-const { Schema } = mongoose;
 
 // TODO: can use #match for the email validator: https://mongoosejs.com/docs/validation.html
+
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
   dateCreated: { type: Date, default: Date.now },
@@ -37,10 +38,15 @@ userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
 // returns true if the password param matches the hashed password of the user this method is called on
-userSchema.methods.isValidPassword = async function (password) {
+userSchema.methods.validatePassword = function (password) {
   const user = this;
-  const compare = bcrypt.compareSync(password, user.password);
-  return compare;
+  return bcrypt.compareSync(password, user.password);
+};
+
+userSchema.methods.saveNewPassword = async function (newPassword) {
+  const user = this;
+  user.password = bcrypt.hashSync(newPassword, 10);
+  await user.save();
 };
 
 const User = mongoose.model("User", userSchema);
@@ -49,66 +55,21 @@ module.exports = User;
 // ------------------------------------------ Services ------------------------------------------ //
 
 // takes a user object and adds it to the collection of users
-module.exports.addUser = function (newUser, callback) {
+module.exports.addUser = function (newUser) {
   newUser.password = bcrypt.hashSync(newUser.password, 10);
-  return newUser.save(callback);
+  return newUser.save();
 };
 
-module.exports.getUserById = function (id, callback) {
-  User.findById(id, callback);
-};
+module.exports.deleteUserById = async function (id, password) {
+  const user = await User.findById(id);
+  const isMatch = user.validatePassword(password);
+  if (!isMatch) {
+    return { success: false, message: "Invalid password!" };
+  }
 
-module.exports.getUserByEmail = function (email, callback) {
-  const query = { email: email };
-  return User.findOne(query, callback);
-};
-
-module.exports.changeUserPassword = function (
-  id,
-  oldPassword,
-  newPassword,
-  callback
-) {
-  User.findById(id, async (err, user) => {
-    if (err) throw err;
-
-    const isMatch = await user.isValidPassword(oldPassword);
-    if (isMatch) {
-      user.password = bcrypt.hashSync(newPassword, 10);
-      user.save(
-        callback(null, {
-          success: true,
-          message: "Password successfully changed",
-        })
-      );
-    } else {
-      callback(null, { success: false, message: "Invalid password!" });
-    }
-  });
-};
-
-module.exports.deleteUserById = function (id, password, callback) {
-  User.findById(id, async (err, user) => {
-    if (err) throw err;
-
-    const isMatch = await user.isValidPassword(password);
-    if (isMatch) {
-      User.deleteOne({ _id: id })
-        .then(
-          callback(null, {
-            success: true,
-            message: "User successfully deleted",
-          })
-        )
-        .catch((err) => {
-          console.log(err);
-          callback(err, {
-            success: false,
-            message: "Error while trying to delete user in database",
-          });
-        });
-    } else {
-      callback(null, { success: false, message: "Invalid password!" });
-    }
-  });
+  await User.deleteOne({ _id: id });
+  return {
+    success: true,
+    message: "User successfully deleted",
+  };
 };

@@ -113,18 +113,6 @@ describe("User model and services - service functions", () => {
   //   await addUsers();
   // });
 
-  it("can get user by email", async () => {
-    const { addedUser1 } = await addUsers();
-
-    await User.getUserByEmail(addedUser1.email, (err, user) => {
-      if (err) console.log("There was an error getting user by email");
-      if (!user) console.log("No user found");
-
-      expect(user._id).toStrictEqual(addedUser1._id);
-      expect(user.email).toBe(addedUser1.email);
-    });
-  });
-
   it("can get user by id", async () => {
     const { addedUser1 } = await addUsers();
 
