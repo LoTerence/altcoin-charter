@@ -57,7 +57,7 @@ export const { setCoins, setError } = coinListSlice.actions;
 // ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
-  const res = await axios.get("/coins_public/coinList");
+  const res = await axios.get("/watchlist/public");
   if (!res.data.success) {
     throw new Error("Something went wrong while getting coin list");
   }
@@ -87,7 +87,7 @@ export const addNewCoin = createAsyncThunk(
       Symbol: cryptoData.Symbol,
     };
 
-    const res = await axios.post("/coins_public/coinList", newCoin);
+    const res = await axios.post("/watchlist/public", newCoin);
     if (!res.data.success) {
       console.log("error in posting to coins_public in addNewCoin action ");
       throw new Error("There was an error posting new coin data");
@@ -101,7 +101,7 @@ export const addNewCoin = createAsyncThunk(
 export const deleteCoin = createAsyncThunk(
   "coinList/deleteCoin",
   async (_id) => {
-    const res = await axios.delete(`/coins_public/coinList/${_id}`);
+    const res = await axios.delete(`/watchlist/public/${_id}`);
     if (!res.data.success) {
       throw new Error("Something went wrong while deleting coin");
     }
