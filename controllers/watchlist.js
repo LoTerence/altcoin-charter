@@ -25,19 +25,26 @@ const getPublicCoins = async (req, res) => {
 
 const addCoin = async (req, res) => {
   const data = req.body;
-
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
-    let newCoin = await Coin.findOne({ symbol: data.symbol });
-    if (!newCoin?._id) {
-      newCoin = await Coin.create(data);
+    let coin = await Coin.findOne({ symbol: data.symbol });
+    if (!coin?._id) {
+      coin = await Coin.create(data);
     }
 
-    public.coins.push(newCoin._id);
+    const isListed = public.coins.some((oid) => oid.equals(coin._id));
+    if (isListed) {
+      return res.status(200).json({
+        error: "That coin is already on the list",
+        success: false,
+      });
+    }
+
+    public.coins.push(coin._id);
     await public.save();
 
     return res.status(200).json({
-      data: newCoin,
+      data: coin,
       message: "Coin was successfully added",
       success: true,
     });
@@ -52,15 +59,10 @@ const addCoin = async (req, res) => {
 
 const removeCoinById = async (req, res) => {
   const oid = req.params.id;
-
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
-
-    const newCoins = public.coins.filter((id) => !id.equals(oid));
-
-    public.coins = newCoins;
+    public.coins = public.coins.filter((id) => !id.equals(oid));
     await public.save();
-
     return res.status(200).json({
       data: {},
       message: "Coin was successfully deleted",

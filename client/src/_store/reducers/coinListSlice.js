@@ -1,10 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-/* TODO: dev mode bug
-In dev mode, the [initialState.status: "idle"] sometimes makes it so that when 
-  a code file is saved, no coins show up. Fix it so that coinList always shows up */
-
 // TODO: add ts types for status
 // initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -45,8 +41,7 @@ export const coinListSlice = createSlice({
       })
       .addCase(deleteCoin.fulfilled, (state, action) => {
         const _id = action.payload;
-        const coinsArr = state.coins;
-        state.coins = coinsArr.filter((c) => c._id !== _id);
+        state.coins = state.coins.filter((c) => c._id !== _id);
         state.error = null;
       });
   },
@@ -54,7 +49,6 @@ export const coinListSlice = createSlice({
 
 export const { setCoins, setError } = coinListSlice.actions;
 
-// ------------------------------------------------ Async thunks ------------------------------------------------ //
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
   const res = await axios.get("/watchlist/public");
@@ -78,21 +72,17 @@ export const addNewCoin = createAsyncThunk(
     if (!doesCryptoExist) {
       throw new Error("A coin with that symbol does not exist");
     }
-
     const cryptoData = cryptocompareRes.data.Data[sym];
-    const newCoin = {
+    const data = {
       coinName: cryptoData.CoinName,
       cryptoCompareId: cryptoData.Id,
       name: cryptoData.Name,
       symbol: cryptoData.Symbol,
     };
-
-    const res = await axios.put("/watchlist/public", newCoin);
+    const res = await axios.put("/watchlist/public", data);
     if (!res.data.success) {
-      console.log("error in posting to watchlist in addNewCoin action ");
       throw new Error("There was an error posting new coin data");
     }
-
     const coin = res.data.data;
     return coin;
   }
