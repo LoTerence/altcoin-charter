@@ -1,31 +1,26 @@
 /*
  * The block that lets the user add a new AltCoin
  */
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SpinnerIcon } from "../icons";
-
-// TODO: add custom styling, right now its all bootstrap
-// TODO: load list of symbols from DB? and use a cron to update DB once a week? or load symbols in redux?
+import {
+  fetchSymbols,
+  selectSymbols,
+} from "../../_store/reducers/symbolsSlice";
 
 const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [symbol, setSymbol] = useState("");
-  const [symbols, setSymbols] = useState([]);
+  const { status, symbols } = useSelector(selectSymbols);
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    const loadSymbols = async () => {
-      const res = await axios.get(
-        "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
-      );
-      const initialSymbols = Object.values(res.data.Data);
-      setSymbols(initialSymbols);
-    };
-    loadSymbols();
-  }, []);
+    if (status === "idle") {
+      dispatch(fetchSymbols());
+    }
+  }, [dispatch, status]);
 
   const handleInputChange = (e) => {
     const text = e.target.value;
