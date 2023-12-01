@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCoin, setError } from "../../../_store/reducers/watchListSlice";
 import {
   fetchCoinInfo,
   fetchHistory,
   setActiveCoinId,
   selectHistory,
-} from "../../../_store/reducers/historySlice";
-import { SpinnerIcon, TrashIcon } from "../../icons";
+} from "../../_store/reducers/historySlice";
+import { SpinnerIcon, TrashIcon } from "../icons";
 
-const CoinLi = ({ coin }) => {
+// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
+// TODO: figure out why one reload makes this component reload like 16 times
+
+const CoinCard = ({ coin, deleteCoin, setError }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
   const [deleteReqStatus, setDeleteReqStatus] = useState("idle");
@@ -19,16 +21,16 @@ const CoinLi = ({ coin }) => {
     e.stopPropagation();
     try {
       setDeleteReqStatus("pending");
-      await dispatch(deleteCoin(coin._id));
+      await dispatch(deleteCoin(coin._id)).unwrap();
     } catch (err) {
-      console.error("Failed to delete the coin from watchlist: ", err);
-      setError("Something went wrong while deleting coin");
+      console.error("Failed to delete the coin: ", err);
+      dispatch(setError("Something went wrong while deleting coin"));
     } finally {
       setDeleteReqStatus("idle");
     }
   };
 
-  function handleSetActiveCoin(e) {
+  const handleSetActiveCoin = (e) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
@@ -36,7 +38,7 @@ const CoinLi = ({ coin }) => {
     dispatch(
       fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
     );
-  }
+  };
 
   return (
     <div className="col-md-4 col-sm-6 col-12 relative">
@@ -68,4 +70,4 @@ const DeleteButton = ({ isLoading, onClick }) => {
   );
 };
 
-export default CoinLi;
+export default CoinCard;

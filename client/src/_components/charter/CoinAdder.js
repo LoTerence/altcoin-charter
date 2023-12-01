@@ -1,5 +1,5 @@
 /*
- * The block in the coinUList component that lets the user add a new AltCoin
+ * The block that lets the user add a new AltCoin
  */
 import axios from "axios";
 import { useEffect, useState } from "react";

@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "../_components/auth/PrivateRoute";
 import ChartTitle from "../_components/charter/ChartTitle";
 import CoinAdder from "../_components/charter/CoinAdder";
+import CoinCard from "../_components/charter/CoinCard";
 import CoinInfo from "../_components/charter/CoinInfo";
-import CoinLi from "../_components/charter/CoinLi";
 import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
 import { getProfile, selectAuth } from "../_store/reducers/authSlice";
@@ -60,7 +60,7 @@ const Feature = () => {
       {status === "loading" && <p>loading coins..</p>}
       <div className="d-flex flex-wrap">
         {coins.map((coin) => (
-          <CoinLi
+          <CoinCard
             key={coin._id}
             coin={coin}
             deleteCoin={deleteCoin}
