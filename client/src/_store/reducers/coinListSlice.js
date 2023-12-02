@@ -32,7 +32,9 @@ export const coinListSlice = createSlice({
       })
       .addCase(fetchCoins.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Something went wrong while getting coin list";
+        state.error =
+          action?.error?.message ||
+          "Something went wrong while getting coin list";
       })
       .addCase(addNewCoin.fulfilled, (state, action) => {
         const newCoin = action.payload;
@@ -59,7 +61,7 @@ export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
   return coins;
 });
 
-// TODO: add by coinname as well as symbol
+// TODO: make a function to add by coinname as well as symbol
 // addNewCoin -- adds new coin to the db by symbol
 export const addNewCoin = createAsyncThunk(
   "coinList/addNewCoin",

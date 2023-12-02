@@ -1,22 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
 const { REACT_APP_SERVER_URL } = process.env;
 
+const initialState = {
+  error: null,
+  isAuthenticated: false,
+  userProfile: {
+    name: "",
+    email: "",
+    _id: null,
+  },
+  status: "",
+  emailAlert: null,
+  pwAlert: null,
+  daAlert: null,
+};
+
+// TODO: move alerts (changeEmailAlert, changepwAlert, deleteAccountAlert) to setting page
+// TODO: change isAuthenticated to status/authStatus or something more descriptive
+
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    error: "",
-    userProfile: {
-      name: "",
-      email: "",
-      _id: "",
-    },
-    isAuthenticated: false,
-  },
+  initialState,
   reducers: {
     authenticate: (state) => {
-      state.error = "";
+      state.error = null;
       state.isAuthenticated = true;
     },
     unauthenticate: (state) => {
@@ -39,6 +48,25 @@ export const authSlice = createSlice({
       state.daAlert = action.payload;
     },
   },
+  extraReducers(builder) {
+    builder
+      .addCase(signIn.pending, (state, action) => {
+        state.status = "loading";
+        // TODO: add a loading indicator to the front end
+      })
+      .addCase(signIn.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // TODO: if login successful, it should save the user data from the db into global context
+        console.log(action.payload);
+        state.error = null;
+        state.isAuthenticated = true;
+      })
+      .addCase(signIn.rejected, (state, action) => {
+        state.status = "failed";
+        state.isAuthenticated = false;
+        state.error = action?.error?.message || "Failed to log in";
+      });
+  },
 });
 
 export const {
@@ -51,25 +79,24 @@ export const {
   deleteAccountAlert,
 } = authSlice.actions;
 
-// thunks that allows us to perform async logic
-export const signInAction =
-  (navigate, { email, password }) =>
-  (dispatch) => {
-    axios
-      .post("/users/authenticate", { email, password })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(authenticate());
-          localStorage.setItem("token", res.data.token);
-          navigate("/feature");
-        } else {
-          dispatch(authError(res.data.message));
-        }
-      })
-      .catch((err) => {
-        dispatch(authError("Bad Login Info"));
-      });
-  };
+// TODO: it should save the user data from the db into global context
+// TODO: move navigate back to the Sigin component to separate concerns
+export const signIn = createAsyncThunk(
+  "auth/signIn",
+  async ({ navigate, email, password }) => {
+    console.log("signIn thunk email: ", email);
+    console.log("signIn thunk password: ", password);
+    const res = await axios.post("/users/authenticate", { email, password });
+    if (!res.data.success) {
+      console.error(res.data.message);
+      // res.data.message is the fail reason message from the server (ie bad password, etc.)
+      throw new Error(res.data.message);
+    }
+    localStorage.setItem("token", res.data.token);
+    navigate("/feature");
+    return { success: true };
+  }
+);
 
 // <----------------------  OAuth2.0 signin  ------------------------->
 export const googleSignInAction = () => () => {
