@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as EmailValidator from "email-validator";
 import {
-  signInAction,
+  signIn,
   selectAuth,
   googleSignInAction,
   fbSignInAction,
@@ -45,7 +45,7 @@ function Signin() {
     }
 
     try {
-      dispatch(signInAction(navigate, { email, password }));
+      dispatch(signIn({ navigate, email, password }));
     } catch (err) {
       console.log(err);
       setIsError(true);
