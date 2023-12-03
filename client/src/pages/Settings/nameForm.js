@@ -2,22 +2,23 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeNameAction, selectAuth } from "../../_store/reducers/authSlice";
 
+// TODO: add loading state
+// TODO: better styling
+
 const NameForm = () => {
   const dispatch = useDispatch();
   const { userProfile: profile } = useSelector(selectAuth);
   const [newName, setNewName] = useState("");
-  const [newNameAlert, setNewNameAlert] = useState("");
+  const [alert, setAlert] = useState(null);
 
   const handleNameChangeButton = async (e) => {
     e.preventDefault();
+    setAlert("");
 
-    if (newName === "") {
-      setNewNameAlert("Name cannot be empty");
-      return;
-    }
-
-    if (newName === profile.name) {
-      setNewNameAlert("Thats the same name");
+    try {
+      validateForm({ name: newName, profile });
+    } catch (err) {
+      setAlert(err?.message || "Something went wrong, please try again later");
       return;
     }
 
@@ -26,7 +27,7 @@ const NameForm = () => {
       setNewName("");
     } catch (err) {
       console.log(err);
-      setNewNameAlert("Something went wrong, please try again later");
+      setAlert("Something went wrong, please try again later");
     }
   };
 
@@ -34,20 +35,20 @@ const NameForm = () => {
     <div>
       <h5>Change Name</h5>
       <p>
-        Your name: <b>{profile.name}</b>{" "}
+        Your name: <b>{profile.name}</b>
       </p>
       <div className="form-floating mb-4">
         <input
-          name="changeName"
-          id="changeName"
-          type="text"
           className="form-control form-control-lg"
-          placeholder="name"
-          value={newName}
+          id="nameField"
+          name="newname"
           onChange={(e) => setNewName(e.target.value)}
+          placeholder="Change Name"
           required
+          type="text"
+          value={newName}
         />
-        <label style={{ opacity: "0.5" }} htmlFor="changeName">
+        <label className="opacity-50" htmlFor="nameField">
           Change Name
         </label>
       </div>
@@ -57,9 +58,15 @@ const NameForm = () => {
       >
         Submit name change
       </button>
-      {newNameAlert === "" ? <br /> : <p>{newNameAlert}</p>}
+      {alert && <p>{alert}</p>}
     </div>
   );
 };
 
 export default NameForm;
+
+const validateForm = ({ name, profile }) => {
+  if (name === "") throw new Error("Name cannot be empty");
+  if (name === profile.name) throw new Error("Thats the same name");
+  return true;
+};
