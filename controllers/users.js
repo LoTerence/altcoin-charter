@@ -21,14 +21,14 @@ const registerUser = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-    return res.status(200).json({
+    return res.json({
       message: "User registered",
       success: true,
       token: `JWT ${token}`,
     });
   } catch (err) {
     console.error(err);
-    return res.status(200).json({
+    return res.json({
       message: "Email already registered or not a real email",
       success: false,
     });
@@ -43,11 +43,11 @@ const authenticateUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ message: "User not found", success: false });
+      throw new Error("User not found");
     }
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
-      return res.json({ message: "Invalid password!", success: false });
+      return res.json({ message: "Log in failed", success: false });
     }
     const data = {
       _id: user._id,
@@ -56,14 +56,14 @@ const authenticateUser = async (req, res) => {
     const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
       expiresIn: 604800, //1 week
     });
-    return res.status(200).json({
+    return res.json({
       message: "User logged in",
       success: true,
       token: `JWT ${token}`,
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
+    return res.json({
       message: "Failed to authenticate user",
       success: false,
     });
@@ -75,14 +75,14 @@ const authenticateUser = async (req, res) => {
 // @access private - only the client can access
 const getUserProfile = async (req, res) => {
   const { _id, email, name } = req.user;
-  res.status(200).json({ user: { _id, email, name } });
+  res.json({ user: { _id, email, name } });
 };
 
 // @desc Edit the user's name
 // @route PUT /users/profile/name
 // @access private - only the client can access
 const editUserName = async (req, res) => {
-  const newName = req.body.newName;
+  const { newName } = req.body;
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -92,17 +92,17 @@ const editUserName = async (req, res) => {
     }
     if (user.name === newName) {
       return res.json({
-        message: "User already had the same name",
-        success: true,
+        message: "User already has the same name",
+        success: false,
       });
     }
     user.name = newName;
     await user.save();
-    return res.status(200).json({ newName: user.name, success: true });
+    return res.json({ name: user.name, success: true });
   } catch (err) {
     console.error(err);
     return res.json({
-      error: "error changing name in routes/users.js - put(users/profile/name)",
+      message: "Something went wrong, please try again later",
       success: false,
     });
   }
@@ -128,14 +128,14 @@ const editUserEmail = async (req, res) => {
       return res.json({ message: "Invalid password!", success: false });
     }
     if (user.email === newEmail) {
-      return res.status(200).json({
+      return res.json({
         message: "User already has the same email",
         success: true,
       });
     }
     user.email = newEmail;
     await user.save();
-    return res.status(200).json({ success: true, newEmail: user.email });
+    return res.json({ success: true, newEmail: user.email });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -185,7 +185,7 @@ const deleteUser = async (req, res) => {
       return res.json({ success: false, message: "Invalid password!" });
     }
     await User.deleteOne({ _id: id });
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "User successfully deleted",
     });
@@ -204,7 +204,7 @@ const deleteUser = async (req, res) => {
 const getUserWatchlist = async (req, res) => {
   try {
     const coins = await Coin.find({ _id: req.user.watchlist });
-    return res.status(200).json({
+    return res.json({
       data: coins,
       message: "User's list of coins successfully found",
       success: true,
@@ -227,7 +227,7 @@ const addCoinToWatchlist = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) {
       console.error("error: User not found')");
-      return res.status(200).json({ error: "User not found", success: false });
+      return res.json({ error: "User not found", success: false });
     }
     let coin = await Coin.findOne({ symbol: data.symbol });
     if (!coin?._id) {
@@ -235,14 +235,14 @@ const addCoinToWatchlist = async (req, res) => {
     }
     const isListed = user.watchlist.some((oid) => oid.equals(coin._id));
     if (isListed) {
-      return res.status(200).json({
+      return res.json({
         error: "That coin is already on the list",
         success: false,
       });
     }
     user.watchlist.push(coin._id);
     await user.save();
-    return res.status(200).json({
+    return res.json({
       data: coin,
       message: "Successfully added coin to user watchlist",
       success: true,
@@ -265,11 +265,11 @@ const removeCoinFromWatchlist = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) {
       console.error("error: User not found')");
-      return res.status(200).json({ error: "User not found", success: false });
+      return res.json({ error: "User not found", success: false });
     }
     user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
     await user.save();
-    return res.status(200).json({
+    return res.json({
       data: {},
       message: "Coin was successfully removed",
       success: true,

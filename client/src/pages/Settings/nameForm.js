@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeNameAction, selectAuth } from "../../_store/reducers/authSlice";
+import { changeName, selectAuth } from "../../_store/reducers/authSlice";
+import { SpinnerIcon } from "../../_components/icons";
 
-// TODO: add loading state
 // TODO: better styling
 
 const NameForm = () => {
@@ -10,25 +10,20 @@ const NameForm = () => {
   const { userProfile: profile } = useSelector(selectAuth);
   const [newName, setNewName] = useState("");
   const [alert, setAlert] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNameChangeButton = async (e) => {
     e.preventDefault();
     setAlert("");
-
     try {
       validateForm({ name: newName, profile });
-    } catch (err) {
-      setAlert(err?.message || "Something went wrong, please try again later");
-      return;
-    }
-
-    try {
-      dispatch(changeNameAction(newName));
+      setIsLoading(true);
+      await dispatch(changeName({ newName })).unwrap();
       setNewName("");
     } catch (err) {
-      console.log(err);
-      setAlert("Something went wrong, please try again later");
+      setAlert(err?.message || "Something went wrong, please try again later");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -40,6 +35,7 @@ const NameForm = () => {
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="nameField"
           name="newname"
           onChange={(e) => setNewName(e.target.value)}
@@ -54,9 +50,10 @@ const NameForm = () => {
       </div>
       <button
         className="btn btn-secondary btn-md btn-block"
+        disabled={isLoading}
         onClick={(e) => handleNameChangeButton(e)}
       >
-        Submit name change
+        {isLoading ? <SpinnerIcon /> : "Submit name change"}
       </button>
       {alert && <p>{alert}</p>}
     </div>
