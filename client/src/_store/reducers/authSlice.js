@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
 const { REACT_APP_SERVER_URL } = process.env;
 
-// TODO: move alerts (changeEmailAlert, changepwAlert, deleteAccountAlert) to setting page
+// TODO: move alerts ( deleteAccountAlert) to setting page
 // TODO: change isAuthenticated to status/authStatus or something more descriptive
 
 const initialState = {
@@ -13,7 +13,6 @@ const initialState = {
     email: "",
     _id: null,
   },
-  pwAlert: null,
   daAlert: null,
 };
 
@@ -34,9 +33,6 @@ export const authSlice = createSlice({
     },
     updateProfile: (state, action) => {
       state.userProfile = action.payload;
-    },
-    changepwAlert: (state, action) => {
-      state.pwAlert = action.payload;
     },
     deleteAccountAlert: (state, action) => {
       state.daAlert = action.payload;
@@ -66,7 +62,6 @@ export const authSlice = createSlice({
 export const {
   authenticate,
   updateProfile,
-  changepwAlert,
   deleteAccountAlert,
   deauthenticate,
 } = authSlice.actions;
@@ -163,31 +158,25 @@ export const changeEmail = createAsyncThunk(
   }
 );
 
-//action for changing the user's password
-export const changePasswordAction =
-  (oldPassword, newPassword) => (dispatch) => {
-    axios
-      .put(
-        "/users/password",
-        {
-          password: oldPassword,
-          newPassword: newPassword,
-        },
-        { headers: { authorization: localStorage.getItem("token") } }
-      )
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(changepwAlert(res.data.message));
-        } else {
-          dispatch(changepwAlert(res.data.message));
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(changepwAlert("Something went wrong, please try again later"));
-        throw err;
-      });
-  };
+export const changePassword = createAsyncThunk(
+  "auth/changeEmail",
+  async ({ oldPassword, newPassword }) => {
+    const res = await axios.put(
+      "/users/password",
+      {
+        password: oldPassword,
+        newPassword,
+      },
+      { headers: { authorization: localStorage.getItem("token") } }
+    );
+    if (!res.data.success) {
+      throw new Error(
+        res?.data?.message || "Something went wrong, please try again later"
+      );
+    }
+    return { success: true };
+  }
+);
 
 // action for deleting the user's account
 export const deleteAccountAction = (password) => (dispatch) => {

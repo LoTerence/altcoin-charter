@@ -1,63 +1,41 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  changePasswordAction,
-  selectAuth,
-} from "../../_store/reducers/authSlice";
+import { useDispatch } from "react-redux";
+import { changePassword } from "../../_store/reducers/authSlice";
+
+const validateForm = ({ oldPassword, newPassword, newPwConfirmation }) => {
+  if (oldPassword === "") throw new Error("Old Password field empty");
+  if (newPassword === "") throw new Error("New Password field empty");
+  if (newPassword.length < 8)
+    throw new Error("Password should be at least 8 characters");
+  if (newPassword !== newPwConfirmation)
+    throw new Error("Passwords do not match");
+  return true;
+};
 
 const PasswordForm = () => {
   const dispatch = useDispatch();
-  const { pwAlert } = useSelector(selectAuth);
   const [oldPassword, setOldPassword] = useState("");
-  const [newPassword1, setNewPassword1] = useState("");
-  const [newPassword2, setNewPassword2] = useState("");
-  const [newPasswordAlert, setNewPasswordAlert] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPwConfirmation, setNewPwConfirmation] = useState("");
+  const [alert, setAlert] = useState(null);
 
   const handlePasswordChangeButton = async (e) => {
     e.preventDefault();
-    setNewPasswordAlert("");
-
-    if (oldPassword === "") {
-      setNewPasswordAlert("Old Password field empty");
-      return;
-    }
-
-    if (newPassword1 === "") {
-      setNewPasswordAlert("New Password field empty");
-      return;
-    }
-
-    if (newPassword1.length < 6) {
-      setNewPasswordAlert("Password should be at least 6 characters");
-      return;
-    }
-
-    if (newPassword1 !== newPassword2) {
-      setNewPasswordAlert("Passwords do not match");
-      return;
-    }
-
+    setAlert(null);
     try {
-      dispatch(changePasswordAction(oldPassword, newPassword1));
-      setNewPassword1("");
-      setNewPassword2("");
+      validateForm({ oldPassword, newPassword, newPwConfirmation });
+      const { success } = await dispatch(
+        changePassword({ oldPassword, newPassword })
+      ).unwrap();
+      setOldPassword("");
+      setNewPassword("");
+      setNewPwConfirmation("");
+      if (success) {
+        setAlert("Password successfully changed!");
+      }
     } catch (err) {
       console.log(err);
-      setNewPasswordAlert("Something went wrong please try again later");
-    }
-  };
-
-  const renderPasswordAlert = () => {
-    if (pwAlert) {
-      return <div className="alert alert-danger">{pwAlert}</div>;
-    }
-
-    if (newPasswordAlert !== "") {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {newPasswordAlert}
-        </div>
-      );
+      setAlert("Something went wrong please try again later");
     }
   };
 
@@ -66,46 +44,46 @@ const PasswordForm = () => {
       <h5>Change password </h5>
       <div className="form-floating mb-4">
         <input
-          name="changePassword0"
-          id="changePassword0"
-          type="password"
           className="form-control form-control-lg"
-          placeholder="Old password"
-          value={oldPassword}
+          id="changePassword0"
+          name="changePassword0"
           onChange={(e) => setOldPassword(e.target.value)}
+          placeholder="Old password"
           required
+          type="password"
+          value={oldPassword}
         />
-        <label style={{ opacity: "0.5" }} htmlFor="changePassword0">
+        <label className="opacity-50" htmlFor="changePassword0">
           Old password
         </label>
       </div>
       <div className="form-floating mb-4">
         <input
-          name="changePassword1"
-          id="changePassword1"
-          type="password"
           className="form-control form-control-lg"
+          id="changePassword1"
+          name="changePassword1"
+          onChange={(e) => setNewPassword(e.target.value)}
           placeholder="change password"
-          value={newPassword1}
-          onChange={(e) => setNewPassword1(e.target.value)}
           required
+          type="password"
+          value={newPassword}
         />
-        <label style={{ opacity: "0.5" }} htmlFor="changePassword1">
+        <label className="opacity-50" htmlFor="changePassword1">
           New password
         </label>
       </div>
       <div className="form-floating mb-4">
         <input
-          name="changePassword2"
-          id="changePassword2"
-          type="password"
           className="form-control form-control-lg"
+          id="changePassword2"
+          name="changePassword2"
+          onChange={(e) => setNewPwConfirmation(e.target.value)}
           placeholder="retype password"
-          value={newPassword2}
-          onChange={(e) => setNewPassword2(e.target.value)}
           required
+          type="password"
+          value={newPwConfirmation}
         />
-        <label style={{ opacity: "0.5" }} htmlFor="changePassword2">
+        <label className="opacity-50" htmlFor="changePassword2">
           Confirm new password
         </label>
       </div>
@@ -115,7 +93,7 @@ const PasswordForm = () => {
       >
         Submit password change
       </button>
-      {renderPasswordAlert()}
+      {alert && <div className="alert alert-danger">{alert}</div>}
     </div>
   );
 };
