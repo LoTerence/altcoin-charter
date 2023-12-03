@@ -1,16 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { changePassword } from "../../_store/reducers/authSlice";
+import { SpinnerIcon } from "../../_components/icons";
 
-const validateForm = ({ oldPassword, newPassword, newPwConfirmation }) => {
-  if (oldPassword === "") throw new Error("Old Password field empty");
-  if (newPassword === "") throw new Error("New Password field empty");
-  if (newPassword.length < 8)
-    throw new Error("Password should be at least 8 characters");
-  if (newPassword !== newPwConfirmation)
-    throw new Error("Passwords do not match");
-  return true;
-};
+// TODO: better styling
 
 const PasswordForm = () => {
   const dispatch = useDispatch();
@@ -18,10 +11,12 @@ const PasswordForm = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newPwConfirmation, setNewPwConfirmation] = useState("");
   const [alert, setAlert] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePasswordChangeButton = async (e) => {
     e.preventDefault();
     setAlert(null);
+    setIsLoading(true);
     try {
       validateForm({ oldPassword, newPassword, newPwConfirmation });
       const { success } = await dispatch(
@@ -35,8 +30,9 @@ const PasswordForm = () => {
       }
     } catch (err) {
       console.log(err);
-      setAlert("Something went wrong please try again later");
+      setAlert(err?.message || "Something went wrong please try again later");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -45,6 +41,7 @@ const PasswordForm = () => {
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="changePassword0"
           name="changePassword0"
           onChange={(e) => setOldPassword(e.target.value)}
@@ -60,6 +57,7 @@ const PasswordForm = () => {
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="changePassword1"
           name="changePassword1"
           onChange={(e) => setNewPassword(e.target.value)}
@@ -75,6 +73,7 @@ const PasswordForm = () => {
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="changePassword2"
           name="changePassword2"
           onChange={(e) => setNewPwConfirmation(e.target.value)}
@@ -89,9 +88,10 @@ const PasswordForm = () => {
       </div>
       <button
         className="btn btn-secondary btn-md btn-block"
+        disabled={isLoading}
         onClick={(e) => handlePasswordChangeButton(e)}
       >
-        Submit password change
+        {isLoading ? <SpinnerIcon /> : "Submit password change"}
       </button>
       {alert && <div className="alert alert-danger">{alert}</div>}
     </div>
@@ -99,3 +99,15 @@ const PasswordForm = () => {
 };
 
 export default PasswordForm;
+
+const validateForm = ({ oldPassword, newPassword, newPwConfirmation }) => {
+  if (oldPassword === "") throw new Error("Password field empty");
+  if (newPassword === "") throw new Error("New Password field empty");
+  if (newPassword.length < 8)
+    throw new Error("Password should be at least 8 characters");
+  if (newPwConfirmation === "")
+    throw new Error("Please confirm new password by typing it again");
+  if (newPassword !== newPwConfirmation)
+    throw new Error("Passwords do not match");
+  return true;
+};
