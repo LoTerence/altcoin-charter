@@ -27,8 +27,13 @@ export const authSlice = createSlice({
       state.error = null;
       state.isAuthenticated = true;
     },
-    unauthenticate: (state) => {
+    signOut: (state) => {
       state.isAuthenticated = false;
+      state.userProfile = {
+        name: "",
+        email: "",
+        _id: null,
+      };
     },
     authError: (state, action) => {
       state.isAuthenticated = false;
@@ -64,12 +69,12 @@ export const authSlice = createSlice({
 
 export const {
   authenticate,
-  unauthenticate,
   authError,
   updateProfile,
   changeEmailAlert,
   changepwAlert,
   deleteAccountAlert,
+  signOut,
 } = authSlice.actions;
 
 // TODO: it should save the user data from the db into global context
@@ -108,19 +113,6 @@ export const signUp = createAsyncThunk(
     return { success: true };
   }
 );
-
-// App.js:14
-export const signOutAction = () => (dispatch) => {
-  localStorage.removeItem("token");
-  dispatch(unauthenticate());
-  dispatch(
-    updateProfile({
-      name: "",
-      email: "",
-      _id: "",
-    })
-  );
-};
 
 // this function is for fetching user info from the express server that requires authentication header
 export const getProfile = () => (dispatch) => {
@@ -223,7 +215,8 @@ export const deleteAccountAction = (password) => (dispatch) => {
     })
     .then((res) => {
       if (res.data.success) {
-        dispatch(signOutAction);
+        localStorage.removeItem("token");
+        dispatch(signOut());
         dispatch(authError(res.data.message));
       } else {
         dispatch(deleteAccountAlert(res.data.message));
