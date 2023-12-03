@@ -11,7 +11,6 @@ const initialState = {
     email: "",
     _id: null,
   },
-  status: "",
   emailAlert: null,
   pwAlert: null,
   daAlert: null,
@@ -49,23 +48,11 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder
-      .addCase(signIn.pending, (state, action) => {
-        state.status = "loading";
-        // TODO: add a loading indicator to the front end
-      })
-      .addCase(signIn.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        // TODO: if login successful, it should save the user data from the db into global context
-        console.log(action.payload);
-        state.error = null;
-        state.isAuthenticated = true;
-      })
-      .addCase(signIn.rejected, (state, action) => {
-        state.status = "failed";
-        state.isAuthenticated = false;
-        state.error = action?.error?.message || "Failed to log in";
-      });
+    builder.addCase(signIn.fulfilled, (state, action) => {
+      // TODO: if login successful, it should save the user data from the db into global context
+      state.error = null;
+      state.isAuthenticated = true;
+    });
   },
 });
 
@@ -80,20 +67,15 @@ export const {
 } = authSlice.actions;
 
 // TODO: it should save the user data from the db into global context
-// TODO: move navigate back to the Sigin component to separate concerns
 export const signIn = createAsyncThunk(
   "auth/signIn",
-  async ({ navigate, email, password }) => {
-    console.log("signIn thunk email: ", email);
-    console.log("signIn thunk password: ", password);
+  async ({ email, password }) => {
     const res = await axios.post("/users/authenticate", { email, password });
     if (!res.data.success) {
-      console.error(res.data.message);
       // res.data.message is the fail reason message from the server (ie bad password, etc.)
       throw new Error(res.data.message);
     }
     localStorage.setItem("token", res.data.token);
-    navigate("/feature");
     return { success: true };
   }
 );
@@ -107,6 +89,7 @@ export const fbSignInAction = () => () => {
   openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
 };
 
+// TODO: move navigate back to the Signup component to separate concerns
 // Sign up thunk
 export const signUpAction =
   (navigate, { email, password }) =>

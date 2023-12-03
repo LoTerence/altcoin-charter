@@ -1,95 +1,66 @@
-import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
 import {
   signIn,
   selectAuth,
   googleSignInAction,
   fbSignInAction,
-} from "../../_store/reducers/authSlice";
-import { FacebookIcon, GoogleIcon } from "../icons";
+} from "../_store/reducers/authSlice";
+import { FacebookIcon, GoogleIcon } from "../_components/icons";
 
-function Signin() {
+const validateForm = ({ email, password }) => {
+  if (email === "") throw new Error("Email field should not be empty");
+  if (!EmailValidator.validate(email)) throw new Error("Invalid email");
+  if (password === "") throw new Error("Password field should not be empty");
+  if (password.length < 8)
+    throw new Error("Password should be at least 8 characters");
+  return true;
+};
+
+const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authSelector = useSelector(selectAuth);
+  const { isAuthenticated } = useSelector(selectAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isError, setIsError] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
 
-  if (authSelector.isAuthenticated) {
-    return <Navigate to={"/feature"} />;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/feature");
+    }
+  }, [isAuthenticated, navigate]);
 
+  // TODO: add a loading indicator
   async function handleFormSubmit(e) {
     e.preventDefault();
-
-    if (email === "") {
-      setMessage("Email field should not be empty");
-      setIsError(true);
-      return;
-    }
-
-    if (!EmailValidator.validate(email)) {
-      setMessage("Invalid email");
-      setIsError(true);
-      return;
-    }
-
-    if (password === "") {
-      setMessage("Password field should not be empty");
-      setIsError(true);
-      return;
-    }
-
     try {
-      dispatch(signIn({ navigate, email, password }));
+      validateForm({ email, password });
+      await dispatch(signIn({ email, password })).unwrap();
     } catch (err) {
-      console.log(err);
-      setIsError(true);
+      setError(err?.message || "Failed to log in");
     }
   }
 
   async function handleGoogleButtonClick(e) {
     e.preventDefault();
-
     try {
       dispatch(googleSignInAction());
     } catch (err) {
       console.log(err);
-      setIsError(true);
+      setError("Failed to log in");
     }
   }
 
   async function handleFbButtonClick(e) {
     e.preventDefault();
-
     try {
       dispatch(fbSignInAction());
     } catch (err) {
       console.log(err);
-      setIsError(true);
-    }
-  }
-
-  function renderAlert() {
-    if (authSelector.error) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {authSelector.error}
-        </div>
-      );
-    }
-
-    if (isError) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops! </strong>
-          {message}
-        </div>
-      );
+      setError("Failed to log in");
     }
   }
 
@@ -99,7 +70,6 @@ function Signin() {
         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
           <form className="text-center">
             <h3 className="mb-5">Sign in</h3>
-
             {/* Email Input */}
             <div className="form-floating mb-4">
               <input
@@ -116,7 +86,6 @@ function Signin() {
                 Email
               </label>
             </div>
-
             {/* Password Input */}
             <div className="form-floating mb-4">
               <input
@@ -133,7 +102,6 @@ function Signin() {
                 Password
               </label>
             </div>
-
             <div className="d-flex justify-content-between align-items-center mb-4">
               {/* <!-- Checkbox --> */}
               <div className="form-check">
@@ -150,10 +118,12 @@ function Signin() {
               </div>
               {/* <Link to="#!">Forgot password?</Link> */}
             </div>
-
-            {renderAlert()}
-
-            {/* submit button */}
+            {error && (
+              <div className="alert alert-danger">
+                <strong>Oops! </strong>
+                {error}
+              </div>
+            )}
             <button
               className="btn btn-success btn-lg btn-block container-fluid"
               onClick={(e) => handleFormSubmit(e)}
@@ -161,7 +131,6 @@ function Signin() {
               Sign in
             </button>
           </form>
-
           <hr className="my-4" />
           <button
             className="btn google-button btn-lg mb-2"
@@ -186,6 +155,6 @@ function Signin() {
       </div>
     </div>
   );
-}
+};
 
-export default Signin;
+export default SignIn;

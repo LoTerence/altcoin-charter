@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
+import { signUpAction, selectAuth } from "../../_store/reducers/authSlice";
 // import { FacebookIcon, GoogleIcon } from "../icons";
 
 function Signup() {
