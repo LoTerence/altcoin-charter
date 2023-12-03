@@ -39,18 +39,13 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
     const newSymbol = symbol.toUpperCase();
-    const validation = validateSymbol(newSymbol, coins);
-    if (!validation.isValid) {
-      dispatch(setError(validation.message));
-      return;
-    }
     try {
+      validateSymbol(newSymbol, coins);
       setAddRequestStatus("pending");
-      await dispatch(addNewCoin(newSymbol)).unwrap();
       setSymbol("");
+      await dispatch(addNewCoin(newSymbol)).unwrap();
     } catch (err) {
-      console.error("Failed to save the coin: ", err);
-      dispatch(setError("Error: failed to save new coin"));
+      dispatch(setError(err?.message || "Error: failed to save new coin"));
     } finally {
       setAddRequestStatus("idle");
     }
@@ -83,7 +78,7 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
           onClick={handleSuggestClick}
         />
       </form>
-      <ErrorMessage error={error} />
+      {error && <div className="alert alert-danger">{error}</div>}
     </div>
   );
 };
@@ -155,30 +150,17 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
   );
 };
 
-const ErrorMessage = ({ error }) => {
-  return <>{error && <div className="alert alert-danger">{error}</div>}</>;
-};
-
-// TODO: refactor so it throws an error instead of returning objs
-// validates a new symbol
 // @param coins: list of coins to make sure the symbol is not already in the coinlist
-const validateSymbol = (newSymbol, coins) => {
-  const symbol = newSymbol.toUpperCase();
-  if (symbol === "") {
-    return { isValid: false, message: "Input required" };
-  }
+const validateSymbol = (symbol, coins) => {
+  if (symbol === "") throw new Error("Input required");
+
   const iChars = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
-  if (iChars.test(symbol)) {
-    return { isValid: false, message: "No special characters allowed" };
-  }
+  if (iChars.test(symbol)) throw new Error("No special characters allowed");
+
   const isListed = coins.some((c) => c.symbol === symbol);
-  if (isListed) {
-    return {
-      isValid: false,
-      message: `${symbol} is already in the list of coins`,
-    };
-  }
-  return { isValid: true };
+  if (isListed) throw new Error(`${symbol} is already in the list of coins`);
+
+  return true;
 };
 
 const deriveSuggestions = (text, symbols) => {
