@@ -4,7 +4,6 @@ import EmailForm from "./EmailForm";
 import PasswordForm from "./PasswordForm";
 import DeleteAccountForm from "./DeleteAccountForm";
 
-// TODO: refactor this entire page, its a mess
 const Settings = () => {
   return (
     <PrivateRoute>

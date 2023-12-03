@@ -5,28 +5,30 @@ import {
   selectAuth,
 } from "../../_store/reducers/authSlice";
 
+// TODO: add loading state
+// TODO: better styling
+
 const DeleteAccountForm = () => {
   const dispatch = useDispatch();
   const { daAlert } = useSelector(selectAuth);
   const [password, setPassword] = useState("");
-  const [deleteAccountAlert, setDeleteAccountAlert] = useState("");
+  const [alert, setAlert] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDeleteAccountButton = async (e) => {
     e.preventDefault();
-    setDeleteAccountAlert("");
 
     if (password === "") {
-      setDeleteAccountAlert("Password field empty");
-      return;
+      return setAlert("Password field empty");
     }
 
+    setAlert(null);
     try {
       dispatch(deleteAccountAction(password));
       setPassword("");
     } catch (err) {
       console.log(err);
-      setDeleteAccountAlert("Something went wrong please try again later");
+      setAlert("Something went wrong please try again later");
     }
   };
 
@@ -39,10 +41,10 @@ const DeleteAccountForm = () => {
       );
     }
 
-    if (deleteAccountAlert) {
+    if (alert) {
       return (
         <div className="alert alert-danger">
-          <strong>Oops!</strong> {deleteAccountAlert}
+          <strong>Oops!</strong> {alert}
         </div>
       );
     }
@@ -60,22 +62,21 @@ const DeleteAccountForm = () => {
           </div>
           <div className="form-floating mb-4">
             <input
-              name="passwordField"
-              id="passwordField"
-              type="password"
               className="form-control form-control-lg"
-              placeholder="Confirm password"
-              value={password}
+              id="passwordField"
+              name="passwordField"
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Confirm password"
               required
+              type="password"
+              value={password}
             />
-            <label style={{ opacity: "0.5" }} htmlFor="passwordField">
+            <label className="opacity-50" htmlFor="passwordField">
               Confirm password
             </label>
           </div>
           <button
-            className="btn btn-danger btn-md btn-block"
-            style={{ marginRight: "5px" }}
+            className="btn btn-danger btn-md btn-block mr-1"
             onClick={(e) => {
               e.preventDefault();
               setIsOpen(false);
