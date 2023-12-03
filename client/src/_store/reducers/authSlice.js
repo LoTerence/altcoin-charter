@@ -27,7 +27,7 @@ export const authSlice = createSlice({
       state.error = null;
       state.isAuthenticated = true;
     },
-    signOut: (state) => {
+    deauthenticate: (state) => {
       state.isAuthenticated = false;
       state.userProfile = {
         name: "",
@@ -74,7 +74,7 @@ export const {
   changeEmailAlert,
   changepwAlert,
   deleteAccountAlert,
-  signOut,
+  deauthenticate,
 } = authSlice.actions;
 
 // TODO: it should save the user data from the db into global context
@@ -216,7 +216,7 @@ export const deleteAccountAction = (password) => (dispatch) => {
     .then((res) => {
       if (res.data.success) {
         localStorage.removeItem("token");
-        dispatch(signOut());
+        dispatch(deauthenticate());
         dispatch(authError(res.data.message));
       } else {
         dispatch(deleteAccountAlert(res.data.message));
