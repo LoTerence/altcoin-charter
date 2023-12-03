@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { signOut } from "../../_store/reducers/authSlice";
+import { deauthenticate } from "../../_store/reducers/authSlice";
 import PrivateRoute from "./PrivateRoute";
 
 function SignOut() {
@@ -8,7 +8,7 @@ function SignOut() {
 
   useEffect(() => {
     localStorage.removeItem("token");
-    dispatch(signOut());
+    dispatch(deauthenticate());
   }, [dispatch]);
 
   return (
