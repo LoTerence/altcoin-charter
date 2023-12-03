@@ -4,9 +4,9 @@ import Feature from "./pages/Feature";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import OAuthCallback from "./_components/auth/OAuthCallback";
-import Signin from "./_components/auth/Signin";
-import Signout from "./_components/auth/Signout";
-import Signup from "./_components/auth/Signup";
+import SignIn from "./pages/SignIn";
+import SignOut from "./_components/auth/Signout";
+import SignUp from "./pages/SignUp";
 import ContactUs from "./pages/ContactUs";
 import ErrorPage from "./pages/ErrorPage";
 import Header from "./_components/universal/Header";
@@ -36,11 +36,11 @@ const router = createBrowserRouter([
       },
       {
         path: "signin",
-        Component: Signin,
+        Component: SignIn,
       },
       {
         path: "signup",
-        Component: Signup,
+        Component: SignUp,
       },
       {
         path: "privacy-policy",
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
       },
       {
         path: "signout",
-        Component: Signout,
+        Component: SignOut,
       },
       {
         path: "feature",
