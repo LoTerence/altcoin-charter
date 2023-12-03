@@ -7,7 +7,7 @@ import { SpinnerIcon } from "../_components/icons";
 
 // TODO: add facebook and google oauth buttons?
 
-function SignUp() {
+const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector(selectAuth);
@@ -23,7 +23,7 @@ function SignUp() {
     }
   }, [isAuthenticated, navigate]);
 
-  async function handleFormSubmit(e) {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(false);
@@ -34,7 +34,7 @@ function SignUp() {
       setError(err?.message || "Failed to sign up");
     }
     setIsLoading(false);
-  }
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center py-5 h-100">
@@ -114,7 +114,7 @@ function SignUp() {
       </div>
     </div>
   );
-}
+};
 
 export default SignUp;
 
