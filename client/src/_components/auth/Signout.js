@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { signOutAction } from "../../_store/reducers/authSlice";
+import { signOut } from "../../_store/reducers/authSlice";
 import PrivateRoute from "./PrivateRoute";
 
-function Signout() {
+function SignOut() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(signOutAction());
-  }, [dispatch]); // TODO: do I need to include this [dispatch] ?
+    localStorage.removeItem("token");
+    dispatch(signOut());
+  }, [dispatch]);
 
   return (
     <PrivateRoute>
@@ -17,4 +18,4 @@ function Signout() {
   );
 }
 
-export default Signout;
+export default SignOut;
