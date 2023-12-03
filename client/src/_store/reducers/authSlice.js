@@ -13,7 +13,6 @@ const initialState = {
     email: "",
     _id: null,
   },
-  emailAlert: null,
   pwAlert: null,
   daAlert: null,
 };
@@ -36,9 +35,6 @@ export const authSlice = createSlice({
     updateProfile: (state, action) => {
       state.userProfile = action.payload;
     },
-    changeEmailAlert: (state, action) => {
-      state.emailAlert = action.payload;
-    },
     changepwAlert: (state, action) => {
       state.pwAlert = action.payload;
     },
@@ -59,6 +55,10 @@ export const authSlice = createSlice({
       .addCase(changeName.fulfilled, (state, action) => {
         const { name } = action.payload;
         state.userProfile.name = name;
+      })
+      .addCase(changeEmail.fulfilled, (state, action) => {
+        const { email } = action.payload;
+        state.userProfile.email = email;
       });
   },
 });
@@ -66,7 +66,6 @@ export const authSlice = createSlice({
 export const {
   authenticate,
   updateProfile,
-  changeEmailAlert,
   changepwAlert,
   deleteAccountAlert,
   deauthenticate,
@@ -140,33 +139,29 @@ export const changeName = createAsyncThunk(
   }
 );
 
-//action for change the email of the user
-export const changeEmailAction = (newEmail, password) => (dispatch) => {
-  axios
-    .put(
+export const changeEmail = createAsyncThunk(
+  "auth/changeEmail",
+  async ({ newEmail, password }) => {
+    const res = await axios.put(
       "/users/profile/email",
       {
-        newEmail: newEmail,
-        password: password,
+        newEmail,
+        password,
       },
       {
         headers: {
           authorization: localStorage.getItem("token"),
         },
       }
-    )
-    .then((res) => {
-      if (res.data.success) {
-        dispatch(getProfile());
-      } else {
-        dispatch(changeEmailAlert(res.data.message));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
-};
+    );
+    if (!res.data.success) {
+      throw new Error(
+        res?.data?.message || "Something went wrong, please try again later"
+      );
+    }
+    return { email: res.data.email };
+  }
+);
 
 //action for changing the user's password
 export const changePasswordAction =

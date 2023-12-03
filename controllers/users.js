@@ -130,15 +130,15 @@ const editUserEmail = async (req, res) => {
     if (user.email === newEmail) {
       return res.json({
         message: "User already has the same email",
-        success: true,
+        success: false,
       });
     }
     user.email = newEmail;
     await user.save();
-    return res.json({ success: true, newEmail: user.email });
+    return res.json({ success: true, email: user.email });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
+    return res.json({
       message: "Something went wrong, please try again later",
       success: false,
     });
