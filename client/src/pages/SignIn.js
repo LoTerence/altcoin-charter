@@ -9,15 +9,9 @@ import {
   fbSignInAction,
 } from "../_store/reducers/authSlice";
 import { FacebookIcon, GoogleIcon } from "../_components/icons";
+import { SpinnerIcon } from "../_components/icons";
 
-const validateForm = ({ email, password }) => {
-  if (email === "") throw new Error("Email field should not be empty");
-  if (!EmailValidator.validate(email)) throw new Error("Invalid email");
-  if (password === "") throw new Error("Password field should not be empty");
-  if (password.length < 8)
-    throw new Error("Password should be at least 8 characters");
-  return true;
-};
+// TODO: remember me checkbox doesnt do anything
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -26,6 +20,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -33,15 +28,17 @@ const SignIn = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // TODO: add a loading indicator
   async function handleFormSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
+    setError(false);
     try {
       validateForm({ email, password });
       await dispatch(signIn({ email, password })).unwrap();
     } catch (err) {
       setError(err?.message || "Failed to log in");
     }
+    setIsLoading(false);
   }
 
   async function handleGoogleButtonClick(e) {
@@ -65,96 +62,110 @@ const SignIn = () => {
   }
 
   return (
-    <div className="container py-5 h-100">
-      <div className="d-flex align-items-center justify-content-center h-100">
-        <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-          <form className="text-center">
-            <h3 className="mb-5">Sign in</h3>
-            {/* Email Input */}
-            <div className="form-floating mb-4">
+    <div className="d-flex align-items-center justify-content-center py-5 h-100">
+      <div className="col-12 col-md-8 col-lg-6 col-xl-5">
+        <form className="text-center">
+          <h3 className="mb-5">Sign in</h3>
+          {/* Email Input */}
+          <div className="form-floating mb-4">
+            <input
+              autoComplete="email"
+              className="form-control form-control-lg"
+              disabled={isLoading}
+              id="signinEmail"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+              required
+              type="email"
+              value={email}
+            />
+            <label htmlFor="signinEmail" style={{ opacity: "0.5" }}>
+              Email
+            </label>
+          </div>
+          {/* Password Input */}
+          <div className="form-floating mb-4">
+            <input
+              autoComplete="current-password"
+              className="form-control form-control-lg"
+              disabled={isLoading}
+              id="signinPassword"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+              required
+              type="password"
+              value={password}
+            />
+            <label htmlFor="signinPassword" style={{ opacity: "0.5" }}>
+              Password
+            </label>
+          </div>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            {/* <!-- Checkbox --> */}
+            <div className="form-check">
               <input
-                name="email"
-                id="signinEmail"
-                type="email"
-                className="form-control form-control-lg"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+                className="form-check-input"
+                id="signInCheck"
+                type="checkbox"
+                value=""
               />
-              <label style={{ opacity: "0.5" }} htmlFor="signinEmail">
-                Email
+              <label className="form-check-label" htmlFor="signInCheck">
+                Remember me
               </label>
             </div>
-            {/* Password Input */}
-            <div className="form-floating mb-4">
-              <input
-                name="password"
-                id="signinPassword"
-                type="password"
-                className="form-control form-control-lg"
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <label style={{ opacity: "0.5" }} htmlFor="signinPassword">
-                Password
-              </label>
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              {/* <!-- Checkbox --> */}
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="signinCheck"
-                />
-                <label className="form-check-label" htmlFor="signinCheck">
-                  {" "}
-                  Remember me{" "}
-                </label>
-              </div>
-              {/* <Link to="#!">Forgot password?</Link> */}
-            </div>
-            {error && (
-              <div className="alert alert-danger">
-                <strong>Oops! </strong>
-                {error}
-              </div>
-            )}
-            <button
-              className="btn btn-success btn-lg btn-block container-fluid"
-              onClick={(e) => handleFormSubmit(e)}
-            >
-              Sign in
-            </button>
-          </form>
-          <hr className="my-4" />
+            {/* <Link to="#!">Forgot password?</Link> */}
+          </div>
           <button
-            className="btn google-button btn-lg mb-2"
-            type="submit"
-            onClick={(e) => handleGoogleButtonClick(e)}
+            className="btn btn-success btn-lg btn-block mb-4 w-full"
+            disabled={isLoading}
+            onClick={(e) => handleFormSubmit(e)}
+            style={{ width: "calc(100% - 34px)" }}
           >
-            <GoogleIcon /> Sign in with Google
+            {isLoading ? <SpinnerIcon /> : "Sign in"}
+            {/* Sign in */}
           </button>
-          <button
-            className="btn fb-button btn-lg mb-2"
-            type="submit"
-            onClick={(e) => handleFbButtonClick(e)}
-          >
-            <FacebookIcon /> Sign in with Facebook
-          </button>
-          <br />
-          <p>
-            Dont have an account? Click <Link to="/signup">here</Link> to sign
-            up!
-          </p>
-        </div>
+          {error && (
+            <div className="alert alert-danger">
+              <strong>Oops! </strong>
+              {error}
+            </div>
+          )}
+        </form>
+        <hr className="my-4" />
+        <button
+          className="btn google-button btn-lg mb-2"
+          onClick={(e) => handleGoogleButtonClick(e)}
+          style={{ width: "calc(100% - 34px)" }}
+          type="submit"
+        >
+          <GoogleIcon /> Sign in with Google
+        </button>
+        <button
+          className="btn fb-button btn-lg mb-2"
+          onClick={(e) => handleFbButtonClick(e)}
+          style={{ width: "calc(100% - 34px)" }}
+          type="submit"
+        >
+          <FacebookIcon /> Sign in with Facebook
+        </button>
+        <br />
+        <p>
+          Dont have an account? Click <Link to="/signup">here</Link> to sign up!
+        </p>
       </div>
     </div>
   );
+};
+
+const validateForm = ({ email, password }) => {
+  if (email === "") throw new Error("Email field should not be empty");
+  if (!EmailValidator.validate(email)) throw new Error("Invalid email");
+  if (password === "") throw new Error("Password field should not be empty");
+  if (password.length < 8)
+    throw new Error("Password should be at least 8 characters");
+  return true;
 };
 
 export default SignIn;
