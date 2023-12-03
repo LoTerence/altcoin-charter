@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
+    return res.status(200).json({
       message: "Email already registered or not a real email",
       success: false,
     });
