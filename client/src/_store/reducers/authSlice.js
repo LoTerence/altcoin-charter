@@ -3,6 +3,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
 const { REACT_APP_SERVER_URL } = process.env;
 
+// TODO: move alerts (changeEmailAlert, changepwAlert, deleteAccountAlert) to setting page
+// TODO: change isAuthenticated to status/authStatus or something more descriptive
+
 const initialState = {
   error: null,
   isAuthenticated: false,
@@ -15,9 +18,6 @@ const initialState = {
   pwAlert: null,
   daAlert: null,
 };
-
-// TODO: move alerts (changeEmailAlert, changepwAlert, deleteAccountAlert) to setting page
-// TODO: change isAuthenticated to status/authStatus or something more descriptive
 
 export const authSlice = createSlice({
   name: "auth",
@@ -48,11 +48,17 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(signIn.fulfilled, (state, action) => {
-      // TODO: if login successful, it should save the user data from the db into global context
-      state.error = null;
-      state.isAuthenticated = true;
-    });
+    builder
+      .addCase(signIn.fulfilled, (state, action) => {
+        // TODO: if login successful, it should save the user data from the db into global context
+        state.error = null;
+        state.isAuthenticated = true;
+      })
+      .addCase(signUp.fulfilled, (state, action) => {
+        // TODO: if login successful, it should save the user data from the db into global context
+        state.error = null;
+        state.isAuthenticated = true;
+      });
   },
 });
 
@@ -80,7 +86,7 @@ export const signIn = createAsyncThunk(
   }
 );
 
-// <----------------------  OAuth2.0 signin  ------------------------->
+// <----------------------  OAuth2.0 sign in  ------------------------->
 export const googleSignInAction = () => () => {
   openSignInWindow(REACT_APP_SERVER_URL + "/users/google", "SignIn");
 };
@@ -89,29 +95,19 @@ export const fbSignInAction = () => () => {
   openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
 };
 
-// TODO: move navigate back to the Signup component to separate concerns
-// Sign up thunk
-export const signUpAction =
-  (navigate, { email, password }) =>
-  (dispatch) => {
-    //same process as signInAction
-    axios
-      .post("/users/register", { email, password })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(authenticate());
-          localStorage.setItem("token", res.data.token);
-          navigate("/feature");
-        } else {
-          console.log(res.data.message);
-          dispatch(authError(res.data.message));
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(authError("Error with signing up"));
-      });
-  };
+export const signUp = createAsyncThunk(
+  "auth/signUp",
+  async ({ email, password }) => {
+    const res = await axios.post("/users/register", { email, password });
+    if (!res.data.success) {
+      console.log(res.data);
+      console.log(res.data.message);
+      throw new Error(res.data.message);
+    }
+    localStorage.setItem("token", res.data.token);
+    return { success: true };
+  }
+);
 
 // App.js:14
 export const signOutAction = () => (dispatch) => {

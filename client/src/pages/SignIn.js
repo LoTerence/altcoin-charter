@@ -8,8 +8,7 @@ import {
   googleSignInAction,
   fbSignInAction,
 } from "../_store/reducers/authSlice";
-import { FacebookIcon, GoogleIcon } from "../_components/icons";
-import { SpinnerIcon } from "../_components/icons";
+import { FacebookIcon, GoogleIcon, SpinnerIcon } from "../_components/icons";
 
 // TODO: remember me checkbox doesnt do anything
 
@@ -19,8 +18,8 @@ const SignIn = () => {
   const { isAuthenticated } = useSelector(selectAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -80,7 +79,7 @@ const SignIn = () => {
               type="email"
               value={email}
             />
-            <label htmlFor="signinEmail" style={{ opacity: "0.5" }}>
+            <label className="opacity-50" htmlFor="signinEmail">
               Email
             </label>
           </div>
@@ -98,7 +97,7 @@ const SignIn = () => {
               type="password"
               value={password}
             />
-            <label htmlFor="signinPassword" style={{ opacity: "0.5" }}>
+            <label className="opacity-50" htmlFor="signinPassword">
               Password
             </label>
           </div>
@@ -123,8 +122,7 @@ const SignIn = () => {
             onClick={(e) => handleFormSubmit(e)}
             style={{ width: "calc(100% - 34px)" }}
           >
-            {isLoading ? <SpinnerIcon /> : "Sign in"}
-            {/* Sign in */}
+            {isLoading ? <SpinnerIcon /> : "Log in"}
           </button>
           {error && (
             <div className="alert alert-danger">

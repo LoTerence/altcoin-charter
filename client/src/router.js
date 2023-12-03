@@ -6,7 +6,7 @@ import Settings from "./pages/Settings";
 import OAuthCallback from "./_components/auth/OAuthCallback";
 import SignIn from "./pages/SignIn";
 import Signout from "./_components/auth/Signout";
-import Signup from "./_components/auth/Signup";
+import SignUp from "./pages/SignUp";
 import ContactUs from "./pages/ContactUs";
 import ErrorPage from "./pages/ErrorPage";
 import Header from "./_components/universal/Header";
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: "signup",
-        Component: Signup,
+        Component: SignUp,
       },
       {
         path: "privacy-policy",
