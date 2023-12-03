@@ -1,72 +1,46 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as EmailValidator from "email-validator";
-import {
-  changeEmailAction,
-  changeEmailAlert,
-  selectAuth,
-} from "../../_store/reducers/authSlice";
+import { changeEmail, selectAuth } from "../../_store/reducers/authSlice";
+import { SpinnerIcon } from "../../_components/icons";
 
 // TODO: add loading state
 // TODO: better styling
 
 const EmailForm = () => {
   const dispatch = useDispatch();
-  const { emailAlert, userProfile: profile } = useSelector(selectAuth);
+  const { userProfile } = useSelector(selectAuth);
   const [newEmail, setNewEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmailChangeButton = async (e) => {
     e.preventDefault();
-    dispatch(changeEmailAlert(""));
-
-    try {
-      validateForm({ newEmail, password, profile });
-    } catch (err) {
-      setAlert(err?.message || "Something went wrong, please try again later");
-      return;
-    }
-
     setAlert(null);
+    setIsLoading(true);
     try {
-      dispatch(changeEmailAction(newEmail, password));
+      validateForm({ newEmail, password, userProfile });
+      await dispatch(changeEmail({ newEmail, password })).unwrap();
       setNewEmail("");
       setPassword("");
     } catch (err) {
       console.log(err);
-      setAlert("Something went wrong, please try again later");
+      setAlert(err?.message || "Something went wrong, please try again later");
     }
-  };
-
-  const renderEmailAlert = () => {
-    if (emailAlert) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops! </strong>
-          {emailAlert}
-        </div>
-      );
-    }
-
-    if (alert) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {alert}
-        </div>
-      );
-    }
+    setIsLoading(false);
   };
 
   return (
     <div>
       <h5>Change Email</h5>
       <p>
-        Your email: <b>{profile.email}</b>
+        Your email: <b>{userProfile.email}</b>
       </p>
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="emailField"
           name="newemail"
           onChange={(e) => setNewEmail(e.target.value)}
@@ -82,6 +56,7 @@ const EmailForm = () => {
       <div className="form-floating mb-4">
         <input
           className="form-control form-control-lg"
+          disabled={isLoading}
           id="confirmPasswordField"
           name="confirmPassword"
           onChange={(e) => setPassword(e.target.value)}
@@ -96,19 +71,24 @@ const EmailForm = () => {
       </div>
       <button
         className="btn btn-secondary btn-md btn-block"
+        disabled={isLoading}
         onClick={(e) => handleEmailChangeButton(e)}
       >
-        Submit email change
+        {isLoading ? <SpinnerIcon /> : "Submit email change"}
       </button>
-      {renderEmailAlert()}
+      {alert && (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {alert}
+        </div>
+      )}
     </div>
   );
 };
 
 export default EmailForm;
 
-const validateForm = ({ newEmail, password, profile }) => {
-  if (newEmail === profile.email) throw new Error("That's the same email");
+const validateForm = ({ newEmail, password, userProfile }) => {
+  if (newEmail === userProfile.email) throw new Error("That's the same email");
   if (!EmailValidator.validate(newEmail)) throw new Error("Invalid email");
   if (password === "") throw new Error("Password field cannot be empty");
   return true;

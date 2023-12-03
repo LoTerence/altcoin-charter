@@ -14,10 +14,10 @@ const NameForm = () => {
 
   const handleNameChangeButton = async (e) => {
     e.preventDefault();
-    setAlert("");
+    setAlert(null);
+    setIsLoading(true);
     try {
       validateForm({ name: newName, profile });
-      setIsLoading(true);
       await dispatch(changeName({ newName })).unwrap();
       setNewName("");
     } catch (err) {
