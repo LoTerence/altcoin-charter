@@ -4,7 +4,7 @@ import Feature from "./pages/Feature";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Settings from "./pages/Settings";
 import OAuthCallback from "./_components/auth/OAuthCallback";
-import Signin from "./_components/auth/Signin";
+import SignIn from "./pages/SignIn";
 import Signout from "./_components/auth/Signout";
 import Signup from "./_components/auth/Signup";
 import ContactUs from "./pages/ContactUs";
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       },
       {
         path: "signin",
-        Component: Signin,
+        Component: SignIn,
       },
       {
         path: "signup",

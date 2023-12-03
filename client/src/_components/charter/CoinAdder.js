@@ -50,7 +50,7 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
       setSymbol("");
     } catch (err) {
       console.error("Failed to save the coin: ", err);
-      dispatch(setError("Error posting new coin"));
+      dispatch(setError("Error: failed to save new coin"));
     } finally {
       setAddRequestStatus("idle");
     }
@@ -159,6 +159,7 @@ const ErrorMessage = ({ error }) => {
   return <>{error && <div className="alert alert-danger">{error}</div>}</>;
 };
 
+// TODO: refactor so it throws an error instead of returning objs
 // validates a new symbol
 // @param coins: list of coins to make sure the symbol is not already in the coinlist
 const validateSymbol = (newSymbol, coins) => {
