@@ -69,14 +69,19 @@ export const addNewCoin = createAsyncThunk(
   "watchList/addNewCoin",
   async (newCoinSymbol) => {
     const sym = newCoinSymbol.toUpperCase();
-    const cryptocompareRes = await axios.get(
-      "https://min-api.cryptocompare.com/data/all/coinlist"
-    );
-    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
-    if (!doesCryptoExist) {
+    let cryptocompareRes;
+    try {
+      cryptocompareRes = await axios.get(
+        "https://min-api.cryptocompare.com/data/all/coinlist"
+      );
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error: failed to save new coin, please try again later");
+    }
+    const cryptoData = cryptocompareRes?.data?.Data[sym];
+    if (!cryptoData) {
       throw new Error("A coin with that symbol does not exist");
     }
-    const cryptoData = cryptocompareRes.data.Data[sym];
     const data = {
       coinName: cryptoData.CoinName,
       cryptoCompareId: cryptoData.Id,

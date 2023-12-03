@@ -32,7 +32,9 @@ export const coinListSlice = createSlice({
       })
       .addCase(fetchCoins.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Something went wrong while getting coin list";
+        state.error =
+          action?.error?.message ||
+          "Something went wrong while getting coin list";
       })
       .addCase(addNewCoin.fulfilled, (state, action) => {
         const newCoin = action.payload;
@@ -59,20 +61,25 @@ export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
   return coins;
 });
 
-// TODO: add by coinname as well as symbol
+// TODO: make a function to add by coinname as well as symbol
 // addNewCoin -- adds new coin to the db by symbol
 export const addNewCoin = createAsyncThunk(
   "coinList/addNewCoin",
   async (newCoinSymbol) => {
     const sym = newCoinSymbol.toUpperCase();
-    const cryptocompareRes = await axios.get(
-      "https://min-api.cryptocompare.com/data/all/coinlist"
-    );
-    const doesCryptoExist = Boolean(cryptocompareRes.data.Data[sym]);
-    if (!doesCryptoExist) {
+    let cryptocompareRes;
+    try {
+      cryptocompareRes = await axios.get(
+        "https://min-api.cryptocompare.com/data/all/coinlist"
+      );
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error: failed to save new coin, please try again later");
+    }
+    const cryptoData = cryptocompareRes?.data?.Data[sym];
+    if (!cryptoData) {
       throw new Error("A coin with that symbol does not exist");
     }
-    const cryptoData = cryptocompareRes.data.Data[sym];
     const data = {
       coinName: cryptoData.CoinName,
       cryptoCompareId: cryptoData.Id,

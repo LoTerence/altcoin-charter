@@ -1,26 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
 const { REACT_APP_SERVER_URL } = process.env;
 
+// TODO: move alerts (changeEmailAlert, changepwAlert, deleteAccountAlert) to setting page
+// TODO: change isAuthenticated to status/authStatus or something more descriptive
+
+const initialState = {
+  error: null,
+  isAuthenticated: false,
+  userProfile: {
+    name: "",
+    email: "",
+    _id: null,
+  },
+  emailAlert: null,
+  pwAlert: null,
+  daAlert: null,
+};
+
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    error: "",
-    userProfile: {
-      name: "",
-      email: "",
-      _id: "",
-    },
-    isAuthenticated: false,
-  },
+  initialState,
   reducers: {
     authenticate: (state) => {
-      state.error = "";
+      state.error = null;
       state.isAuthenticated = true;
     },
-    unauthenticate: (state) => {
+    deauthenticate: (state) => {
       state.isAuthenticated = false;
+      state.userProfile = {
+        name: "",
+        email: "",
+        _id: null,
+      };
     },
     authError: (state, action) => {
       state.isAuthenticated = false;
@@ -39,39 +52,46 @@ export const authSlice = createSlice({
       state.daAlert = action.payload;
     },
   },
+  extraReducers(builder) {
+    builder
+      .addCase(signIn.fulfilled, (state, action) => {
+        // TODO: if login successful, it should save the user data from the db into global context
+        state.error = null;
+        state.isAuthenticated = true;
+      })
+      .addCase(signUp.fulfilled, (state, action) => {
+        // TODO: if login successful, it should save the user data from the db into global context
+        state.error = null;
+        state.isAuthenticated = true;
+      });
+  },
 });
 
 export const {
   authenticate,
-  unauthenticate,
   authError,
   updateProfile,
   changeEmailAlert,
   changepwAlert,
   deleteAccountAlert,
+  deauthenticate,
 } = authSlice.actions;
 
-// thunks that allows us to perform async logic
-export const signInAction =
-  (navigate, { email, password }) =>
-  (dispatch) => {
-    axios
-      .post("/users/authenticate", { email, password })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(authenticate());
-          localStorage.setItem("token", res.data.token);
-          navigate("/feature");
-        } else {
-          dispatch(authError(res.data.message));
-        }
-      })
-      .catch((err) => {
-        dispatch(authError("Bad Login Info"));
-      });
-  };
+// TODO: it should save the user data from the db into global context
+export const signIn = createAsyncThunk(
+  "auth/signIn",
+  async ({ email, password }) => {
+    const res = await axios.post("/users/authenticate", { email, password });
+    if (!res.data.success) {
+      // res.data.message is the fail reason message from the server (ie bad password, etc.)
+      throw new Error(res.data.message);
+    }
+    localStorage.setItem("token", res.data.token);
+    return { success: true };
+  }
+);
 
-// <----------------------  OAuth2.0 signin  ------------------------->
+// <----------------------  OAuth2.0 sign in  ------------------------->
 export const googleSignInAction = () => () => {
   openSignInWindow(REACT_APP_SERVER_URL + "/users/google", "SignIn");
 };
@@ -80,42 +100,22 @@ export const fbSignInAction = () => () => {
   openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
 };
 
-// Sign up thunk
-export const signUpAction =
-  (navigate, { email, password }) =>
-  (dispatch) => {
-    //same process as signInAction
-    axios
-      .post("/users/register", { email, password })
-      .then((res) => {
-        if (res.data.success) {
-          dispatch(authenticate());
-          localStorage.setItem("token", res.data.token);
-          navigate("/feature");
-        } else {
-          console.log(res.data.message);
-          dispatch(authError(res.data.message));
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(authError("Error with signing up"));
-      });
-  };
+export const signUp = createAsyncThunk(
+  "auth/signUp",
+  async ({ email, password }) => {
+    const res = await axios.post("/users/register", { email, password });
+    if (!res.data.success) {
+      console.log(res.data);
+      console.log(res.data.message);
+      throw new Error(res.data.message);
+    }
+    localStorage.setItem("token", res.data.token);
+    return { success: true };
+  }
+);
 
-// App.js:14
-export const signOutAction = () => (dispatch) => {
-  localStorage.removeItem("token");
-  dispatch(unauthenticate());
-  dispatch(
-    updateProfile({
-      name: "",
-      email: "",
-      _id: "",
-    })
-  );
-};
-
+// TODO: we should only be getting profile on login/signup
+//   - Blocked: because we need to set up token validation on the server
 // this function is for fetching user info from the express server that requires authentication header
 export const getProfile = () => (dispatch) => {
   axios
@@ -217,7 +217,8 @@ export const deleteAccountAction = (password) => (dispatch) => {
     })
     .then((res) => {
       if (res.data.success) {
-        dispatch(signOutAction);
+        localStorage.removeItem("token");
+        dispatch(deauthenticate());
         dispatch(authError(res.data.message));
       } else {
         dispatch(deleteAccountAlert(res.data.message));
