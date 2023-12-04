@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
 const { REACT_APP_SERVER_URL } = process.env;
 
-// TODO: move alerts ( deleteAccountAlert) to setting page
 // TODO: change isAuthenticated to status/authStatus or something more descriptive
 
 const initialState = {
@@ -13,7 +12,6 @@ const initialState = {
     email: "",
     _id: null,
   },
-  daAlert: null,
 };
 
 export const authSlice = createSlice({
@@ -34,9 +32,6 @@ export const authSlice = createSlice({
     updateProfile: (state, action) => {
       state.userProfile = action.payload;
     },
-    deleteAccountAlert: (state, action) => {
-      state.daAlert = action.payload;
-    },
   },
   extraReducers(builder) {
     builder
@@ -55,16 +50,20 @@ export const authSlice = createSlice({
       .addCase(changeEmail.fulfilled, (state, action) => {
         const { email } = action.payload;
         state.userProfile.email = email;
+      })
+      .addCase(deleteAccount.fulfilled, (state, action) => {
+        state.isAuthenticated = false;
+        state.userProfile = {
+          name: "",
+          email: "",
+          _id: null,
+        };
       });
   },
 });
 
-export const {
-  authenticate,
-  updateProfile,
-  deleteAccountAlert,
-  deauthenticate,
-} = authSlice.actions;
+export const { authenticate, deauthenticate, updateProfile } =
+  authSlice.actions;
 
 // TODO: it should save the user data from the db into global context
 export const signIn = createAsyncThunk(
@@ -169,44 +168,35 @@ export const changePassword = createAsyncThunk(
       },
       { headers: { authorization: localStorage.getItem("token") } }
     );
-    if (!res.data.success) {
+    const { success, message } = res.data;
+    if (!success) {
       throw new Error(
-        res?.data?.message || "Something went wrong, please try again later"
+        message || "Something went wrong, please try again later"
       );
     }
     return { success: true };
   }
 );
 
-// action for deleting the user's account
-export const deleteAccountAction = (password) => (dispatch) => {
-  axios
-    .delete("/users/delete", {
+export const deleteAccount = createAsyncThunk(
+  "auth/deleteAccount",
+  async ({ password }) => {
+    const res = await axios.delete("/users/delete", {
       headers: {
         authorization: localStorage.getItem("token"),
       },
       data: {
         password: password,
       },
-    })
-    .then((res) => {
-      if (res.data.success) {
-        localStorage.removeItem("token");
-        dispatch(deauthenticate());
-        // dispatch(authError(res.data.message));
-        console.error(res.data.message);
-      } else {
-        dispatch(deleteAccountAlert(res.data.message));
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch(
-        deleteAccountAlert("Something went wrong, please try again later")
-      );
-      throw err;
     });
-};
+    const { success, message } = res.data;
+    if (!success) {
+      throw new Error("Something went wrong, please try again later");
+    }
+    localStorage.removeItem("token");
+    return { success: true, message };
+  }
+);
 
 // Selector that lets the rest of the app get read access to authSlice state
 export const selectAuth = (state) => state.auth;

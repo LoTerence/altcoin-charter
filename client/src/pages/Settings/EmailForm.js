@@ -4,7 +4,6 @@ import * as EmailValidator from "email-validator";
 import { changeEmail, selectAuth } from "../../_store/reducers/authSlice";
 import { SpinnerIcon } from "../../_components/icons";
 
-// TODO: add loading state
 // TODO: better styling
 
 const EmailForm = () => {
