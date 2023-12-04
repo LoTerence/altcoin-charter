@@ -55,7 +55,7 @@ const NameForm = () => {
       >
         {isLoading ? <SpinnerIcon /> : "Submit name change"}
       </button>
-      {alert && <p>{alert}</p>}
+      {alert && <div className="alert alert-danger">{alert}</div>}
     </div>
   );
 };

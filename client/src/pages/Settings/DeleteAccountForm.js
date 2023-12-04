@@ -65,7 +65,7 @@ const DeleteAccountForm = () => {
           </button>
           <button
             className="btn btn-secondary btn-md btn-block"
-            disabled={isLoading}
+            disabled={isLoading || password === ""}
             onClick={(e) => handleDeleteAccountButton(e)}
           >
             {isLoading ? <SpinnerIcon /> : "Continue to delete account"}
