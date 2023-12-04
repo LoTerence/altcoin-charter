@@ -1,22 +1,21 @@
-import { RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticate } from "./_store/reducers/authSlice";
-import router from "./router";
+import routes from "./routes";
 import "./App.scss";
 
-function App() {
+export default function App() {
   const dispatch = useDispatch();
 
-  // extract user from token then authenticate
+  // TODO: extract user from token then authenticate
   const token = localStorage.getItem("token");
 
-  // TODO: should check if token is legit
-  // server will check jwt token to see if it is legit before returning any user data
+  // TODO: server should check if jwt token is legit before returning any user data
   if (token) {
     dispatch(authenticate());
   }
 
-  return <RouterProvider router={router} history="" />;
-}
+  const router = createBrowserRouter(routes);
 
-export default App;
+  return <RouterProvider router={router} />;
+}

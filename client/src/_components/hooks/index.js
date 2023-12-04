@@ -1,3 +1,4 @@
 import useActiveCoin from "./useActiveCoin";
+import usePrivateRoute from "./usePrivateRoute";
 
-export { useActiveCoin };
+export { useActiveCoin, usePrivateRoute };

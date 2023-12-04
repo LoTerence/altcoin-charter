@@ -6,7 +6,6 @@
  */
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PrivateRoute from "../_components/auth/PrivateRoute";
 import ChartTitle from "../_components/charter/ChartTitle";
 import CoinAdder from "../_components/charter/CoinAdder";
 import CoinCard from "../_components/charter/CoinCard";
@@ -45,7 +44,7 @@ const Feature = () => {
   }, [dispatch]);
 
   return (
-    <PrivateRoute>
+    <>
       <ChartTitle />
       <TimeFrameList />
       <PriceChart />
@@ -74,7 +73,7 @@ const Feature = () => {
           setError={setError}
         />
       </div>
-    </PrivateRoute>
+    </>
   );
 };
 
