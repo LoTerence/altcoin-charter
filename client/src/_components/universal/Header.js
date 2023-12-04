@@ -26,19 +26,19 @@ function Header() {
         </Link>
 
         <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarToggler"
-          aria-controls="navbarToggler"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          className="navbar-toggler"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          type="button"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarToggler">
-          <ul className="navbar-nav">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
             {navs.map((nav) => (
               <li key={nav.id} className="nav-item">
                 <Link className="nav-link" to={nav.linkTo}>
