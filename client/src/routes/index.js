@@ -8,6 +8,7 @@ import SignUp from "../pages/SignUp";
 import OAuthCallback from "./OAuthCallback";
 // TODO: lazy load private routes?
 import Feature from "../pages/Feature";
+import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 import SignOut from "../pages/SignOut";
 import PrivateRoute from "./PrivateRoute";
@@ -52,6 +53,14 @@ const routes = [
         element: (
           <PrivateRoute>
             <Feature />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         ),
       },

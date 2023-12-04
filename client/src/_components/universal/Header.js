@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
 
 const authNavs = [
-  { id: 0, text: "Settings", linkTo: "/settings" },
-  { id: 1, text: "Log Out", linkTo: "/signout" },
+  { id: 0, text: "Profile", linkTo: "/profile" },
+  { id: 1, text: "Settings", linkTo: "/settings" },
+  { id: 2, text: "Log Out", linkTo: "/signout" },
 ];
 
 const publicNavs = [
