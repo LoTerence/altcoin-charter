@@ -6,6 +6,7 @@ import PrivacyPolicy from "../pages/PrivacyPolicy";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import OAuthCallback from "./OAuthCallback";
+// TODO: lazy load private routes?
 import Feature from "../pages/Feature";
 import Settings from "../pages/Settings";
 import SignOut from "../pages/SignOut";
