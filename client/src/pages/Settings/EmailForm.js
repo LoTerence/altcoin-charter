@@ -22,11 +22,10 @@ const EmailForm = () => {
       validateForm({ newEmail, password, userProfile });
       await dispatch(changeEmail({ newEmail, password })).unwrap();
       setNewEmail("");
-      setPassword("");
     } catch (err) {
-      console.log(err);
       setAlert(err?.message || "Something went wrong, please try again later");
     }
+    setPassword("");
     setIsLoading(false);
   };
 
@@ -75,11 +74,7 @@ const EmailForm = () => {
       >
         {isLoading ? <SpinnerIcon /> : "Submit email change"}
       </button>
-      {alert && (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {alert}
-        </div>
-      )}
+      {alert && <div className="alert alert-danger">{alert}</div>}
     </div>
   );
 };
@@ -87,6 +82,7 @@ const EmailForm = () => {
 export default EmailForm;
 
 const validateForm = ({ newEmail, password, userProfile }) => {
+  if (newEmail === "") throw new Error("Email field cannot be empty");
   if (newEmail === userProfile.email) throw new Error("That's the same email");
   if (!EmailValidator.validate(newEmail)) throw new Error("Invalid email");
   if (password === "") throw new Error("Password field cannot be empty");
