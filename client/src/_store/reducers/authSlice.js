@@ -178,6 +178,7 @@ export const changePassword = createAsyncThunk(
     return { success: true };
   }
 );
+
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
   async ({ password }) => {
