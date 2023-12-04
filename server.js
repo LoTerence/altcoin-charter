@@ -4,7 +4,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
-const connectDB = require("./config/database");
+const connectDB = require("./server/config/database");
 
 // allows project to read from .env
 if (process.env.NODE_ENV !== "production") {
@@ -39,12 +39,12 @@ app.use(cors());
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
-require("./config/passport"); // authentication strategy
+require("./server/config/passport"); // authentication strategy
 
 // API express routing
-app.use("/coins", require("./routes/coins"));
-app.use("/watchlist", require("./routes/watchlist"));
-app.use("/users", require("./routes/users"));
+app.use("/coins", require("./server/routes/coins"));
+app.use("/watchlist", require("./server/routes/watchlist"));
+app.use("/users", require("./server/routes/users"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 
