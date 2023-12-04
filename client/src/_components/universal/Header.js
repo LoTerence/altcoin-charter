@@ -3,15 +3,13 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
 
 const authNavs = [
-  { id: 0, text: "Sign Out", linkTo: "/signout" },
-  { id: 1, text: "Personal Watchlist", linkTo: "/feature" },
-  { id: 2, text: "Settings", linkTo: "/settings" },
+  { id: 0, text: "Settings", linkTo: "/settings" },
+  { id: 1, text: "Sign Out", linkTo: "/signout" },
 ];
 
 const publicNavs = [
   { id: 0, text: "Sign in", linkTo: "/signin" },
   { id: 1, text: "Sign up", linkTo: "/signup" },
-  { id: 2, text: "Personal Watchlist", linkTo: "/feature" },
 ];
 
 function Header() {
@@ -19,35 +17,41 @@ function Header() {
   const navs = isAuthenticated ? authNavs : publicNavs;
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-success mb-2">
-      <div className="container d-flex justify-content-between">
-        <Link to="/" className="navbar-brand">
+    <nav className="navbar navbar-expand navbar-dark bg-success mb-2">
+      <div className="container d-flex justify-content-start">
+        <Link className="navbar-brand" to="/">
           Altcoin Charter
         </Link>
-
-        <button
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-          className="navbar-toggler"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          type="button"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
-            {navs.map((nav) => (
-              <li key={nav.id} className="nav-item">
-                <Link className="nav-link" to={nav.linkTo}>
+        <ul className="navbar-nav mt-lg-0">
+          <li className="nav-item">
+            <Link className="nav-link" to="/feature">
+              Watchlist
+            </Link>
+          </li>
+          <li className="nav-item dropdown">
+            <button
+              aria-haspopup="true"
+              aria-expanded="false"
+              className="nav-link dropdown-toggle"
+              data-toggle="dropdown"
+              id="navbarDropdown"
+              type="button"
+            >
+              Account
+            </button>
+            <div
+              aria-labelledby="navbarDropdown"
+              className="dropdown-menu"
+              style={{ minWidth: "fit-content" }}
+            >
+              {navs.map((nav) => (
+                <Link className="dropdown-item" key={nav.id} to={nav.linkTo}>
                   {nav.text}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+              ))}
+            </div>
+          </li>
+        </ul>
       </div>
     </nav>
   );
