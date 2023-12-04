@@ -38,6 +38,7 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
 
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
+    setSuggestions([]);
     const newSymbol = symbol.toUpperCase();
     try {
       validateSymbol(newSymbol, coins);
