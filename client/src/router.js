@@ -1,14 +1,14 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Home from "./pages/Home";
-import Feature from "./pages/Feature";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Settings from "./pages/Settings";
-import OAuthCallback from "./_components/auth/OAuthCallback";
-import SignIn from "./pages/SignIn";
-import SignOut from "./_components/auth/Signout";
-import SignUp from "./pages/SignUp";
 import ContactUs from "./pages/ContactUs";
 import ErrorPage from "./pages/ErrorPage";
+import Feature from "./pages/Feature";
+import Home from "./pages/Home";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Settings from "./pages/Settings";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import OAuthCallback from "./_components/auth/OAuthCallback";
+import SignOut from "./_components/auth/Signout";
 import Header from "./_components/universal/Header";
 import Footer from "./_components/universal/Footer";
 

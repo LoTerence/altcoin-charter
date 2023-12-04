@@ -27,7 +27,7 @@ const SignIn = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  async function handleFormSubmit(e) {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(false);
@@ -38,9 +38,9 @@ const SignIn = () => {
       setError(err?.message || "Failed to log in");
     }
     setIsLoading(false);
-  }
+  };
 
-  async function handleGoogleButtonClick(e) {
+  const handleGoogleButtonClick = async (e) => {
     e.preventDefault();
     try {
       dispatch(googleSignInAction());
@@ -48,9 +48,9 @@ const SignIn = () => {
       console.log(err);
       setError("Failed to log in");
     }
-  }
+  };
 
-  async function handleFbButtonClick(e) {
+  const handleFbButtonClick = async (e) => {
     e.preventDefault();
     try {
       dispatch(fbSignInAction());
@@ -58,13 +58,13 @@ const SignIn = () => {
       console.log(err);
       setError("Failed to log in");
     }
-  }
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center py-5 h-100">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">
         <form className="text-center">
-          <h3 className="mb-5">Sign in</h3>
+          <h1 className="mb-4">Sign in</h1>
           {/* Email Input */}
           <div className="form-floating mb-4">
             <input
