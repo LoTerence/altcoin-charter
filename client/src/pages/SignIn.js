@@ -117,7 +117,7 @@ const SignIn = () => {
             {/* <Link to="#!">Forgot password?</Link> */}
           </div>
           <button
-            className="btn btn-success btn-lg btn-block mb-4 w-full"
+            className="btn btn-success btn-lg btn-block mb-4"
             disabled={isLoading}
             onClick={(e) => handleFormSubmit(e)}
             style={{ width: "calc(100% - 34px)" }}
