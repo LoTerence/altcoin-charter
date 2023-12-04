@@ -41,8 +41,7 @@ function Header() {
             </button>
             <div
               aria-labelledby="navbarDropdown"
-              className="dropdown-menu"
-              style={{ minWidth: "fit-content" }}
+              className="dropdown-menu min-w-fit"
             >
               {navs.map((nav) => (
                 <Link className="dropdown-item" key={nav.id} to={nav.linkTo}>
