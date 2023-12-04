@@ -40,7 +40,7 @@ const TimeFrameList = () => {
         const isActive = activeTimeframe === value;
         return (
           <button
-            className={`m1px border-grey btn btn-md ${
+            className={`m-px border-grey btn btn-md ${
               isActive ? "btn-success" : "btn-outline-dark"
             }`}
             disabled={isActive}

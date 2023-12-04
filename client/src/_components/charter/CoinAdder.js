@@ -42,8 +42,8 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
     try {
       validateSymbol(newSymbol, coins);
       setAddRequestStatus("pending");
-      setSymbol("");
       await dispatch(addNewCoin(newSymbol)).unwrap();
+      setSymbol("");
     } catch (err) {
       dispatch(setError(err?.message || "Error: failed to save new coin"));
     } finally {
