@@ -43,7 +43,7 @@ const authenticateUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("User not found");
+      return res.json({ message: "Log in failed", success: false });
     }
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
@@ -63,7 +63,7 @@ const authenticateUser = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.json({
+    return res.status(500).json({
       message: "Failed to authenticate user",
       success: false,
     });
@@ -86,9 +86,7 @@ const editUserName = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res
-        .status(200)
-        .json({ message: "User not found", success: false });
+      throw new Error("User not found");
     }
     if (user.name === newName) {
       return res.json({
@@ -98,10 +96,10 @@ const editUserName = async (req, res) => {
     }
     user.name = newName;
     await user.save();
-    return res.json({ name: user.name, success: true });
+    return res.json({ message: null, name: user.name, success: true });
   } catch (err) {
     console.error(err);
-    return res.json({
+    return res.status(500).json({
       message: "Something went wrong, please try again later",
       success: false,
     });
@@ -113,19 +111,17 @@ const editUserName = async (req, res) => {
 // @access private - only the client can access
 const editUserEmail = async (req, res) => {
   if (!req.body?.password) {
-    return res.json({ success: false, message: "No password!" });
+    return res.json({ message: "No password!", success: false });
   }
   const { newEmail, password } = req.body;
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res
-        .status(200)
-        .json({ message: "User not found", success: false });
+      throw new Error("User not found");
     }
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
-      return res.json({ message: "Invalid password!", success: false });
+      return res.json({ message: null, success: false });
     }
     if (user.email === newEmail) {
       return res.json({
@@ -135,10 +131,10 @@ const editUserEmail = async (req, res) => {
     }
     user.email = newEmail;
     await user.save();
-    return res.json({ success: true, email: user.email });
+    return res.json({ email: user.email, message: null, success: true });
   } catch (err) {
     console.error(err);
-    return res.json({
+    return res.status(500).json({
       message: "Something went wrong, please try again later",
       success: false,
     });
@@ -149,19 +145,24 @@ const editUserEmail = async (req, res) => {
 // @route PUT /users/password
 // @access private - only the client can access
 const editUserPassword = async (req, res) => {
-  if (!req.body?.password) {
-    return res.json({ success: false, message: "No password!" });
+  const { password, newPassword } = req.body;
+  if (!password) {
+    return res.json({ message: "No password!", success: false });
   }
   try {
     const user = await User.findById(req.user._id);
-    const isMatch = user.validatePassword(req.body.password);
-    if (!isMatch) {
-      return res.json({ message: "Invalid password!", success: false });
+    if (!user) {
+      throw new Error("User not found");
     }
-    await user.saveNewPassword(req.body.newPassword);
-    return res
-      .status(200)
-      .json({ message: "Password successfully changed", success: true });
+    const isMatch = user.validatePassword(password);
+    if (!isMatch) {
+      return res.json({ message: "Failed to change password", success: false });
+    }
+    await user.saveNewPassword(newPassword);
+    return res.json({
+      message: "Password successfully changed",
+      success: true,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -175,16 +176,18 @@ const editUserPassword = async (req, res) => {
 // @route DELETE /users/delete
 // @access private - only the client can access
 const deleteUser = async (req, res) => {
-  if (!req.body?.password) {
-    return res.json({ success: false, message: "No password!" });
+  const { _id } = req.user;
+  const password = req.body?.password;
+  if (!password) {
+    return res.json({ message: "No password!", success: false });
   }
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(_id);
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
-      return res.json({ success: false, message: "Invalid password!" });
+      return res.json({ message: "Failed to delete user", success: false });
     }
-    await User.deleteOne({ _id: id });
+    await User.deleteOne({ _id });
     return res.json({
       success: true,
       message: "User successfully deleted",

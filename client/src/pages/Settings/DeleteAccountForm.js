@@ -1,52 +1,27 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteAccountAction,
-  selectAuth,
-} from "../../_store/reducers/authSlice";
+import { useDispatch } from "react-redux";
+import { deleteAccount } from "../../_store/reducers/authSlice";
 
 // TODO: add loading state
 // TODO: better styling
 
 const DeleteAccountForm = () => {
   const dispatch = useDispatch();
-  const { daAlert } = useSelector(selectAuth);
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDeleteAccountButton = async (e) => {
     e.preventDefault();
-
-    if (password === "") {
-      return setAlert("Password field empty");
-    }
+    if (password === "") return setAlert("Password field empty");
 
     setAlert(null);
     try {
-      dispatch(deleteAccountAction(password));
+      await dispatch(deleteAccount({ password })).unwrap();
       setPassword("");
     } catch (err) {
       console.log(err);
       setAlert("Something went wrong please try again later");
-    }
-  };
-
-  const renderDeleteAlert = () => {
-    if (daAlert) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {daAlert}
-        </div>
-      );
-    }
-
-    if (alert) {
-      return (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {alert}
-        </div>
-      );
     }
   };
 
@@ -102,7 +77,11 @@ const DeleteAccountForm = () => {
           Delete account
         </button>
       )}
-      {renderDeleteAlert()}
+      {alert && (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {alert}
+        </div>
+      )}
     </div>
   );
 };

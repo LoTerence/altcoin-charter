@@ -29,7 +29,6 @@ const PasswordForm = () => {
         setAlert("Password successfully changed!");
       }
     } catch (err) {
-      console.log(err);
       setAlert(err?.message || "Something went wrong please try again later");
     }
     setIsLoading(false);
