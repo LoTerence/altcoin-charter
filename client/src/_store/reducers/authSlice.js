@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { openSignInWindow } from "./utility/oauth_popup";
+
+import delay from "../../lib/delay";
 const { REACT_APP_SERVER_URL } = process.env;
 
 // TODO: change isAuthenticated to status/authStatus or something more descriptive
@@ -177,7 +179,6 @@ export const changePassword = createAsyncThunk(
     return { success: true };
   }
 );
-
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
   async ({ password }) => {
@@ -191,7 +192,9 @@ export const deleteAccount = createAsyncThunk(
     });
     const { success, message } = res.data;
     if (!success) {
-      throw new Error("Something went wrong, please try again later");
+      throw new Error(
+        message || "Something went wrong, please try again later"
+      );
     }
     localStorage.removeItem("token");
     return { success: true, message };

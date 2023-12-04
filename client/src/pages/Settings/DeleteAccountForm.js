@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { deleteAccount } from "../../_store/reducers/authSlice";
+import { SpinnerIcon } from "../../_components/icons";
 
-// TODO: add loading state
 // TODO: better styling
 
 const DeleteAccountForm = () => {
@@ -10,19 +10,21 @@ const DeleteAccountForm = () => {
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDeleteAccountButton = async (e) => {
     e.preventDefault();
     if (password === "") return setAlert("Password field empty");
-
     setAlert(null);
+    setIsLoading(true);
     try {
       await dispatch(deleteAccount({ password })).unwrap();
-      setPassword("");
     } catch (err) {
-      console.log(err);
-      setAlert("Something went wrong please try again later");
+      setAlert(err?.message || "Something went wrong please try again later");
+    } finally {
+      setPassword("");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -30,7 +32,7 @@ const DeleteAccountForm = () => {
       <h5>Danger zone</h5>
       {isOpen ? (
         <>
-          <div className="alert alert-danger">
+          <div className="alert alert-danger font-bold">
             WARNING: This action cannot be reversed. If you are sure you want to
             delete your account, confirm your password and continue. Otherwise,
             click cancel.
@@ -38,6 +40,7 @@ const DeleteAccountForm = () => {
           <div className="form-floating mb-4">
             <input
               className="form-control form-control-lg"
+              disabled={isLoading}
               id="passwordField"
               name="passwordField"
               onChange={(e) => setPassword(e.target.value)}
@@ -51,7 +54,8 @@ const DeleteAccountForm = () => {
             </label>
           </div>
           <button
-            className="btn btn-danger btn-md btn-block mr-1"
+            className="btn btn-danger btn-md btn-block mr-1 font-bold"
+            disabled={isLoading}
             onClick={(e) => {
               e.preventDefault();
               setIsOpen(false);
@@ -61,9 +65,10 @@ const DeleteAccountForm = () => {
           </button>
           <button
             className="btn btn-secondary btn-md btn-block"
+            disabled={isLoading}
             onClick={(e) => handleDeleteAccountButton(e)}
           >
-            Continue to delete account
+            {isLoading ? <SpinnerIcon /> : "Continue to delete account"}
           </button>
         </>
       ) : (
@@ -77,11 +82,7 @@ const DeleteAccountForm = () => {
           Delete account
         </button>
       )}
-      {alert && (
-        <div className="alert alert-danger">
-          <strong>Oops!</strong> {alert}
-        </div>
-      )}
+      {alert && <div className="alert alert-danger">{alert}</div>}
     </div>
   );
 };
