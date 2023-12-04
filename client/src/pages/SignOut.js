@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { deauthenticate } from "../../_store/reducers/authSlice";
-import PrivateRoute from "./PrivateRoute";
+import { deauthenticate } from "../_store/reducers/authSlice";
 
 const SignOut = () => {
   const dispatch = useDispatch();
@@ -11,11 +10,7 @@ const SignOut = () => {
     dispatch(deauthenticate());
   }, [dispatch]);
 
-  return (
-    <PrivateRoute>
-      <h1>You have been logged out</h1>
-    </PrivateRoute>
-  );
+  return <h1>You have been logged out</h1>;
 };
 
 export default SignOut;
