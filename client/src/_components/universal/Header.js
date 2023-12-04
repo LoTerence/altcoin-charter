@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
+import { ProfileIcon } from "../icons";
 
 const authNavs = [
   { id: 0, text: "Settings", linkTo: "/settings" },
@@ -37,7 +38,7 @@ function Header() {
               id="navbarDropdown"
               type="button"
             >
-              Account
+              <ProfileIcon />
             </button>
             <div
               aria-labelledby="navbarDropdown"
