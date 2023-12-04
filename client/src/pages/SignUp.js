@@ -40,9 +40,11 @@ const SignUp = () => {
     <div className="d-flex align-items-center justify-content-center py-5 h-100">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">
         <form className="text-center">
-          <h3 className="mb-5">
-            Sign up for Altcoin Charter to save a personal watchlist!
-          </h3>
+          <h1>Sign up</h1>
+          <p className="mb-4">
+            Register for Altcoin Charter to save a personal watchlist!
+          </p>
+
           {/* Email Input */}
           <div className="form-floating mb-4">
             <input

@@ -30,7 +30,7 @@ const EmailForm = () => {
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <h5>Change Email</h5>
       <p>
         Your email: <b>{userProfile.email}</b>

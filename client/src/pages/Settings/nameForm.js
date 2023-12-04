@@ -27,7 +27,7 @@ const NameForm = () => {
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <h5>Change Name</h5>
       <p>
         Your name: <b>{profile.name}</b>

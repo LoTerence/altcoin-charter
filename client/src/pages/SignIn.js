@@ -64,7 +64,7 @@ const SignIn = () => {
     <div className="d-flex align-items-center justify-content-center py-5 h-100">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">
         <form className="text-center">
-          <h3 className="mb-5">Sign in</h3>
+          <h1 className="mb-4">Sign in</h1>
           {/* Email Input */}
           <div className="form-floating mb-4">
             <input

@@ -35,7 +35,7 @@ const PasswordForm = () => {
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <h5>Change password </h5>
       <div className="form-floating mb-4">
         <input
