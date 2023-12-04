@@ -7,18 +7,12 @@ import DeleteAccountForm from "./DeleteAccountForm";
 const Settings = () => {
   return (
     <PrivateRoute>
-      <div className="container h-100">
-        <h2>User Settings</h2>
-        <br />
-        <NameForm />
-        <br />
-        <EmailForm />
-        <br />
-        <br />
-        <PasswordForm />
-        <hr />
-        <DeleteAccountForm />
-      </div>
+      <h1 className="mb-4">User Settings</h1>
+      <NameForm />
+      <EmailForm />
+      <PasswordForm />
+      <hr />
+      <DeleteAccountForm />
     </PrivateRoute>
   );
 };

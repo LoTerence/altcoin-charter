@@ -28,7 +28,7 @@ const DeleteAccountForm = () => {
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <h5>Danger zone</h5>
       {isOpen ? (
         <>
