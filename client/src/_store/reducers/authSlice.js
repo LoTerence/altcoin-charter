@@ -105,18 +105,14 @@ export const signUp = createAsyncThunk(
   }
 );
 
-// TODO: we should only be getting profile on login/signup
-//   - Blocked: because we need to set up token validation on the server
-// this function is for fetching user info from the express server that requires authentication header
-export const getProfile = () => (dispatch) => {
-  axios
-    .get("/users/profile", {
-      headers: { authorization: localStorage.getItem("token") },
-    })
-    .then((res) => {
-      dispatch(updateProfile(res.data.user));
-    });
-};
+export const signOut = createAsyncThunk("auth/signOut", async () => {
+  const res = await axios.get("/users/logout");
+  const { success } = res.data;
+  if (!success) {
+    throw new Error();
+  }
+  return { success };
+});
 
 export const fetchUser = createAsyncThunk("auth/fetchUser", async () => {
   const token = localStorage.getItem("token");
