@@ -6,8 +6,9 @@ const { REACT_APP_SERVER_URL } = process.env;
 
 // TODO: change isAuthenticated to status/authStatus or something more descriptive
 
+const token = localStorage.getItem("token");
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: Boolean(token),
   userProfile: {
     name: "",
     email: "",
@@ -36,6 +37,10 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        state.userProfile = action.payload;
+      })
       .addCase(signIn.fulfilled, (state, action) => {
         // TODO: if login successful, it should save the user data from the db into global context
         state.isAuthenticated = true;
@@ -112,6 +117,15 @@ export const getProfile = () => (dispatch) => {
       dispatch(updateProfile(res.data.user));
     });
 };
+
+export const fetchUser = createAsyncThunk("auth/fetchUser", async () => {
+  const token = localStorage.getItem("token");
+  const res = await axios.get("/users/profile", {
+    headers: { authorization: token },
+  });
+  const { _id, email, name } = res.data.user;
+  return { _id, email, name };
+});
 
 export const changeName = createAsyncThunk(
   "auth/changeName",

@@ -18,9 +18,9 @@ const {
 } = require("../controllers/users");
 
 // passport middleware
-function authenticateJWT() {
-  passport.authenticate("jwt", { session: true });
-}
+const authenticateJWT = () => {
+  return passport.authenticate("jwt", { session: true });
+};
 
 // <----------------------------- Routes ------------------------------------------------>
 // Register

@@ -12,7 +12,7 @@ import CoinCard from "../_components/charter/CoinCard";
 import CoinInfo from "../_components/charter/CoinInfo";
 import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
-import { getProfile, selectAuth } from "../_store/reducers/authSlice";
+import { selectAuth } from "../_store/reducers/authSlice";
 import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 import {
   addNewCoin,
@@ -32,11 +32,6 @@ const Feature = () => {
       dispatch(fetchWatchlist());
     }
   }, [dispatch, status]);
-
-  useEffect(() => {
-    // TODO: should do a auth slice status: idle for getting profile
-    dispatch(getProfile());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setActiveCoinId(null));
