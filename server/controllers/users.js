@@ -20,21 +20,25 @@ const registerUser = async (req, res) => {
       watchlist: [],
     });
     const user = await User.addUser(newUser);
-    const data = {
+    const token = createToken({ _id: user._id });
+    const profile = {
       _id: user._id,
       email: user.email,
+      name: "",
     };
-    const token = createToken(data);
     return res.json({
       message: "User registered",
+      profile,
       success: true,
       token: `JWT ${token}`,
     });
   } catch (err) {
     console.error(err);
     return res.json({
-      message: "Email already registered or not a real email",
+      message: "Failed to register new user",
+      profile: null,
       success: false,
+      token: null,
     });
   }
 };
@@ -53,13 +57,15 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.json({ message: "Log in failed", success: false });
     }
-    const data = {
+    const token = createToken({ _id: user._id });
+    const profile = {
       _id: user._id,
       email: user.email,
+      name: "",
     };
-    const token = createToken(data);
     return res.json({
       message: "User logged in",
+      profile,
       success: true,
       token: `JWT ${token}`,
     });
@@ -67,7 +73,9 @@ const loginUser = async (req, res) => {
     console.error(err);
     return res.status(500).json({
       message: "Failed to authenticate user",
+      profile: null,
       success: false,
+      token: null,
     });
   }
 };
@@ -299,7 +307,7 @@ const authenticateUserGoogle = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = createToken(data);
+    const token = createToken({ _id: user._id });
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
@@ -321,7 +329,7 @@ const authenticateUserFacebook = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = createToken(data);
+    const token = createToken({ _id: user._id });
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
