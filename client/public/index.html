@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -22,6 +23,17 @@
   </head>
 
   <body>
+    <script>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.setAttribute("data-bs-theme", "dark");
+      } else {
+        document.documentElement.removeAttribute("data-bs-theme");
+      }
+    </script>
     <script>
       window.fbAsyncInit = function () {
         FB.init({
