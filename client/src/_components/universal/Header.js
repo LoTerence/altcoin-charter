@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
-import { CircleHalfIcon, DarkIcon, LightIcon } from "../icons";
+import DarkModeToggler from "./DarkModeToggler";
 
 const authNavs = [
   { id: 0, text: "Profile", linkTo: "/profile" },
@@ -70,42 +70,7 @@ function Header() {
                 ))}
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <button
-                aria-haspopup="true"
-                aria-expanded="false"
-                className="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-                id="bd-theme"
-                type="button"
-              >
-                Theme
-              </button>
-              <ul
-                aria-labelledby="navbarDropdown"
-                className="dropdown-menu dropdown-menu-end min-w-fit"
-                data-bs-popper="static"
-              >
-                <li>
-                  <button className="dropdown-item d-flex align-items-center w-auto">
-                    <LightIcon className="me-2 opacity-50" />
-                    Light
-                  </button>
-                </li>
-                <li>
-                  <button className="dropdown-item d-flex align-items-center w-auto">
-                    <DarkIcon className="me-2 opacity-50" />
-                    Dark
-                  </button>
-                </li>
-                <li>
-                  <button className="dropdown-item d-flex align-items-center w-auto">
-                    <CircleHalfIcon className="me-2 opacity-50" />
-                    Auto
-                  </button>
-                </li>
-              </ul>
-            </li>
+            <DarkModeToggler />
             {navs.map((nav) => (
               <li className="nav-item d-md-none" key={nav.id}>
                 <Link className="nav-link" to={nav.linkTo}>
