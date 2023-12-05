@@ -303,10 +303,6 @@ const authenticateUserGoogle = async (req, res) => {
     if (!user) {
       return res.json({ message: "User not found", success: false });
     }
-    const data = {
-      _id: user._id,
-      email: user.email,
-    };
     const token = createToken({ _id: user._id });
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
@@ -322,13 +318,8 @@ const authenticateUserFacebook = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      console.log("No user");
-      return res.json({ success: false, message: "User not found" });
+      return res.json({ message: "User not found", success: false });
     }
-    const data = {
-      _id: user._id,
-      email: user.email,
-    };
     const token = createToken({ _id: user._id });
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token

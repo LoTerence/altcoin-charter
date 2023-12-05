@@ -2,13 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import * as EmailValidator from "email-validator";
-import {
-  signIn,
-  selectAuth,
-  googleSignInAction,
-  fbSignInAction,
-} from "../_store/reducers/authSlice";
+import { signIn, selectAuth } from "../_store/reducers/authSlice";
 import { FacebookIcon, GoogleIcon, SpinnerIcon } from "../_components/icons";
+import { googleSignInAction, fbSignInAction } from "../lib/oauth_actions";
 
 // TODO: remember me checkbox doesnt do anything
 
@@ -43,7 +39,7 @@ const SignIn = () => {
   const handleGoogleButtonClick = async (e) => {
     e.preventDefault();
     try {
-      dispatch(googleSignInAction());
+      googleSignInAction();
     } catch (err) {
       console.log(err);
       setError("Failed to log in");
@@ -53,7 +49,7 @@ const SignIn = () => {
   const handleFbButtonClick = async (e) => {
     e.preventDefault();
     try {
-      dispatch(fbSignInAction());
+      fbSignInAction();
     } catch (err) {
       console.log(err);
       setError("Failed to log in");
