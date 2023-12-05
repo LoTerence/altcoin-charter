@@ -2,6 +2,12 @@ const jwt = require("jsonwebtoken");
 const Coin = require("../models/Coin");
 const User = require("../models/User");
 
+function createToken(data) {
+  return jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+    expiresIn: 604800, //1 week
+  });
+}
+
 // @desc Register a new user
 // @route POST /users/register
 // @access private - only the client can access
@@ -18,9 +24,7 @@ const registerUser = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-      expiresIn: 604800, //1 week
-    });
+    const token = createToken(data);
     return res.json({
       message: "User registered",
       success: true,
@@ -53,9 +57,7 @@ const loginUser = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-      expiresIn: 604800, //1 week
-    });
+    const token = createToken(data);
     return res.json({
       message: "User logged in",
       success: true,
@@ -68,6 +70,22 @@ const loginUser = async (req, res) => {
       success: false,
     });
   }
+};
+
+const logOutUser = (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      console.error(err);
+      return res.json({
+        message: "Failed to log user out",
+        success: false,
+      });
+    }
+  });
+  return res.json({
+    message: "User logged out",
+    success: true,
+  });
 };
 
 // @desc Get the user profile
@@ -298,9 +316,7 @@ const authenticateUserGoogle = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-      expiresIn: 604800, //1 week
-    });
+    const token = createToken(data);
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
@@ -322,9 +338,7 @@ const authenticateUserFacebook = async (req, res) => {
       _id: user._id,
       email: user.email,
     };
-    const token = jwt.sign({ data: data }, process.env.JWT_SECRET_KEY, {
-      expiresIn: 604800, //1 week
-    });
+    const token = createToken(data);
     return res.redirect(
       process.env.CLIENT_URL + "/oauthcallback?token=" + token
     );
@@ -337,6 +351,7 @@ const authenticateUserFacebook = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  logOutUser,
   getUserProfile,
   editUserName,
   editUserEmail,

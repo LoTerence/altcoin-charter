@@ -6,19 +6,21 @@ const path = require("path");
 const passport = require("passport");
 const connectDB = require("./server/config/database");
 
-// allows project to read from .env
+connectDB();
+
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
-// Instantiate express server
 const app = express();
 
 // let express parse requests from client forms
 app.use(express.json());
 
-// connecting to mongodb database
-connectDB();
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
 
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
 // Express session middleware
@@ -47,11 +49,7 @@ app.use("/watchlist", require("./server/routes/watchlist"));
 app.use("/users", require("./server/routes/users"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
-
-// Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
-
   // TODO: implement service worker in react?
   // app.get("/service-worker.js", (req, res) => {
   //   res.sendFile(__dirname + "/client/build/service-worker.js");

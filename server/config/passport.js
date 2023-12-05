@@ -1,29 +1,28 @@
 const passport = require("passport");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
+const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
+
+// for creating OAuth2.0 strategies
+// this is using passport-local-mongoose
+passport.use(User.createStrategy());
 
 const opts = {
   secretOrKey: process.env.JWT_SECRET_KEY,
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
 };
 
-// for creating OAuth2.0 strategies
-passport.use(User.createStrategy());
-
 passport.use(
-  new JwtStrategy(opts, async (jwt_payload, done) => {
-    try {
-      const user = await User.findById(jwt_payload.data._id);
-      if (!user) {
-        return done(null, false, { message: "User id not found" });
-      }
-      done(null, user);
-    } catch (err) {
-      done(err, false);
-    }
+  new JwtStrategy(opts, (jwt_payload, done) => {
+    User.findById(jwt_payload.data._id)
+      .then((user) => {
+        if (!user) {
+          return done(null, false, { message: "User not found" });
+        }
+        done(null, user);
+      })
+      .catch((err) => done(err, false));
   })
 );
 
