@@ -36,9 +36,9 @@ const registerUser = async (req, res) => {
 };
 
 // @desc Log in a new user
-// @route POST /users/authenticate
+// @route POST /users/login
 // @access private - only the client can access
-const authenticateUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -336,7 +336,7 @@ const authenticateUserFacebook = async (req, res) => {
 
 module.exports = {
   registerUser,
-  authenticateUser,
+  loginUser,
   getUserProfile,
   editUserName,
   editUserEmail,

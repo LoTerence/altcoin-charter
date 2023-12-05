@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
   registerUser,
-  authenticateUser,
+  loginUser,
   getUserProfile,
   editUserName,
   editUserEmail,
@@ -22,8 +22,18 @@ const {
 // Register
 router.post("/register", registerUser);
 
-// Authenticate
-router.post("/authenticate", authenticateUser);
+// Log in
+router.post("/login", loginUser);
+
+// Log out
+router.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+  });
+  res.redirect("/");
+});
 
 // Profile
 router.get(
@@ -90,12 +100,6 @@ router.get(
   }),
   authenticateUserFacebook
 );
-
-// TODO: add and refine a logout function
-// logout function
-// router.get("/logout", (req, res) => {
-//   res.redirect("http://localhost:3000");
-// });
 
 // ----------------- watchlist related functions ----------------------------------///
 
