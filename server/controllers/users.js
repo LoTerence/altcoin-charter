@@ -102,10 +102,7 @@ const getUserProfile = async (req, res) => {
 const editUserName = async (req, res) => {
   const { newName } = req.body;
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      throw new Error("User not found");
-    }
+    const user = req.user;
     if (user.name === newName) {
       return res.json({
         message: "User already has the same name",
@@ -133,10 +130,7 @@ const editUserEmail = async (req, res) => {
   }
   const { newEmail, password } = req.body;
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      throw new Error("User not found");
-    }
+    const user = req.user;
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
       return res.json({ message: null, success: false });
@@ -168,10 +162,7 @@ const editUserPassword = async (req, res) => {
     return res.json({ message: "No password!", success: false });
   }
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      throw new Error("User not found");
-    }
+    const user = req.user;
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
       return res.json({ message: "Failed to change password", success: false });
@@ -194,18 +185,18 @@ const editUserPassword = async (req, res) => {
 // @route DELETE /users/delete
 // @access private - only the client can access
 const deleteUser = async (req, res) => {
-  const { _id } = req.user;
   const password = req.body?.password;
   if (!password) {
     return res.json({ message: "No password!", success: false });
   }
   try {
-    const user = await User.findById(_id);
+    const user = req.user;
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
       return res.json({ message: "Failed to delete user", success: false });
     }
-    await User.deleteOne({ _id });
+    await User.deleteOne({ _id: user._id });
+    await req.logout();
     return res.json({
       success: true,
       message: "User successfully deleted",
@@ -244,12 +235,8 @@ const getUserWatchlist = async (req, res) => {
 // @access private - only the client can access
 const addCoinToWatchlist = async (req, res) => {
   const data = req.body;
+  const user = req.user;
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      console.error("error: User not found')");
-      return res.json({ error: "User not found", success: false });
-    }
     let coin = await Coin.findOne({ symbol: data.symbol });
     if (!coin?._id) {
       coin = await Coin.create(data);
@@ -282,13 +269,9 @@ const addCoinToWatchlist = async (req, res) => {
 // @access private - only the client can access
 const removeCoinFromWatchlist = async (req, res) => {
   const oid = req.body.id;
+  const user = req.user;
+  user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-      console.error("error: User not found')");
-      return res.json({ error: "User not found", success: false });
-    }
-    user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
     await user.save();
     return res.json({
       data: {},
