@@ -42,7 +42,7 @@ const SignUp = () => {
         <form className="text-center">
           <h1>Sign up</h1>
           <p className="mb-4">
-            Register for Altcoin Charter to save a personal watchlist!
+            Register for CryptoCharts to save a personal watchlist!
           </p>
 
           {/* Email Input */}

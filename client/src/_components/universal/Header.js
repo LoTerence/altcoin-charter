@@ -21,7 +21,7 @@ function Header() {
     <nav className="navbar navbar-expand-md navbar-dark bg-success mb-2">
       <div className="container d-flex justify-content-between">
         <Link className="navbar-brand" to="/">
-          Altcoin Charter
+          CryptoCharts
         </Link>
         <button
           className="navbar-toggler"

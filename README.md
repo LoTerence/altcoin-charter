@@ -1,4 +1,4 @@
-# Altcoin Charter
+# CryptoCharts
 
 See the histories of cryptocurrencies you saved
 
