@@ -1,10 +1,10 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-
 const {
   registerUser,
-  authenticateUser,
+  loginUser,
+  logOutUser,
   getUserProfile,
   editUserName,
   editUserEmail,
@@ -17,50 +17,36 @@ const {
   authenticateUserFacebook,
 } = require("../controllers/users");
 
-// TODO: add a log out user route (maybe can be done in client)
+// passport middleware
+const authenticateJWT = () => {
+  return passport.authenticate("jwt", { session: true });
+};
 
+// <----------------------------- Routes ------------------------------------------------>
 // Register
 router.post("/register", registerUser);
 
-// Authenticate
-router.post("/authenticate", authenticateUser);
+// Log in
+router.post("/login", loginUser);
+
+// Log out
+router.get("/logout", logOutUser);
 
 // Profile
-router.get(
-  "/profile",
-  passport.authenticate("jwt", { session: true }),
-  getUserProfile
-);
+router.get("/profile", authenticateJWT(), getUserProfile);
 
 // edit name
-router.put(
-  "/profile/name",
-  passport.authenticate("jwt", { session: true }),
-  editUserName
-);
+router.put("/profile/name", authenticateJWT(), editUserName);
 
 // edit email
-router.put(
-  "/profile/email",
-  passport.authenticate("jwt", { session: true }),
-  editUserEmail
-);
+router.put("/profile/email", authenticateJWT(), editUserEmail);
 
 // edit password
-router.put(
-  "/password",
-  passport.authenticate("jwt", { session: true }),
-  editUserPassword
-);
+router.put("/password", authenticateJWT(), editUserPassword);
 
 // delete account
-router.delete(
-  "/delete",
-  passport.authenticate("jwt", { session: true }),
-  deleteUser
-);
+router.delete("/delete", authenticateJWT(), deleteUser);
 
-// // ----------------- Oauth 2.0 routes ------------------------------------------------///
 // -------------- login with google OAuth -----------------
 router.get(
   "/google",
@@ -91,31 +77,13 @@ router.get(
   authenticateUserFacebook
 );
 
-// TODO: add and refine a logout function
-// logout function
-// router.get("/logout", (req, res) => {
-//   res.redirect("http://localhost:3000");
-// });
-
 // ----------------- watchlist related functions ----------------------------------///
 
-router.get(
-  "/watchlist",
-  passport.authenticate("jwt", { session: true }),
-  getUserWatchlist
-);
+router.get("/watchlist", authenticateJWT(), getUserWatchlist);
 
-router.put(
-  "/watchlist/add",
-  passport.authenticate("jwt", { session: true }),
-  addCoinToWatchlist
-);
+router.put("/watchlist/add", authenticateJWT(), addCoinToWatchlist);
 
-router.put(
-  "/watchlist/delete",
-  passport.authenticate("jwt", { session: true }),
-  removeCoinFromWatchlist
-);
+router.put("/watchlist/delete", authenticateJWT(), removeCoinFromWatchlist);
 
 // ------------------- export router ---------------------///
 module.exports = router;

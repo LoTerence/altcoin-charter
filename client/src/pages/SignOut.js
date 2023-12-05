@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { deauthenticate } from "../_store/reducers/authSlice";
+import { deauthenticate, signOut } from "../_store/reducers/authSlice";
 
 const SignOut = () => {
   const dispatch = useDispatch();
@@ -8,6 +8,7 @@ const SignOut = () => {
   useEffect(() => {
     localStorage.removeItem("token");
     dispatch(deauthenticate());
+    dispatch(signOut());
   }, [dispatch]);
 
   return <h1>You have been logged out</h1>;
