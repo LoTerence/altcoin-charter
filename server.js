@@ -6,11 +6,11 @@ const path = require("path");
 const passport = require("passport");
 const connectDB = require("./server/config/database");
 
-connectDB();
-
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
+
+connectDB();
 
 const app = express();
 
