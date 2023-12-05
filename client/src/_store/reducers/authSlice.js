@@ -70,7 +70,7 @@ export const { authenticate, deauthenticate, updateProfile } =
 export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }) => {
-    const res = await axios.post("/users/authenticate", { email, password });
+    const res = await axios.post("/users/login", { email, password });
     if (!res.data.success) {
       throw new Error(res?.data?.message || "Log in failed");
     }
