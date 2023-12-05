@@ -57,16 +57,17 @@ function Header() {
               >
                 Account
               </button>
-              <div
+              <ul
                 aria-labelledby="navbarDropdown"
-                className="dropdown-menu min-w-fit"
+                className="dropdown-menu dropdown-menu-end min-w-fit"
+                data-bs-popper="static"
               >
                 {navs.map((nav) => (
                   <Link className="dropdown-item" key={nav.id} to={nav.linkTo}>
                     {nav.text}
                   </Link>
                 ))}
-              </div>
+              </ul>
             </li>
             {navs.map((nav) => (
               <li className="nav-item d-md-none" key={nav.id}>
