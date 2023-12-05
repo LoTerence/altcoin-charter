@@ -1,8 +1,5 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { openSignInWindow } from "./utility/oauth_popup";
-
-const { REACT_APP_SERVER_URL } = process.env;
 
 // TODO: change isAuthenticated to status/authStatus or something more descriptive
 
@@ -96,15 +93,6 @@ export const signIn = createAsyncThunk(
     return { _id, email: userEmail, name };
   }
 );
-
-// <----------------------  OAuth2.0 sign in  ------------------------->
-export const googleSignInAction = () => () => {
-  openSignInWindow(REACT_APP_SERVER_URL + "/users/google", "SignIn");
-};
-
-export const fbSignInAction = () => () => {
-  openSignInWindow(REACT_APP_SERVER_URL + "/users/facebook", "SignIn");
-};
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
   const res = await axios.get("/users/logout");
