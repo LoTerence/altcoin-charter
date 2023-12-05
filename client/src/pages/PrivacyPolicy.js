@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
           <p>
             <strong>Company</strong> (referred to as either &quot;the
             Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-            this Agreement) refers to Altcoin Charter.
+            this Agreement) refers to CryptoCharts.
           </p>
         </li>
         <li>
@@ -96,7 +96,7 @@ const PrivacyPolicy = () => {
         </li>
         <li>
           <p>
-            <strong>Website</strong> refers to Altcoin Charter, accessible from{" "}
+            <strong>Website</strong> refers to CryptoCharts, accessible from{" "}
             <a
               href="https://altcoin-charter.herokuapp.com/"
               rel="external nofollow noopener noreferrer"
