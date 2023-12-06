@@ -50,7 +50,6 @@ const DarkModeToggler = () => {
           <button
             className="dropdown-item d-flex align-items-center w-auto"
             onClick={() => {
-              console.log("click");
               setLightTheme();
             }}
           >
