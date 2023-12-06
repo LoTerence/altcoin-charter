@@ -8,7 +8,6 @@ import {
 } from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
-// TODO: bug: typing and pressing enter does not clear the suggestions dropdown
 // TODO: figure out why one reload makes this component reload like 16 times
 
 const CoinCard = ({ coin, deleteCoin, setError }) => {
@@ -43,7 +42,8 @@ const CoinCard = ({ coin, deleteCoin, setError }) => {
   return (
     <div className="col-md-4 col-sm-6 col-12 relative">
       <button
-        className={isActive ? "coin-li-isActive" : "coin-li"}
+        className="coin-li"
+        disabled={isActive}
         tabIndex="0"
         onClick={(e) => handleSetActiveCoin(e)}
       >
