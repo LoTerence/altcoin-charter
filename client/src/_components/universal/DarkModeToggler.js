@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { isDarkModeEnabled } from "../../lib/darkmode";
+import { useDispatch, useSelector } from "react-redux";
+import { selectDarkMode, setIsDark } from "../../_store/reducers/darkModeSlice";
 import { CircleHalfIcon, DarkIcon, LightIcon } from "../icons";
 
 const DarkModeToggler = () => {
-  const [isDark, setIsDark] = useState(() => isDarkModeEnabled());
+  const dispatch = useDispatch();
+  const { isDark } = useSelector(selectDarkMode);
 
   const setDarkTheme = () => {
     document.documentElement.setAttribute("data-bs-theme", "dark");
@@ -14,16 +15,16 @@ const DarkModeToggler = () => {
   const setLightTheme = () => {
     document.documentElement.removeAttribute("data-bs-theme");
     localStorage.theme = "light";
-    setIsDark(false);
+    dispatch(setIsDark(false));
   };
 
   const setSystemTheme = () => {
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       document.documentElement.setAttribute("data-bs-theme", "dark");
-      setIsDark(true);
+      dispatch(setIsDark(true));
     } else {
       document.documentElement.removeAttribute("data-bs-theme");
-      setIsDark(false);
+      dispatch(setIsDark(false));
     }
     localStorage.removeItem("theme");
   };
