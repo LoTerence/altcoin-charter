@@ -75,14 +75,14 @@ button {
   position: relative;
 }
 
-.coin-info-loading {
+.loader {
   position: absolute !important;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
   background: var(--background-color-light);
-  opacity: 95%;
+  opacity: 90%;
   text-align: center;
   display: flex;
   flex-direction: column;
