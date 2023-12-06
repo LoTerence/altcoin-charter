@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
+import DarkModeToggler from "./DarkModeToggler";
 
 const authNavs = [
   { id: 0, text: "Profile", linkTo: "/profile" },
@@ -52,22 +53,24 @@ function Header() {
                 aria-expanded="false"
                 className="nav-link dropdown-toggle"
                 data-toggle="dropdown"
-                id="navbarDropdown"
+                id="accountDropdown"
                 type="button"
               >
                 Account
               </button>
-              <div
-                aria-labelledby="navbarDropdown"
-                className="dropdown-menu min-w-fit"
+              <ul
+                aria-labelledby="accountDropdown"
+                className="dropdown-menu dropdown-menu-end min-w-fit"
+                data-bs-popper="static"
               >
                 {navs.map((nav) => (
                   <Link className="dropdown-item" key={nav.id} to={nav.linkTo}>
                     {nav.text}
                   </Link>
                 ))}
-              </div>
+              </ul>
             </li>
+            <DarkModeToggler />
             {navs.map((nav) => (
               <li className="nav-item d-md-none" key={nav.id}>
                 <Link className="nav-link" to={nav.linkTo}>

@@ -15,6 +15,7 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const [symbol, setSymbol] = useState("");
   const { status, symbols } = useSelector(selectSymbols);
   const [suggestions, setSuggestions] = useState([]);
+  const isLoading = addRequestStatus === "pending";
 
   useEffect(() => {
     if (status === "idle") {
@@ -64,15 +65,12 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
       <form>
         <div className="form-floating d-flex">
           <SymbolInput
-            disabled={addRequestStatus === "pending"}
+            disabled={isLoading}
             onBlur={handleBlur}
             onChange={handleInputChange}
             value={symbol}
           />
-          <AddButton
-            isLoading={addRequestStatus === "pending"}
-            onClick={handleAddButtonClick}
-          />
+          <AddButton isLoading={isLoading} onClick={handleAddButtonClick} />
         </div>
         <SuggestionsDropdown
           suggestions={suggestions}
@@ -101,7 +99,7 @@ const SymbolInput = ({ disabled, onBlur, onChange, value }) => {
         type="string"
         value={value}
       />
-      <label htmlFor="addNewCoinInput" style={{ opacity: "0.5" }}>
+      <label className="opacity-50" htmlFor="addNewCoinInput">
         Altcoin symbol, i.e. BTC, LTC...
       </label>
     </>
@@ -110,23 +108,14 @@ const SymbolInput = ({ disabled, onBlur, onChange, value }) => {
 
 const AddButton = ({ isLoading, onClick }) => {
   return (
-    <>
-      {isLoading ? (
-        <button
-          className="btn btn-success add-button-loading"
-          disabled
-          type="button"
-        >
-          <div className="w-32">
-            <SpinnerIcon />
-          </div>
-        </button>
-      ) : (
-        <button className="btn btn-success add-button" onClick={onClick}>
-          <div className="w-32">Add</div>
-        </button>
-      )}
-    </>
+    <button
+      className="btn btn-success add-button"
+      disabled={isLoading}
+      type="button"
+      onClick={onClick}
+    >
+      <div className="w-32">{isLoading ? <SpinnerIcon /> : "Add"}</div>
+    </button>
   );
 };
 

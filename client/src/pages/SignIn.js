@@ -131,7 +131,6 @@ const SignIn = () => {
         <button
           className="btn google-button btn-lg mb-2"
           onClick={(e) => handleGoogleButtonClick(e)}
-          style={{ width: "calc(100% - 34px)" }}
           type="submit"
         >
           <GoogleIcon /> Sign in with Google
@@ -139,7 +138,6 @@ const SignIn = () => {
         <button
           className="btn fb-button btn-lg mb-2"
           onClick={(e) => handleFbButtonClick(e)}
-          style={{ width: "calc(100% - 34px)" }}
           type="submit"
         >
           <FacebookIcon /> Sign in with Facebook

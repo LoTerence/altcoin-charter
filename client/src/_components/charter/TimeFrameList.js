@@ -9,6 +9,7 @@ import {
   selectHistory,
   setTimeFrame,
 } from "../../_store/reducers/historySlice";
+import { selectDarkMode } from "../../_store/reducers/darkModeSlice";
 import { useActiveCoin } from "../hooks";
 import { initTimeframeOpts } from "../../lib/timeframe";
 
@@ -18,6 +19,7 @@ const TimeFrameList = () => {
   const dispatch = useDispatch();
   const activeCoin = useActiveCoin();
   const { activeTimeframe } = useSelector(selectHistory);
+  const { isDark } = useSelector(selectDarkMode);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -41,7 +43,11 @@ const TimeFrameList = () => {
         return (
           <button
             className={`m-px border-grey btn btn-md ${
-              isActive ? "btn-success" : "btn-outline-dark"
+              isActive
+                ? "btn-success opacity-85"
+                : isDark
+                ? "btn-dark"
+                : "btn-outline-dark"
             }`}
             disabled={isActive}
             key={id}
