@@ -1,55 +1,8 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./scss/utilities.scss";
 
 button {
   all: unset;
-}
-
-.block {
-  display: block;
-}
-
-.w-8 {
-  width: 0.5em;
-}
-
-.h-8 {
-  height: 0.5em;
-}
-
-.w-16 {
-  width: 1em;
-}
-
-.w-32 {
-  width: 2em;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.min-w-fit {
-  min-width: fit-content;
-}
-
-.h-16 {
-  height: 1em;
-}
-
-.h-32 {
-  height: 2em;
-}
-
-.m-px {
-  margin: 1px;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.relative {
-  position: relative;
 }
 
 .google-button {
@@ -161,12 +114,12 @@ button {
   background-color: silver;
 }
 
-.add-button {
-  z-index: 1020;
-}
+// TODO: refactor add-button class
+// .add-button {
+// // z-index: 1020;
+// }
 
 .add-button-loading {
-  z-index: 1020;
   opacity: 1 !important;
   background-color: #72a68e !important;
   border-color: #5a987b !important;
@@ -186,8 +139,4 @@ button {
   to {
     transform: rotate(360deg);
   }
-}
-
-.border-grey {
-  border-color: #ccc;
 }
