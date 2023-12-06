@@ -9,7 +9,7 @@ const DarkModeToggler = () => {
   const setDarkTheme = () => {
     document.documentElement.setAttribute("data-bs-theme", "dark");
     localStorage.theme = "dark";
-    setIsDark(true);
+    dispatch(setIsDark(true));
   };
 
   const setLightTheme = () => {
