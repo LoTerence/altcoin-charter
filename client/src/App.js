@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./_store/reducers/authSlice";
 import routes from "./routes";
-import "./App.scss";
+import "./scss/App.scss";
 
 export default function App() {
   const dispatch = useDispatch();
