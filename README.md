@@ -5,7 +5,7 @@ See the histories of cryptocurrencies you saved
 Built with React + Redux front end and Nodejs, express, and MongoDB backend. Includes authentication with passportjs and OAuth2.0 with google and facebook
 
 Example of the app is deployed on:
-https://altcoin-charter.herokuapp.com/
+https://altcoin-charter-7d309cb91bb0.herokuapp.com/
 
 ## Quick Start
 
@@ -36,7 +36,7 @@ Terence Lo
 
 ### Version
 
-1.4.0
+1.5.0
 
 ### License
 
