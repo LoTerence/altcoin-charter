@@ -3,9 +3,10 @@
   "version": "1.4.0",
   "description": "Charts the histories of user saved cryptocurrencies",
   "main": "server.js",
-  "homepage": "https://altcoin-charter.herokuapp.com/",
+  "homepage": "https://github.com/LoTerence/altcoin-charter",
   "engines": {
-    "node": "20.9.0"
+    "node": "20.9.0",
+    "npm": "10.2.5"
   },
   "scripts": {
     "client-install": "cd client && npm install",
