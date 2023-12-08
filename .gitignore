@@ -1,5 +1,6 @@
 # firebase config secrets
 server/config/firebase.js
+notes.md
 
 # Logs
 logs
