@@ -28,6 +28,13 @@ npm run client
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
 
+Staging link:
+https://altcoin-charter-staging-c12857019436.herokuapp.com/
+
+Heroku pipeline:
+https://dashboard.heroku.com/pipelines/5032a5f4-3810-4ac1-adbf-c57b5f715566
+
+
 ## App Info
 
 ### Authors
