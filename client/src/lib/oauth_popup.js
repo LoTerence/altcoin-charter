@@ -2,7 +2,7 @@ let windowObjectReference = null;
 let previousUrl = null;
 const VITE_APP_CLIENT_URL = import.meta.env.VITE_APP_CLIENT_URL;
 
-const openSignInWindow = (url, name) => {
+export const openSignInWindow = (url, name) => {
   // remove any existing event listeners
   window.removeEventListener("message", receiveMessage);
 
@@ -50,9 +50,4 @@ const receiveMessage = (event) => {
   }
 };
 
-module.exports = {
-  openSignInWindow,
-  receiveMessage,
-  windowObjectReference,
-  previousUrl,
-};
+export { receiveMessage, windowObjectReference, previousUrl };

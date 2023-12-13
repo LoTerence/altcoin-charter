@@ -8,8 +8,4 @@ export default defineConfig({
     open: true,
     port: 3000,
   },
-  esbuild: {
-    loader: "jsx",
-    include: ["src/**/*.js", "src/index.js", "node_modules/**/*.js"],
-  },
 });
