@@ -97,8 +97,7 @@ const SignIn = () => {
               Password
             </label>
           </div>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            {/* <!-- Checkbox --> */}
+          {/* <div className="d-flex justify-content-between align-items-center mb-4">
             <div className="form-check">
               <input
                 className="form-check-input"
@@ -110,8 +109,8 @@ const SignIn = () => {
                 Remember me
               </label>
             </div>
-            {/* <Link to="#!">Forgot password?</Link> */}
-          </div>
+            <Link to="#!">Forgot password?</Link>
+          </div> */}
           <button
             className="btn btn-success btn-lg btn-block mb-4"
             disabled={isLoading}
