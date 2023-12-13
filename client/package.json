@@ -22,7 +22,6 @@
     "eslint": "^8.54.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "nth-check": "^2.1.1",
     "sass": "^1.69.5"
   },
   "scripts": {
@@ -41,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "overrides": {
-    "nth-check": "$nth-check"
   }
 }
