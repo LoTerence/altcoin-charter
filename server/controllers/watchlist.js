@@ -5,6 +5,7 @@ const Coin = require("../models/Coin");
 const Watchlist = require("../models/Watchlist");
 
 const getPublicCoins = async (req, res) => {
+  console.log("getting public coins...");
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
     const coins = await Coin.find({ _id: public.coins });

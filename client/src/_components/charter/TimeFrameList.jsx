@@ -1,5 +1,4 @@
 /*
-TimeFrameList.js
   Component that displays buttons for selecting active time frame
   The default time frame is day
 */
