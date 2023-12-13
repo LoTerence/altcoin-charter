@@ -71,7 +71,7 @@ export const { authenticate, deauthenticate, updateProfile } =
 export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password }) => {
-    const res = await axios.post("/users/register", { email, password });
+    const res = await axios.post("/api/users/register", { email, password });
     const { message, profile, success, token } = res.data;
     if (!success) throw new Error(message);
     localStorage.setItem("token", token);
@@ -83,7 +83,7 @@ export const signUp = createAsyncThunk(
 export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }) => {
-    const res = await axios.post("/users/login", { email, password });
+    const res = await axios.post("/api/users/login", { email, password });
     const { profile, success, token } = res.data;
     if (!success) {
       throw new Error("Log in failed");
@@ -95,7 +95,7 @@ export const signIn = createAsyncThunk(
 );
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {
-  const res = await axios.get("/users/logout");
+  const res = await axios.get("/api/users/logout");
   const { success } = res.data;
   if (!success) {
     throw new Error();
@@ -105,7 +105,7 @@ export const signOut = createAsyncThunk("auth/signOut", async () => {
 
 export const fetchUser = createAsyncThunk("auth/fetchUser", async () => {
   const token = localStorage.getItem("token");
-  const res = await axios.get("/users/profile", {
+  const res = await axios.get("/api/users/profile", {
     headers: { authorization: token },
   });
   const { _id, email, name } = res.data.user;
@@ -116,7 +116,7 @@ export const changeName = createAsyncThunk(
   "auth/changeName",
   async ({ newName }) => {
     const res = await axios.put(
-      "/users/profile/name",
+      "/api/users/profile/name",
       { newName },
       {
         headers: {
@@ -137,7 +137,7 @@ export const changeEmail = createAsyncThunk(
   "auth/changeEmail",
   async ({ newEmail, password }) => {
     const res = await axios.put(
-      "/users/profile/email",
+      "/api/users/profile/email",
       {
         newEmail,
         password,
@@ -161,7 +161,7 @@ export const changePassword = createAsyncThunk(
   "auth/changeEmail",
   async ({ oldPassword, newPassword }) => {
     const res = await axios.put(
-      "/users/password",
+      "/api/users/password",
       {
         password: oldPassword,
         newPassword,
@@ -181,7 +181,7 @@ export const changePassword = createAsyncThunk(
 export const deleteAccount = createAsyncThunk(
   "auth/deleteAccount",
   async ({ password }) => {
-    const res = await axios.delete("/users/delete", {
+    const res = await axios.delete("/api/users/delete", {
       headers: {
         authorization: localStorage.getItem("token"),
       },

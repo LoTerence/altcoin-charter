@@ -1,8 +1,8 @@
 let windowObjectReference = null;
 let previousUrl = null;
-const { REACT_APP_CLIENT_URL } = process.env;
+const VITE_APP_CLIENT_URL = import.meta.env.VITE_APP_CLIENT_URL;
 
-const openSignInWindow = (url, name) => {
+export const openSignInWindow = (url, name) => {
   // remove any existing event listeners
   window.removeEventListener("message", receiveMessage);
 
@@ -37,7 +37,7 @@ const openSignInWindow = (url, name) => {
 
 const receiveMessage = (event) => {
   // Do we trust the sender of this message? (might be different from what we originally opened, for example).
-  if (event.origin !== REACT_APP_CLIENT_URL) {
+  if (event.origin !== VITE_APP_CLIENT_URL) {
     return;
   }
 
@@ -50,9 +50,4 @@ const receiveMessage = (event) => {
   }
 };
 
-module.exports = {
-  openSignInWindow,
-  receiveMessage,
-  windowObjectReference,
-  previousUrl,
-};
+export { receiveMessage, windowObjectReference, previousUrl };

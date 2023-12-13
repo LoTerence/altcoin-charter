@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
+  app.use(express.static(path.join(__dirname, "client/dist")));
 }
 
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
@@ -44,19 +44,14 @@ app.use(passport.session());
 require("./server/config/passport"); // authentication strategy
 
 // API express routing
-app.use("/coins", require("./server/routes/coins"));
-app.use("/watchlist", require("./server/routes/watchlist"));
-app.use("/users", require("./server/routes/users"));
+app.use("/api/coins", require("./server/routes/coins"));
+app.use("/api/watchlist", require("./server/routes/watchlist"));
+app.use("/api/users", require("./server/routes/users"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 if (process.env.NODE_ENV === "production") {
-  // TODO: implement service worker in react?
-  // app.get("/service-worker.js", (req, res) => {
-  //   res.sendFile(__dirname + "/client/build/service-worker.js");
-  // });
-
   app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/client/build/index.html");
+    res.sendFile(__dirname + "/client/dist/index.html");
   });
 }
 

@@ -53,7 +53,7 @@ export const { setCoins, setError } = watchListSlice.actions;
 export const fetchWatchlist = createAsyncThunk(
   "watchList/fetchWatchlist",
   async () => {
-    const res = await axios.get("/users/watchlist", {
+    const res = await axios.get("/api/users/watchlist", {
       headers: { authorization: localStorage.getItem("token") },
     });
     if (!res.data.success) {
@@ -91,7 +91,7 @@ export const addNewCoin = createAsyncThunk(
     const config = {
       headers: { authorization: localStorage.getItem("token") },
     };
-    const res = await axios.put("/users/watchlist/add", data, config);
+    const res = await axios.put("/api/users/watchlist/add", data, config);
     if (!res.data.success) {
       throw new Error(res.data.error);
     }
@@ -105,7 +105,7 @@ export const deleteCoin = createAsyncThunk(
   "watchList/deleteCoin",
   async (_id) => {
     const res = await axios.put(
-      "/users/watchlist/delete",
+      "/api/users/watchlist/delete",
       { id: _id },
       { headers: { authorization: localStorage.getItem("token") } }
     );

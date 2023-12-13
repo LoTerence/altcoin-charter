@@ -1,6 +1,4 @@
 /**
- * Feature.js
- *
  * Component where the main app will live. Authenticated users can save
  * and view data on a personal watchlist of coins here.
  */

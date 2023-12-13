@@ -1,10 +1,10 @@
 import { openSignInWindow } from "./oauth_popup";
-const { REACT_APP_SERVER_URL } = process.env;
+const VITE_APP_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 
 export const fbSignInAction = () => {
-  openSignInWindow(`${REACT_APP_SERVER_URL}/users/facebook`, "SignIn");
+  openSignInWindow(`${VITE_APP_SERVER_URL}/users/facebook`, "SignIn");
 };
 
 export const googleSignInAction = () => {
-  openSignInWindow(`${REACT_APP_SERVER_URL}/users/google`, "SignIn");
+  openSignInWindow(`${VITE_APP_SERVER_URL}/users/google`, "SignIn");
 };

@@ -1,5 +1,4 @@
 /* 
-coinInfo.js 
 component that will display the active coin's day's data including current price, 
     day's %change, day's open, high, low, incremental change, market cap, and supply
 */

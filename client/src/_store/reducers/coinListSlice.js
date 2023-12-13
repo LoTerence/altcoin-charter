@@ -53,7 +53,7 @@ export const { setCoins, setError } = coinListSlice.actions;
 
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {
-  const res = await axios.get("/watchlist/public");
+  const res = await axios.get("/api/watchlist/public");
   if (!res.data.success) {
     throw new Error("Something went wrong while getting coin list");
   }
@@ -86,7 +86,7 @@ export const addNewCoin = createAsyncThunk(
       name: cryptoData.Name,
       symbol: cryptoData.Symbol,
     };
-    const res = await axios.put("/watchlist/public", data);
+    const res = await axios.put("/api/watchlist/public", data);
     if (!res.data.success) {
       throw new Error("There was an error posting new coin data");
     }
@@ -98,7 +98,7 @@ export const addNewCoin = createAsyncThunk(
 export const deleteCoin = createAsyncThunk(
   "coinList/deleteCoin",
   async (_id) => {
-    const res = await axios.delete(`/watchlist/public/${_id}`);
+    const res = await axios.delete(`/api/watchlist/public/${_id}`);
     if (!res.data.success) {
       throw new Error("Something went wrong while deleting coin");
     }
