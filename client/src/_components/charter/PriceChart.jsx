@@ -1,4 +1,4 @@
-/* PriceChart.js
+/* 
 --- Component that renders a Chart showing the price history of a selected coin.
 This component uses Uber's react-vis library for data visualization / programming the chart
 */

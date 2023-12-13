@@ -1,5 +1,5 @@
 /* 
-historySlice.js - redux state slice for storing the cryptocoin chart's historical data 
+historySlice - redux state slice for storing the cryptocoin chart's historical data 
 */
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
