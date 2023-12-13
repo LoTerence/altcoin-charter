@@ -34,7 +34,6 @@
     "eject": "react-scripts eject",
     "serve-build": "npx serve -s build"
   },
-  "proxy": "http://localhost:5000",
   "browserslist": {
     "production": [
       ">0.2%",
