@@ -4,7 +4,6 @@
   "private": true,
   "main": "src/index.jsx",
   "dependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@reduxjs/toolkit": "^1.9.7",
     "@vitejs/plugin-react": "^4.2.1",
     "altcoin-charter": "file:..",
