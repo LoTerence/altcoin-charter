@@ -46,7 +46,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.SERVER_URL + "/users/google/callback",
+      callbackURL: process.env.SERVER_URL + "/oauth/google/callback",
     },
     (accessToken, refreshToken, profile, cb) => {
       User.findOrCreate(
@@ -69,7 +69,7 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.SERVER_URL + "/users/facebook/callback",
+      callbackURL: process.env.SERVER_URL + "/oauth/facebook/callback",
       profileFields: ["id", "first_name", "email"],
     },
     (accessToken, refreshToken, profile, cb) => {

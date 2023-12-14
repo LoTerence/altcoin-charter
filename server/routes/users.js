@@ -47,38 +47,7 @@ router.put("/password", authenticateJWT(), editUserPassword);
 // delete account
 router.delete("/delete", authenticateJWT(), deleteUser);
 
-// -------------- login with google OAuth -----------------
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: process.env.CLIENT_URL + "/signin",
-  }),
-  authenticateUserGoogle
-);
-
-// // ------------- login with Facebook ------------
-router.get(
-  "/facebook",
-  passport.authenticate("facebook", {
-    scope: ["public_profile", "email"],
-  })
-);
-
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    failureRedirect: process.env.CLIENT_URL + "/signin",
-  }),
-  authenticateUserFacebook
-);
-
 // ----------------- watchlist related functions ----------------------------------///
-
 router.get("/watchlist", authenticateJWT(), getUserWatchlist);
 
 router.put("/watchlist/add", authenticateJWT(), addCoinToWatchlist);
