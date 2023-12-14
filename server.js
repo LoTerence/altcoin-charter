@@ -17,11 +17,6 @@ const app = express();
 // let express parse requests from client forms
 app.use(express.json());
 
-// Express only serves static assets in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/dist")));
-}
-
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
 // Express session middleware
 app.use(
@@ -51,6 +46,11 @@ app.use("/oauth", require("./server/routes/oauth"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 if (process.env.NODE_ENV === "production") {
+  // Express only serves static assets in production
+  const compress = require("compression");
+  app.use(compress());
+  app.use(express.static(path.join(__dirname, "client/dist")));
+
   app.get("*", (req, res) => {
     res.sendFile(__dirname + "/client/dist/index.html");
   });
