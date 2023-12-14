@@ -35,7 +35,7 @@ app.use(
 // CORS Middleware: access the server from any domain name
 app.use(cors());
 /* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
-  front end is running on so the server can only accept requests from the front end */
+  front end is running on so the prod server can only accept requests from the front end */
 // app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
 
 // Passport Middleware
@@ -47,6 +47,7 @@ require("./server/config/passport"); // authentication strategy
 app.use("/api/coins", require("./server/routes/coins"));
 app.use("/api/watchlist", require("./server/routes/watchlist"));
 app.use("/api/users", require("./server/routes/users"));
+app.use("/oauth", require("./server/routes/oauth"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 if (process.env.NODE_ENV === "production") {
