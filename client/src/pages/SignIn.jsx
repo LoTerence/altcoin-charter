@@ -6,8 +6,6 @@ import { signIn, selectAuth } from "../_store/reducers/authSlice";
 import { FacebookIcon, GoogleIcon, SpinnerIcon } from "../_components/icons";
 import { googleSignInAction, fbSignInAction } from "../lib/oauth_actions";
 
-// TODO: remember me checkbox doesnt do anything
-
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
