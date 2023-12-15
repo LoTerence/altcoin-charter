@@ -1,6 +1,7 @@
 import { lazy } from "react";
-import Layout from "./Layout";
 import ErrorPage from "./ErrorPage";
+import Layout from "./Layout";
+import PrivateRoute from "./PrivateRoute";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
@@ -11,7 +12,6 @@ const Feature = lazy(() => import("../pages/Feature"));
 const Profile = lazy(() => import("../pages/Profile"));
 const Settings = lazy(() => import("../pages/Settings"));
 const SignOut = lazy(() => import("../pages/SignOut"));
-import PrivateRoute from "./PrivateRoute";
 
 const routes = [
   {
