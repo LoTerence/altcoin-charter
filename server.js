@@ -30,7 +30,8 @@ app.use(
 // CORS Middleware: access the server from any domain name
 app.use(cors());
 /* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
-  front end is running on so the prod server can only accept requests from the front end */
+  front end is running on so the prod server can only accept requests from the front end. 
+  We can maybe use process.env.CLIENT_URL here */
 // app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
 
 // Passport Middleware
@@ -46,9 +47,11 @@ app.use("/oauth", require("./server/routes/oauth"));
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 if (process.env.NODE_ENV === "production") {
-  // Express only serves static assets in production
+  // Compress static assets to gzip before serving to client
   const compress = require("compression");
   app.use(compress());
+
+  // Express only serves static assets in production
   app.use(express.static(path.join(__dirname, "client/dist")));
 
   app.get("*", (req, res) => {
