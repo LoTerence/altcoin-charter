@@ -32,8 +32,9 @@ const DarkModeToggler = () => {
   return (
     <li className="nav-item dropdown">
       <button
-        aria-haspopup="true"
         aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="Toggle theme"
         className="nav-link dropdown-toggle d-flex align-items-center"
         data-toggle="dropdown"
         id="bd-theme"
@@ -43,7 +44,7 @@ const DarkModeToggler = () => {
         <div className="d-md-none ms-2">Toggle theme</div>
       </button>
       <ul
-        aria-labelledby="navbarDropdown"
+        aria-label="Dark mode dropdown menu"
         className="dropdown-menu dropdown-menu-end min-w-fit"
         data-bs-popper="static"
       >

@@ -61,6 +61,7 @@ const CoinCard = ({ coin, deleteCoin, setError }) => {
 const DeleteButton = ({ isLoading, onClick }) => {
   return (
     <button
+      aria-label="Remove coin"
       className="remove-icon"
       onClick={(e) => onClick(e)}
       disabled={isLoading}

@@ -1,11 +1,12 @@
-/* 
-historySlice - redux state slice for storing the cryptocoin chart's historical data 
-*/
+/*
+ * historySlice -
+ * redux slice for storing the cryptocoin chart's historical data
+ */
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
 
-// TODO: implement typescript would make it clear what each data field is supposed to be.
+// TODO: implement typescript - would make it clear what each data field is supposed to be.
 //  - idk if activeTimeframe is supposed to be an obj or a str
 //  - status: "idle" | "loading" | "succeeded" | "failed",
 
@@ -42,9 +43,11 @@ export const historySlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchCoinInfo.pending, (state, action) => {
+        state.error = null;
         state.status = "loading";
       })
       .addCase(fetchCoinInfo.fulfilled, (state, action) => {
+        state.error = null;
         state.status = "succeeded";
         state.coinInfo = action.payload;
       })
@@ -120,7 +123,6 @@ export const fetchCoinInfo = createAsyncThunk(
   }
 );
 
-// Selector
 export const selectHistory = (state) => state.history;
 
 export default historySlice.reducer;

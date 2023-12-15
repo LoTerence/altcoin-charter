@@ -1,9 +1,9 @@
-/* 
-component that will display the active coin's day's data including current price, 
-    day's %change, day's open, high, low, incremental change, market cap, and supply
-*/
-
-// TODO: add twitter button?
+/*
+ * CoinInfo -
+ * displays the active coin's day's data including current price,
+ * day's percent change, day's open, high, low, incremental change,
+ * market cap, and supply
+ */
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import { useActiveCoin } from "../hooks";
