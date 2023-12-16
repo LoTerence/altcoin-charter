@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import ErrorPage from "./ErrorPage";
 import Layout from "./Layout";
 import PrivateRoute from "./PrivateRoute";
-import Loading from "../_components/universal/LoadingOverlay";
+import Loading from "../_components/universal/Loading";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";

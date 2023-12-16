@@ -7,7 +7,7 @@
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import { useActiveCoin } from "../hooks";
-import LoadingOverlay from "../universal/LoadingOverlay";
+import Loading from "../universal/Loading";
 
 const CoinInfo = () => {
   const activeCoin = useActiveCoin();
@@ -17,7 +17,7 @@ const CoinInfo = () => {
   if (error) {
     return (
       <div className="alert alert-danger">
-        <LoadingOverlay isLoading={isLoading} />
+        <Loading isLoading={isLoading} />
         {error}
       </div>
     );
@@ -26,7 +26,7 @@ const CoinInfo = () => {
   if (!activeCoin || !coinInfo || !activeCoin.coinName) {
     return (
       <div className="alert alert-warning">
-        <LoadingOverlay isLoading={isLoading} />
+        <Loading isLoading={isLoading} />
         Select a coin from the list below to see its data
       </div>
     );
@@ -34,7 +34,7 @@ const CoinInfo = () => {
 
   return (
     <div className="coin-info d-flex flex-column flex-md-row justify-content-evenly align-items-start align-items-md-center flex-wrap">
-      <LoadingOverlay isLoading={isLoading} />
+      <Loading isLoading={isLoading} />
       <div className="p-2 flex-fill">
         <p>{activeCoin.coinName}&apos;s current Price:</p>
         <h1>{coinInfo.currentPrice}</h1>

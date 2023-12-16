@@ -6,7 +6,7 @@ import CoinCard from "../_components/charter/CoinCard";
 import CoinInfo from "../_components/charter/CoinInfo";
 import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
-import LoadingOverlay from "../_components/universal/LoadingOverlay";
+import Loading from "../_components/universal/Loading";
 import {
   addNewCoin,
   deleteCoin,
@@ -46,7 +46,7 @@ const Home = () => {
             n
           >
             <p>Loading coins..</p>
-            <LoadingOverlay />
+            <Loading />
           </div>
         )}
         {coins.map((coin) => (
