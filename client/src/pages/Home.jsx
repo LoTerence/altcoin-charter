@@ -43,7 +43,6 @@ const Home = () => {
           <div
             className="position-relative w-100 p-3"
             style={{ height: "94px" }}
-            n
           >
             <p>Loading coins..</p>
             <Loading />
