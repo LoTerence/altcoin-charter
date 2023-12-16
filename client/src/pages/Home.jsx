@@ -46,7 +46,7 @@ const Home = () => {
             n
           >
             <p>Loading coins..</p>
-            <LoadingOverlay isLoading={true} />
+            <LoadingOverlay />
           </div>
         )}
         {coins.map((coin) => (
