@@ -4,8 +4,8 @@ import Layout from "./Layout";
 import PrivateRoute from "./PrivateRoute";
 import Loading from "../_components/universal/Loading";
 import Home from "../pages/Home";
-import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
+const SignIn = lazy(() => import("../pages/SignIn"));
+const SignUp = lazy(() => import("../pages/SignUp"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
 const OAuthCallback = lazy(() => import("../pages/OAuthCallback"));
@@ -24,10 +24,21 @@ const routes = [
         path: "",
         Component: Home,
       },
-      { path: "signin", Component: SignIn },
+      {
+        path: "signin",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SignIn />
+          </Suspense>
+        ),
+      },
       {
         path: "signup",
-        Component: SignUp,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SignUp />
+          </Suspense>
+        ),
       },
       {
         path: "privacy-policy",
