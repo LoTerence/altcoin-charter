@@ -1,6 +1,6 @@
 import { SpinnerIcon } from "../icons";
 
-const LoadingOverlay = ({ isLoading = true }) => {
+const Loading = ({ isLoading = true }) => {
   return (
     <>
       {isLoading && (
@@ -12,4 +12,4 @@ const LoadingOverlay = ({ isLoading = true }) => {
   );
 };
 
-export default LoadingOverlay;
+export default Loading;
