@@ -2,10 +2,10 @@ import { lazy, Suspense } from "react";
 import ErrorPage from "./ErrorPage";
 import Layout from "./Layout";
 import PrivateRoute from "./PrivateRoute";
-import Loading from "../_components/universal/LoadingOverlay";
+import Loading from "../_components/universal/Loading";
 import Home from "../pages/Home";
-import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
+const SignIn = lazy(() => import("../pages/SignIn"));
+const SignUp = lazy(() => import("../pages/SignUp"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
 const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
 const OAuthCallback = lazy(() => import("../pages/OAuthCallback"));
@@ -24,15 +24,26 @@ const routes = [
         path: "",
         Component: Home,
       },
-      { path: "signin", Component: SignIn },
+      {
+        path: "signin",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SignIn />
+          </Suspense>
+        ),
+      },
       {
         path: "signup",
-        Component: SignUp,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SignUp />
+          </Suspense>
+        ),
       },
       {
         path: "privacy-policy",
         element: (
-          <Suspense fallback={<Loading isLoading={true} />}>
+          <Suspense fallback={<Loading />}>
             <PrivacyPolicy />
           </Suspense>
         ),
@@ -40,7 +51,7 @@ const routes = [
       {
         path: "contact-us",
         element: (
-          <Suspense fallback={<Loading isLoading={true} />}>
+          <Suspense fallback={<Loading />}>
             <ContactUs />
           </Suspense>
         ),
@@ -48,7 +59,7 @@ const routes = [
       {
         path: "oauthcallback",
         element: (
-          <Suspense fallback={<Loading isLoading={true} />}>
+          <Suspense fallback={<Loading />}>
             <OAuthCallback />
           </Suspense>
         ),
@@ -57,7 +68,7 @@ const routes = [
         path: "signout",
         element: (
           <PrivateRoute>
-            <Suspense fallback={<Loading isLoading={true} />}>
+            <Suspense fallback={<Loading />}>
               <SignOut />
             </Suspense>
           </PrivateRoute>
@@ -67,7 +78,7 @@ const routes = [
         path: "feature",
         element: (
           <PrivateRoute>
-            <Suspense fallback={<Loading isLoading={true} />}>
+            <Suspense fallback={<Loading />}>
               <Feature />
             </Suspense>
           </PrivateRoute>
@@ -77,7 +88,7 @@ const routes = [
         path: "profile",
         element: (
           <PrivateRoute>
-            <Suspense fallback={<Loading isLoading={true} />}>
+            <Suspense fallback={<Loading />}>
               <Profile />
             </Suspense>
           </PrivateRoute>
@@ -87,7 +98,7 @@ const routes = [
         path: "settings",
         element: (
           <PrivateRoute>
-            <Suspense fallback={<Loading isLoading={true} />}>
+            <Suspense fallback={<Loading />}>
               <Settings />
             </Suspense>
           </PrivateRoute>

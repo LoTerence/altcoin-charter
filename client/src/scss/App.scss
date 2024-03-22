@@ -12,7 +12,7 @@ html {
 
 [data-bs-theme="dark"] {
   --text-color-normal: #white;
-  --background-color-light: #231d24;
+  --background-color-light: #292e33;
 }
 
 button {
@@ -75,21 +75,6 @@ button {
   position: relative;
 }
 
-.loader {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: var(--background-color-light);
-  opacity: 90%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .suggestions {
   border-color: black;
   border-style: solid;
@@ -106,13 +91,29 @@ button {
 }
 
 .add-button {
-  z-index: 3;
+  z-index: 2;
 }
 
 .add-button:disabled {
   background-color: #72a68e !important;
   border-color: #5a987b !important;
   opacity: 1 !important;
+}
+
+.loader {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--background-color-light);
+  opacity: 90%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
 }
 
 .spinner-icon {
