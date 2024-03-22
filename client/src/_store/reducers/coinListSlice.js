@@ -20,6 +20,9 @@ export const coinListSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setStatus: (state, action) => {
+      state.status = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -49,7 +52,7 @@ export const coinListSlice = createSlice({
   },
 });
 
-export const { setCoins, setError } = coinListSlice.actions;
+export const { setCoins, setError, setStatus } = coinListSlice.actions;
 
 // fetchCoins -- fetch coins from db
 export const fetchCoins = createAsyncThunk("coinList/fetchCoins", async () => {

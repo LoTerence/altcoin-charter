@@ -8,8 +8,6 @@ import {
 } from "../../_store/reducers/historySlice";
 import { SpinnerIcon, TrashIcon } from "../icons";
 
-// TODO: figure out why one reload makes this component reload like 16 times
-
 const CoinCard = ({ coin, deleteCoin, setError }) => {
   const dispatch = useDispatch();
   const { activeCoinId, activeTimeframe } = useSelector(selectHistory);
@@ -40,7 +38,7 @@ const CoinCard = ({ coin, deleteCoin, setError }) => {
   };
 
   return (
-    <div className="col-md-4 col-sm-6 col-12 relative">
+    <div className="col-md-4 col-sm-6 col-12 position-relative">
       <button
         className="coin-li"
         disabled={isActive}
