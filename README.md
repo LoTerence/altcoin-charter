@@ -2,10 +2,11 @@
 
 See the histories of cryptocurrencies you saved
 
-Built with the MERN stack:
-- React + Redux front end and 
-- Node.js, Express, and MongoDB backend. 
-- Includes authentication with passportjs and OAuth2.0 with google and facebook
+Built with the MERN stack
+- React + Redux front end 
+- Node.js, Express, and MongoDB backend
+- Includes authentication with Passport.js - OAuth2.0 with google and facebook
+- Bootstrap 5 for the UI components
 
 Example of the app is deployed on:
 https://altcoin-charter-prod-43963c381922.herokuapp.com
