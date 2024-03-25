@@ -8,8 +8,8 @@ Built with the MERN stack
 - Includes authentication with Passport.js - OAuth2.0 with google and facebook
 - Bootstrap 5 for the UI components
 
-<!-- Example of the app is deployed on:
-https://altcoin-charter-prod-43963c381922.herokuapp.com -->
+Example of the app is deployed on:
+https://cryptocharts.koyomi-ai.com/
 
 ## Quick Start
 
@@ -40,9 +40,7 @@ docker pull loterence10/altcoin-charter
 
 # Run the image on your local machine
 docker run -p 8888:5000 loterence10/altcoin-charter
-
-# Build a new image
-docker build -t yourusername/altcoin-charter .
+http://localhost:8888
 ```
 
 <!-- Staging link:
