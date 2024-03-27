@@ -1,0 +1,20 @@
+# secrets
+.env
+
+# Dependency directories
+node_modules/
+
+# VSCode
+.vscode
+.vscode-test
+
+# git
+.git
+.gitignore
+
+# client folder
+client/.env
+client/node_modules
+client/coverage
+client/dist
+client/.gitignore
