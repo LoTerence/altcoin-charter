@@ -1,9 +1,23 @@
 {
   "name": "altcoin-charter",
   "version": "1.5.0",
-  "description": "Charts the histories of user saved cryptocurrencies",
+  "description": "MERN cryptocurrency visual charts",
   "main": "server.js",
-  "homepage": "https://github.com/LoTerence/altcoin-charter",
+  "homepage": "https://github.com/LoTerence/altcoin-charter#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoTerence/altcoin-charter.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongoose",
+    "react",
+    "redux",
+    "redux-thunk"
+  ],
+  "author": "Terence Lo",
+  "license": "MIT",
   "scripts": {
     "client-install": "cd client && npm install",
     "start": "node server.js",
@@ -12,14 +26,6 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client-build": "npm install --prefix client && npm run build --prefix client",
     "test": "jest --runInBand ./server/tests"
-  },
-  "author": "Terence Lo",
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^6.3.0",
-    "jest": "^27.3.1",
-    "mongodb-memory-server": "^8.0.0",
-    "nodemon": "^2.0.22"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -39,7 +45,16 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0"
   },
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "jest": "^27.3.1",
+    "mongodb-memory-server": "^8.0.0",
+    "nodemon": "^2.0.22"
+  },
   "jest": {
     "testEnvironment": "node"
+  },
+  "bugs": {
+    "url": "https://github.com/LoTerence/altcoin-charter/issues"
   }
 }
