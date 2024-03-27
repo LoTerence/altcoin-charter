@@ -14,11 +14,11 @@ connectDB();
 
 const app = express();
 
-// let express parse requests from client forms
+// Let Express parse requests from client forms
 app.use(express.json());
 
 // <-------------------------------------------  ROUTING  -----------------------------------------> //
-// Express session middleware
+// Express Session Middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -27,7 +27,7 @@ app.use(
   })
 );
 
-// CORS Middleware: access the server from any domain name
+// CORS Middleware: Access the server from any domain name
 app.use(cors());
 /* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
   front end is running on so the prod server can only accept requests from the front end. 
@@ -37,9 +37,9 @@ app.use(cors());
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
-require("./server/config/passport"); // authentication strategy
+require("./server/config/passport");
 
-// API express routing
+// API Routes
 app.use("/api/coins", require("./server/routes/coins"));
 app.use("/api/watchlist", require("./server/routes/watchlist"));
 app.use("/api/users", require("./server/routes/users"));
