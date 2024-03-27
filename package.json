@@ -4,10 +4,6 @@
   "description": "Charts the histories of user saved cryptocurrencies",
   "main": "server.js",
   "homepage": "https://github.com/LoTerence/altcoin-charter",
-  "engines": {
-    "node": "20.11.1",
-    "npm": "10.5.0"
-  },
   "scripts": {
     "client-install": "cd client && npm install",
     "start": "node server.js",
