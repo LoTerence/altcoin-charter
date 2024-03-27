@@ -61,6 +61,7 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
+/* Todo: bug: PORT number is wrong when hosting in docker container */
 app.listen(PORT, (error) =>
   error
     ? console.error(error)
