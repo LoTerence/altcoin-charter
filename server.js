@@ -29,10 +29,6 @@ app.use(
 
 // CORS Middleware: Access the server from any domain name
 app.use(cors());
-/* TODO: add option {origin: "https://altcoin-charter.herokuapp.com/" } or whatever the origin that the 
-  front end is running on so the prod server can only accept requests from the front end. 
-  We can maybe use process.env.CLIENT_URL here */
-// app.use(cors({origin: "https://altcoin-charter.herokuapp.com/"}));
 
 // Passport Middleware
 app.use(passport.initialize());
@@ -61,7 +57,6 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
-/* Todo: bug: PORT number is wrong when hosting in docker container */
 app.listen(PORT, (error) =>
   error
     ? console.error(error)
