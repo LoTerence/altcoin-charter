@@ -1,15 +1,12 @@
 require("dotenv").config();
-const cors = require("cors");
 const express = require("express");
+const cors = require("cors");
 const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
 
 const connectDB = require("./server/config/database");
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+const routes = require("./server/routes");
 
 // TODO: change this to setupDB
 connectDB();
@@ -39,11 +36,7 @@ require("./server/config/passport");
 
 // API Routes
 // todo: put all this in one api file, like so:
-// app.use(routes);
-app.use("/api/coins", require("./server/routes/coins"));
-app.use("/api/watchlist", require("./server/routes/watchlist"));
-app.use("/api/users", require("./server/routes/users"));
-app.use("/oauth", require("./server/routes/oauth"));
+app.use(routes);
 
 // <------------------------------------------  SERVE -----------------------------------------> //
 if (process.env.NODE_ENV === "production") {
