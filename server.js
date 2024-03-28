@@ -9,7 +9,6 @@ const connectDB = require("./server/config/database");
 const routes = require("./server/routes");
 
 connectDB();
-
 const app = express();
 
 app.use(express.json());
@@ -30,19 +29,22 @@ require("./server/config/passport");
 // API Routes
 app.use(routes);
 
-// Serve
-if (process.env.NODE_ENV === "production") {
-  // Compress static assets to gzip before serving to client
-  const compress = require("compression");
-  app.use(compress());
+// Serve static assets in production
+const serve = () => {
+  if (process.env.NODE_ENV === "production") {
+    // Compress static assets to gzip before serving to client
+    const compress = require("compression");
+    app.use(compress());
 
-  // Express only serves static assets in production
-  app.use(express.static(path.join(__dirname, "client/dist")));
+    app.use(express.static(path.join(__dirname, "client/dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/client/dist/index.html");
-  });
-}
+    app.get("*", (req, res) => {
+      res.sendFile(__dirname + "/client/dist/index.html");
+    });
+  }
+};
+
+serve();
 
 const PORT = process.env.PORT || 5000;
 
