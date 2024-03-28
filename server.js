@@ -1,15 +1,17 @@
+require("dotenv").config();
 const cors = require("cors");
-const dotenv = require("dotenv");
 const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
+
 const connectDB = require("./server/config/database");
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
+// TODO: change this to setupDB
 connectDB();
 
 const app = express();
@@ -36,6 +38,8 @@ app.use(passport.session());
 require("./server/config/passport");
 
 // API Routes
+// todo: put all this in one api file, like so:
+// app.use(routes);
 app.use("/api/coins", require("./server/routes/coins"));
 app.use("/api/watchlist", require("./server/routes/watchlist"));
 app.use("/api/users", require("./server/routes/users"));
