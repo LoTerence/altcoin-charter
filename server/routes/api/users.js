@@ -15,7 +15,7 @@ const {
   removeCoinFromWatchlist,
   authenticateUserGoogle,
   authenticateUserFacebook,
-} = require("../controllers/users");
+} = require("../../controllers/users");
 
 // passport middleware
 const authenticateJWT = () => {

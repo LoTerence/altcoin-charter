@@ -5,7 +5,7 @@ const {
   getPublicCoins,
   addCoin,
   removeCoinById,
-} = require("../controllers/watchlist");
+} = require("../../controllers/watchlist");
 
 router.route("/public").get(getPublicCoins).put(addCoin);
 
