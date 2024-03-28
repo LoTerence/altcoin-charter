@@ -1,5 +1,7 @@
+// Creates a public watchlist in your Mongo DB
+
 const dotenv = require("dotenv");
-const connectDB = require("../../config/database");
+const connectDB = require("../config/database");
 const Watchlist = require("../models/Watchlist");
 
 if (process.env.NODE_ENV !== "production") {
