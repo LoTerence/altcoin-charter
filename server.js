@@ -8,16 +8,11 @@ const passport = require("passport");
 const connectDB = require("./server/config/database");
 const routes = require("./server/routes");
 
-// TODO: change this to setupDB
 connectDB();
 
 const app = express();
 
-// Let Express parse requests from client forms
 app.use(express.json());
-
-// <-------------------------------------------  ROUTING  -----------------------------------------> //
-// Express Session Middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -25,8 +20,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
-// CORS Middleware: Access the server from any domain name
 app.use(cors());
 
 // Passport Middleware
@@ -35,10 +28,9 @@ app.use(passport.session());
 require("./server/config/passport");
 
 // API Routes
-// todo: put all this in one api file, like so:
 app.use(routes);
 
-// <------------------------------------------  SERVE -----------------------------------------> //
+// Serve
 if (process.env.NODE_ENV === "production") {
   // Compress static assets to gzip before serving to client
   const compress = require("compression");
