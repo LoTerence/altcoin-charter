@@ -29,22 +29,23 @@ require("./server/config/passport");
 // API Routes
 app.use(routes);
 
-// Serve static assets in production
-const serve = () => {
-  if (process.env.NODE_ENV === "production") {
-    // Compress static assets to gzip before serving to client
-    const compress = require("compression");
-    app.use(compress());
+const useStaticAssets = () => {
+  // Compress static assets to gzip before serving
+  const compress = require("compression");
+  app.use(compress());
 
-    app.use(express.static(path.join(__dirname, "client/dist")));
+  const staticAssetsPath = path.join(__dirname, "client/dist");
+  app.use(express.static(staticAssetsPath));
 
-    app.get("*", (req, res) => {
-      res.sendFile(__dirname + "/client/dist/index.html");
-    });
-  }
+  app.get("*", (req, res) => {
+    res.sendFile(staticAssetsPath + "/index.html");
+  });
 };
 
-serve();
+// Serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  useStaticAssets();
+}
 
 const PORT = process.env.PORT || 5000;
 
