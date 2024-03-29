@@ -6,8 +6,8 @@ build
 dist
 
 # misc
+package.json.bak
 .DS_Store
-
 
 # Environment config files
 .env
