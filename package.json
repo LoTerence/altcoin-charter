@@ -1,36 +1,38 @@
 {
   "name": "altcoin-charter",
   "version": "1.5.0",
-  "description": "Charts the histories of user saved cryptocurrencies",
+  "description": "MERN cryptocurrency visual charts",
   "main": "server.js",
-  "homepage": "https://github.com/LoTerence/altcoin-charter",
-  "engines": {
-    "node": "20.11.1",
-    "npm": "10.5.0"
+  "homepage": "https://github.com/LoTerence/altcoin-charter#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoTerence/altcoin-charter.git"
   },
+  "keywords": [
+    "node",
+    "express",
+    "mongoose",
+    "react",
+    "redux",
+    "redux-thunk"
+  ],
+  "author": "Terence Lo",
+  "license": "MIT",
   "scripts": {
-    "client-install": "cd client && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client",
-    "test": "jest --runInBand ./server/tests"
-  },
-  "author": "Terence Lo",
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^6.3.0",
-    "jest": "^27.3.1",
-    "mongodb-memory-server": "^8.0.0",
-    "nodemon": "^2.0.22"
+    "client-install": "cd client && npm install",
+    "client-build": "npm install --prefix client && npm run build --prefix client",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "compression": "^1.7.4",
     "cors": "2.8.5",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
@@ -43,7 +45,12 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0"
   },
-  "jest": {
-    "testEnvironment": "node"
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "mongodb-memory-server": "^8.0.0",
+    "nodemon": "^2.0.22"
+  },
+  "bugs": {
+    "url": "https://github.com/LoTerence/altcoin-charter/issues"
   }
 }
