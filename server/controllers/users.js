@@ -3,7 +3,7 @@ const Coin = require("../models/Coin");
 const User = require("../models/User");
 
 function createToken(data) {
-  return jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
+  return jwt.sign({ data }, process.env.JWT_SECRET, {
     expiresIn: 604800, //1 week
   });
 }

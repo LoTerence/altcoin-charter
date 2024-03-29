@@ -9,7 +9,7 @@ const User = require("../models/User");
 passport.use(User.createStrategy());
 
 const opts = {
-  secretOrKey: process.env.JWT_SECRET_KEY,
+  secretOrKey: process.env.JWT_SECRET,
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
 };
 
