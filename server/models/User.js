@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 
-// TODO: can use #match for the email validator: https://mongoosejs.com/docs/validation.html
+const { validateEmail } = require("./../utils");
 
 const { Schema } = mongoose;
 
@@ -16,9 +16,7 @@ const userSchema = new Schema({
     required: [true, "Email required"],
     unique: true,
     validate: {
-      validator: function (v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-      },
+      validator: validateEmail,
       message: "Please enter a valid email",
     },
   },
