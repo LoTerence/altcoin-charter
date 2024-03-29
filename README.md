@@ -43,10 +43,6 @@ docker run -p 8888:5000 loterence10/altcoin-charter
 http://localhost:8888
 ```
 
-<!-- Staging link:
-https://altcoin-charter-staging-c12857019436.herokuapp.com/ -->
-
-
 ## App Info
 
 ### Authors

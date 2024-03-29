@@ -6,7 +6,7 @@ const {
   getCoinById,
   getCoinList,
   deleteCoinById,
-} = require("../controllers/coins");
+} = require("../../controllers/coins");
 
 router.route("").get(getCoinList).post(addCoin);
 

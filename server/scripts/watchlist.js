@@ -1,10 +1,8 @@
-const dotenv = require("dotenv");
-const connectDB = require("../../config/database");
-const Watchlist = require("../models/Watchlist");
+// Creates a public watchlist in your Mongo DB
 
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+require("dotenv").config();
+const connectDB = require("../config/database");
+const Watchlist = require("../models/Watchlist");
 
 const createPublicCoinList = async () => {
   console.log("creating public coin list..");
