@@ -7,7 +7,7 @@ const path = require("path");
 const passport = require("passport");
 
 const keys = require("./server/config/keys");
-const routes = require("./server/routes");
+const apiRoutes = require("./server/routes");
 const connectDB = require("./server/utils/db");
 
 connectDB();
@@ -28,13 +28,8 @@ app.use(
 );
 app.use(cors());
 
-// Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
-require("./server/config/passport");
-
-// API Routes
-app.use(routes);
+require("./server/config/passport")(app);
+app.use(apiRoutes);
 
 const useStaticAssets = () => {
   // Compress static assets to gzip before serving
