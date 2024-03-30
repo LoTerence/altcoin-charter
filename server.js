@@ -9,6 +9,7 @@ const passport = require("passport");
 const keys = require("./server/config/keys");
 const apiRoutes = require("./server/routes");
 const connectDB = require("./server/utils/db");
+const useStaticAssets = require("./serveClient");
 
 connectDB();
 const app = express();
@@ -31,23 +32,7 @@ app.use(cors());
 require("./server/config/passport")(app);
 app.use(apiRoutes);
 
-const useStaticAssets = () => {
-  // Compress static assets to gzip before serving
-  const compress = require("compression");
-  app.use(compress());
-
-  const staticAssetsPath = path.join(__dirname, "client/dist");
-  app.use(express.static(staticAssetsPath));
-
-  app.get("*", (req, res) => {
-    res.sendFile(staticAssetsPath + "/index.html");
-  });
-};
-
-// Serve static assets in production
-if (process.env.NODE_ENV === "production") {
-  useStaticAssets();
-}
+useStaticAssets(app);
 
 const { port } = keys;
 
