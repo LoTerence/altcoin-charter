@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Build the client
-RUN npm run client-build
+RUN npm run build:client
 
 # Expose port 5000 for the server
 EXPOSE 5000
 
 # Start the server
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
