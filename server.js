@@ -1,13 +1,16 @@
 require("dotenv").config();
 const express = require("express");
+const chalk = require("chalk");
 const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 
-const keys = require("./server/config/keys");
 const apiRoutes = require("./server/routes");
 const connectDB = require("./server/utils/db");
+const keys = require("./server/config/keys");
 const useStaticAssets = require("./serveClient");
+
+const { port } = keys;
 
 connectDB();
 const app = express();
@@ -32,12 +35,11 @@ app.use(apiRoutes);
 
 useStaticAssets(app);
 
-const { port } = keys;
-
-app.listen(port, (error) =>
-  error
-    ? console.error(error)
-    : console.info(
-        `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
-      )
-);
+app.listen(port, (error) => {
+  error && console.error(error);
+  console.log(
+    `${chalk.green("✓")} ${chalk.blue(
+      `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
+    )}`
+  );
+});
