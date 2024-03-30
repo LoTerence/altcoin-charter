@@ -3,8 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
-const path = require("path");
-const passport = require("passport");
 
 const keys = require("./server/config/keys");
 const apiRoutes = require("./server/routes");
