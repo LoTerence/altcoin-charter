@@ -3,6 +3,12 @@
   "version": "1.5.0",
   "private": true,
   "main": "src/index.jsx",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rimraf dist"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@vitejs/plugin-react": "^4.2.1",
@@ -22,12 +28,8 @@
     "eslint": "^8.54.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "rimraf": "^5.0.5",
     "sass": "^1.69.5"
-  },
-  "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
   },
   "browserslist": {
     "production": [

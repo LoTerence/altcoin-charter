@@ -2,15 +2,19 @@ const passport = require("passport");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../models/User");
 
-// for creating OAuth2.0 strategies
-// this is using passport-local-mongoose
+const User = require("../models/User");
+const keys = require("./keys");
+
+const { app, jwt, google, facebook } = keys;
+
+// < --------------- Configure passport.js strategy ------------------- >
+// create OAuth2.0 strategy with passport-local-mongoose
 passport.use(User.createStrategy());
 
 const opts = {
-  secretOrKey: process.env.JWT_SECRET_KEY,
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+  secretOrKey: jwt.secret,
 };
 
 passport.use(
@@ -39,50 +43,72 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// < --------------- OAuth2.0 strategies ------------------- >
-// < -------------  Google OAuth2.0 strategy  --------------- >
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.SERVER_URL + "/oauth/google/callback",
-    },
-    (accessToken, refreshToken, profile, cb) => {
-      User.findOrCreate(
-        {
-          email: profile.emails[0].value,
-          name: profile.displayName,
-          googleid: profile.id,
-        },
-        function (err, user) {
-          return cb(err, user);
-        }
-      );
-    }
-  )
-);
+// < --------------- Export passport middleware ------------------- >
 
-// < ------------ Facebook OAuth2.0 strategy ----------------- >
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.SERVER_URL + "/oauth/facebook/callback",
-      profileFields: ["id", "first_name", "email"],
-    },
-    (accessToken, refreshToken, profile, cb) => {
-      User.findOrCreate(
+module.exports = async (app) => {
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  await googleAuth();
+  await facebookAuth();
+};
+
+// < --------------- OAuth2.0 strategies ------------------- >
+const googleAuth = async () => {
+  try {
+    passport.use(
+      new GoogleStrategy(
         {
-          email: profile.emails[0].value,
-          name: profile.name.givenName,
-          facebookid: profile.id,
+          clientID: google.clientID,
+          clientSecret: google.clientSecret,
+          callbackURL: app.serverURL + "/oauth/google/callback",
         },
-        function (err, user) {
-          return cb(err, user);
+        (accessToken, refreshToken, profile, cb) => {
+          User.findOrCreate(
+            {
+              email: profile.emails[0].value,
+              name: profile.displayName,
+              googleid: profile.id,
+            },
+            function (err, user) {
+              return cb(err, user);
+            }
+          );
         }
-      );
-    }
-  )
-);
+      )
+    );
+  } catch (err) {
+    console.log("Missing google keys");
+    console.log(err);
+  }
+};
+
+const facebookAuth = async () => {
+  try {
+    passport.use(
+      new FacebookStrategy(
+        {
+          clientID: facebook.clientID,
+          clientSecret: facebook.clientSecret,
+          callbackURL: app.serverURL + "/oauth/facebook/callback",
+          profileFields: ["id", "first_name", "email"],
+        },
+        (accessToken, refreshToken, profile, cb) => {
+          User.findOrCreate(
+            {
+              email: profile.emails[0].value,
+              name: profile.name.givenName,
+              facebookid: profile.id,
+            },
+            function (err, user) {
+              return cb(err, user);
+            }
+          );
+        }
+      )
+    );
+  } catch (err) {
+    console.log("Missing facebook keys");
+    console.log(err);
+  }
+};
