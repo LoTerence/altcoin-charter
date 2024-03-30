@@ -8,9 +8,7 @@ const passport = require("passport");
 
 const keys = require("./server/config/keys");
 const routes = require("./server/routes");
-const connectDB = require("./server/utils/database");
-
-const { port } = keys;
+const connectDB = require("./server/utils/db");
 
 connectDB();
 const app = express();
@@ -23,12 +21,11 @@ app.use(
 );
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: keys.session.secret,
     resave: true,
     saveUninitialized: true,
   })
 );
-// TODO: define a Content Security Policy
 app.use(cors());
 
 // Passport Middleware
@@ -56,6 +53,8 @@ const useStaticAssets = () => {
 if (process.env.NODE_ENV === "production") {
   useStaticAssets();
 }
+
+const { port } = keys;
 
 app.listen(port, (error) =>
   error
