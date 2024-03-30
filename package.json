@@ -35,6 +35,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^8.0.2",
     "mongoose-findorcreate": "^4.0.0",

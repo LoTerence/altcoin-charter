@@ -1,17 +1,26 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const session = require("express-session");
 const path = require("path");
 const passport = require("passport");
 
-const connectDB = require("./server/config/database");
+const keys = require("./server/config/keys");
 const routes = require("./server/routes");
+const connectDB = require("./server/utils/database");
+
+const { port } = keys;
 
 connectDB();
 const app = express();
 
 app.use(express.json());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -19,6 +28,7 @@ app.use(
     saveUninitialized: true,
   })
 );
+// TODO: define a Content Security Policy
 app.use(cors());
 
 // Passport Middleware
@@ -47,12 +57,10 @@ if (process.env.NODE_ENV === "production") {
   useStaticAssets();
 }
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, (error) =>
+app.listen(port, (error) =>
   error
     ? console.error(error)
     : console.info(
-        `Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`
+        `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
       )
 );
