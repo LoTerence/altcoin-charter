@@ -4,11 +4,11 @@ const User = require("../models/User");
 const keys = require("../config/keys");
 
 const clientURL = keys.app.clientURL;
-const secret = keys.jwt.secret;
+const { secret, tokenLife } = keys.jwt;
 
 function createToken(data) {
   return jwt.sign({ data }, secret, {
-    expiresIn: 604800, //1 week
+    expiresIn: tokenLife,
   });
 }
 
