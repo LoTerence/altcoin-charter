@@ -18,9 +18,9 @@ https://cryptocharts.koyomi-ai.com/
 npm install
 
 # Install dependencies for client
-npm run client-install
+npm run install:client
 
-# Run the client & server with concurrently
+# Run the client & server concurrently
 npm run dev
 
 # Run the Express server only
@@ -32,7 +32,10 @@ npm run client
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
 
-## Docker Instructions
+<!-- ## env vars -->
+<!-- To run the app properly, you need to have a `.env.development` and a `.env.production` file -->
+
+<!-- ## Docker Instructions
 
 ```bash
 # Pull the prod image from docker hub
@@ -41,7 +44,7 @@ docker pull loterence10/altcoin-charter
 # Run the image on your local machine
 docker run -p 8888:5000 loterence10/altcoin-charter
 http://localhost:8888
-```
+``` -->
 
 ## App Info
 
