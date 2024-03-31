@@ -42,6 +42,11 @@ useStaticAssets(app);
 app.listen(port, (error) => {
   error && console.error(error);
   console.log(
+    `${chalk.green("✓")} Server started in ${chalk.yellow(
+      `${process.env.NODE_ENV}`
+    )} mode.`
+  );
+  console.log(
     `${chalk.green("✓")} ${chalk.blue(
       `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
     )}`
