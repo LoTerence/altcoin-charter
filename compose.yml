@@ -11,6 +11,7 @@ services:
       - BASE_API_URL=api
       - CLIENT_URL=http://localhost:3000
       - JWT_SECRET=wIYOVtqnTg8aRcurGLva
-      - MONGO_URI=mongodb://localhost:27017/?readPreference=primary&directConnection=true&ssl=false
+      - SESSION_SECRET=BF94Zoyz0WHzd9DegJC9
+      - MONGO_URI=mongodb+srv://admin-terence:5HRXS4naQwThtap7@cluster0.l1zh8kf.mongodb.net/?retryWrites=true&w=majority
     ports:
       - '5000:5000'
