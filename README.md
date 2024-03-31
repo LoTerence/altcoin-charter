@@ -14,8 +14,11 @@ https://cryptocharts.koyomi-ai.com/
 ## Quick Start
 
 ```bash
-# Install dependencies for server
+# Install dependencies
 npm install
+
+# Install dependencies for server
+npm run install:server
 
 # Install dependencies for client
 npm run install:client
