@@ -8,6 +8,7 @@ dist
 # misc
 package.json.bak
 .DS_Store
+.aws
 
 # secrets
 .env
@@ -16,6 +17,8 @@ package.json.bak
 
 # testing
 coverage/
+.coverage
+.coverage.*
 
 # git
 .git
