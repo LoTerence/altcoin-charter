@@ -26,6 +26,8 @@
     "dev": "concurrently \"npm:dev:*\"",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
+    "install-app": "concurrently \"npm:install:*\"",
+    "uninstall": "rm -rf server/node_modules && rm -rf client/node_modules",
     "install:server": "cd server && npm install",
     "install:client": "cd client && npm install",
     "build:client": "npm install --prefix client && npm run build --prefix client",
