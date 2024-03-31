@@ -14,6 +14,10 @@ package.json.bak
 .env.*
 !.env.example
 
+# VSCode
+.vscode
+.vscode-test
+
 # testing
 coverage/
 
