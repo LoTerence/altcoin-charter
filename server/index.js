@@ -9,9 +9,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 
-const apiRoutes = require("./server/routes");
-const connectDB = require("./server/utils/db");
-const keys = require("./server/config/keys");
+const apiRoutes = require("./routes");
+const connectDB = require("./utils/db");
+const keys = require("./config/keys");
 const useStaticAssets = require("./serveClient");
 
 const { port } = keys;
@@ -34,7 +34,7 @@ app.use(
 );
 app.use(cors());
 
-require("./server/config/passport")(app);
+require("./config/passport")(app);
 app.use(apiRoutes);
 
 useStaticAssets(app);
