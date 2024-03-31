@@ -28,6 +28,10 @@ coverage/
 .git
 .gitignore
 
+# Docker
+*/Dockerfile
+*/.dockerignore
+
 # Output of 'npm pack'
 *.tgz
 
