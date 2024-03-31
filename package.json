@@ -2,7 +2,7 @@
   "name": "altcoin-charter",
   "version": "1.5.0",
   "description": "MERN cryptocurrency visual charts",
-  "main": "./server.js",
+  "main": "server/index.js",
   "homepage": "https://github.com/LoTerence/altcoin-charter#readme",
   "repository": {
     "type": "git",
@@ -20,13 +20,12 @@
   "author": "Terence Lo",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon server.js",
+    "server": "nodemon server/index.js",
     "client": "npm start --prefix client",
     "install:client": "cd client && npm install",
     "build:client": "npm install --prefix client && npm run build --prefix client",
-    "start:prod": "cross-env NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
