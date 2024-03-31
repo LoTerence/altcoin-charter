@@ -1,0 +1,45 @@
+# Dependency directories
+node_modules/
+
+# Production builds
+build
+dist
+
+# misc
+package.json.bak
+.DS_Store
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# VSCode
+.vscode
+.vscode-test
+
+# testing
+coverage/
+
+# git
+.git
+.gitignore
+
+# Output of 'npm pack'
+*.tgz
+
+# Debug logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log* 
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock

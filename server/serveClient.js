@@ -11,11 +11,11 @@ module.exports = (app) => {
   const compress = require("compression");
   app.use(compress());
 
-  const buildPath = path.join(__dirname, "client/dist");
+  const buildDirectory = path.resolve(__dirname, "..", "client/dist");
 
-  app.use(express.static(buildPath));
+  app.use(express.static(buildDirectory));
 
   app.get("*", (req, res) => {
-    res.sendFile(`${buildPath}/index.html`);
+    res.sendFile(`${buildDirectory}/index.html`);
   });
 };
