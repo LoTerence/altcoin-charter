@@ -23,14 +23,14 @@ npm run install:server
 # Install dependencies for client
 npm run install:client
 
-# Run the client & server concurrently
+# Run the client & server in development mode
 npm run dev
 
 # Run the Express server only
-npm run server
+npm run dev:server
 
 # Run the React client only
-npm run client
+npm run dev:client
 
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
