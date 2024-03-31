@@ -17,6 +17,9 @@ https://cryptocharts.koyomi-ai.com/
 # Install dependencies
 npm install
 
+# Install dependencies for client & server
+npm run install-app
+
 # Install dependencies for server
 npm run install:server
 
@@ -25,6 +28,7 @@ npm run install:client
 
 # Run the client & server in development mode
 npm run dev
+# Server runs on http://localhost:5000 and client on http://localhost:3000
 
 # Run the Express server only
 npm run dev:server
@@ -32,7 +36,12 @@ npm run dev:server
 # Run the React client only
 npm run dev:client
 
-# Server runs on http://localhost:5000 and client on http://localhost:3000
+# Build the client
+npm run build:client
+
+# Serve the app in production mode
+npm start
+
 ```
 
 ## Docker Instructions
