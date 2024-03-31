@@ -79,7 +79,6 @@ const googleAuth = async () => {
     );
   } catch (err) {
     console.log("Missing google keys");
-    console.log(err);
   }
 };
 
@@ -109,6 +108,5 @@ const facebookAuth = async () => {
     );
   } catch (err) {
     console.log("Missing facebook keys");
-    console.log(err);
   }
 };
