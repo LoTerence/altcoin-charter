@@ -9,9 +9,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 
-const apiRoutes = require("./server/routes");
-const connectDB = require("./server/utils/db");
-const keys = require("./server/config/keys");
+const apiRoutes = require("./routes");
+const connectDB = require("./utils/db");
+const keys = require("./config/keys");
 const useStaticAssets = require("./serveClient");
 
 const { port } = keys;
@@ -34,13 +34,18 @@ app.use(
 );
 app.use(cors());
 
-require("./server/config/passport")(app);
+require("./config/passport")(app);
 app.use(apiRoutes);
 
 useStaticAssets(app);
 
 app.listen(port, (error) => {
   error && console.error(error);
+  console.log(
+    `${chalk.green("✓")} Server started in ${chalk.yellow(
+      `${process.env.NODE_ENV}`
+    )} mode.`
+  );
   console.log(
     `${chalk.green("✓")} ${chalk.blue(
       `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
