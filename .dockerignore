@@ -1,18 +1,19 @@
 # Dependency directories
-node_modules/
+**/node_modules/
 
 # Production builds
-build
-dist
+client/build
+**/dist
 
 # misc
 package.json.bak
 .DS_Store
+.aws
 
 # secrets
-.env
-.env.*
-!.env.example
+**/.env
+**/.env.*
+!**/.env.example
 
 # VSCode
 .vscode
@@ -20,6 +21,8 @@ package.json.bak
 
 # testing
 coverage/
+.coverage
+.coverage.*
 
 # git
 .git

@@ -20,6 +20,8 @@ package.json.bak
 
 # testing
 coverage/
+.coverage
+.coverage.*
 
 # git
 .git
