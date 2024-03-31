@@ -32,10 +32,7 @@ npm run client
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
 
-<!-- ## env vars -->
-<!-- To run the app properly, you need to have a `.env.development` and a `.env.production` file -->
-
-<!-- ## Docker Instructions
+## Docker Instructions
 
 ```bash
 # Pull the prod image from docker hub
@@ -44,7 +41,7 @@ docker pull loterence10/altcoin-charter
 # Run the image on your local machine
 docker run -p 8888:5000 loterence10/altcoin-charter
 http://localhost:8888
-``` -->
+```
 
 ## App Info
 

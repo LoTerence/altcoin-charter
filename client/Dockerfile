@@ -18,8 +18,8 @@ RUN mv .env.example .env
 # Build the client for production
 RUN npm run build
 
-# Expose port 8080 for the client
+# Expose port 3000 for the client
 EXPOSE 3000
 
 # Start the client
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "start" ]
