@@ -5,6 +5,7 @@ export default defineConfig({
   base: "",
   plugins: [react()],
   server: {
+    host: true,
     port: 3000,
     proxy: {
       "/api": {
@@ -12,6 +13,9 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+    },
+    watch: {
+      usePolling: true,
     },
   },
 });

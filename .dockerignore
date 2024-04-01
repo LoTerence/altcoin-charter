@@ -1,9 +1,9 @@
 # Dependency directories
-node_modules/
+**/node_modules/
 
 # Production builds
-build
-dist
+client/build
+**/dist
 
 # misc
 package.json.bak
@@ -11,9 +11,13 @@ package.json.bak
 .aws
 
 # secrets
-.env
-.env.*
-!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# VSCode
+.vscode
+.vscode-test
 
 # testing
 coverage/
@@ -23,6 +27,10 @@ coverage/
 # git
 .git
 .gitignore
+
+# Docker
+*/Dockerfile
+*/.dockerignore
 
 # Output of 'npm pack'
 *.tgz
