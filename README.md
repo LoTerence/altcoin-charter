@@ -20,26 +20,14 @@ npm install
 # Install dependencies for client & server
 npm run install-app
 
-# Install dependencies for server
-npm run install:server
-
-# Install dependencies for client
-npm run install:client
-
 # Run the client & server in development mode
 npm run dev
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 
-# Run the Express server only
-npm run dev:server
-
-# Run the React client only
-npm run dev:client
-
 # Build the client
 npm run build:client
 
-# Serve the app in production mode
+# Run the app in production mode
 npm start
 
 ```
