@@ -14,22 +14,34 @@ https://cryptocharts.koyomi-ai.com/
 ## Quick Start
 
 ```bash
-# Install dependencies for server
+# Install dependencies
 npm install
 
-# Install dependencies for client
-npm run client-install
+# Install dependencies for client & server
+npm run install-app
 
-# Run the client & server with concurrently
+# Install dependencies for server
+npm run install:server
+
+# Install dependencies for client
+npm run install:client
+
+# Run the client & server in development mode
 npm run dev
+# Server runs on http://localhost:5000 and client on http://localhost:3000
 
 # Run the Express server only
-npm run server
+npm run dev:server
 
 # Run the React client only
-npm run client
+npm run dev:client
 
-# Server runs on http://localhost:5000 and client on http://localhost:3000
+# Build the client
+npm run build:client
+
+# Serve the app in production mode
+npm start
+
 ```
 
 ## Docker Instructions
@@ -42,10 +54,6 @@ docker pull loterence10/altcoin-charter
 docker run -p 8888:5000 loterence10/altcoin-charter
 http://localhost:8888
 ```
-
-<!-- Staging link:
-https://altcoin-charter-staging-c12857019436.herokuapp.com/ -->
-
 
 ## App Info
 

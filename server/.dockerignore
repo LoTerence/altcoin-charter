@@ -8,18 +8,21 @@ dist
 # misc
 package.json.bak
 .DS_Store
+.aws
 
-# Environment config files
+# secrets
 .env
 .env.*
 !.env.example
 
-# VScode
-.vscode
-.vscode-test
-
 # testing
 coverage/
+.coverage
+.coverage.*
+
+# git
+.git
+.gitignore
 
 # Output of 'npm pack'
 *.tgz

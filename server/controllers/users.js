@@ -1,10 +1,14 @@
 const jwt = require("jsonwebtoken");
 const Coin = require("../models/Coin");
 const User = require("../models/User");
+const keys = require("../config/keys");
+
+const clientURL = keys.app.clientURL;
+const { secret, tokenLife } = keys.jwt;
 
 function createToken(data) {
-  return jwt.sign({ data }, process.env.JWT_SECRET_KEY, {
-    expiresIn: 604800, //1 week
+  return jwt.sign({ data }, secret, {
+    expiresIn: tokenLife,
   });
 }
 
@@ -304,9 +308,7 @@ const authenticateUserGoogle = async (req, res) => {
       return res.json({ message: "User not found", success: false });
     }
     const token = createToken({ _id: user._id });
-    return res.redirect(
-      process.env.CLIENT_URL + "/oauthcallback?token=" + token
-    );
+    return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Auth failed", success: false });
@@ -321,9 +323,7 @@ const authenticateUserFacebook = async (req, res) => {
       return res.json({ message: "User not found", success: false });
     }
     const token = createToken({ _id: user._id });
-    return res.redirect(
-      process.env.CLIENT_URL + "/oauthcallback?token=" + token
-    );
+    return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Auth failed", success: false });
