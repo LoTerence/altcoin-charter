@@ -13,8 +13,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Install the client and server dependencies
+RUN npm run install-app
+
+# Build the client
+RUN npm run build --prefix client
+
 # Expose port 5000 for the server
 EXPOSE 5000
 
-# Start the server
-CMD ["npm", "run", "dev"]
+# Start the server in production mode
+CMD ["npm", "start"]

@@ -1,4 +1,6 @@
+const e = require("express");
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
 
 module.exports = (app) => {
@@ -13,9 +15,18 @@ module.exports = (app) => {
 
   const buildDirectory = path.resolve(__dirname, "..", "client/dist");
 
-  app.use(express.static(buildDirectory));
+  if (fs.existsSync(buildDirectory)) {
+    app.use(express.static(buildDirectory));
 
-  app.get("*", (req, res) => {
-    res.sendFile(`${buildDirectory}/index.html`);
-  });
+    app.get("*", (req, res) => {
+      res.sendFile(`${buildDirectory}/index.html`);
+    });
+  } else {
+    console.error(
+      `❌ Server ERROR: 
+  - The client build path (${buildDirectory}) does not exist. 
+  - The application will not be able to serve static assets
+  - Please make sure to build the client with \`$ vite build\``
+    );
+  }
 };
