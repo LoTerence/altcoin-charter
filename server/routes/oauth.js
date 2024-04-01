@@ -1,6 +1,6 @@
-const express = require("express");
 const passport = require("passport");
-const router = express.Router();
+const router = require("express").Router();
+const clientURL = require("../config/keys").app.clientURL;
 
 const {
   authenticateUserGoogle,
@@ -16,7 +16,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: process.env.CLIENT_URL + "/signin",
+    failureRedirect: `${clientURL}/signin`,
   }),
   authenticateUserGoogle
 );
@@ -32,7 +32,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: process.env.CLIENT_URL + "/signin",
+    failureRedirect: `${clientURL}/signin`,
   }),
   authenticateUserFacebook
 );

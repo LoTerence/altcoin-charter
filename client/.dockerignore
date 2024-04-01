@@ -9,17 +9,23 @@ dist
 package.json.bak
 .DS_Store
 
-# Environment config files
+# secrets
 .env
 .env.*
 !.env.example
 
-# VScode
+# VSCode
 .vscode
 .vscode-test
 
 # testing
 coverage/
+.coverage
+.coverage.*
+
+# git
+.git
+.gitignore
 
 # Output of 'npm pack'
 *.tgz
