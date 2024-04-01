@@ -9,6 +9,7 @@ client/build
 package.json.bak
 .DS_Store
 .aws
+**.sh
 
 # secrets
 **/.env
