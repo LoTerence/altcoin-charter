@@ -22,5 +22,5 @@ RUN npm run build --prefix client
 # Expose port 5000 for the server
 EXPOSE 5000
 
-# Start the server in production mode
+# Start the application in production mode
 CMD ["npm", "start"]
