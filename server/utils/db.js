@@ -18,9 +18,12 @@ const connectDB = async () => {
       }`
     );
   } catch (err) {
-    console.error(`MongoDB Connection Error: ${err.message}`);
+    console.error(
+      `${chalk.red("❌ SERVER ERROR -")} MongoDB Connection Error: ${
+        err.message
+      }`
+    );
     console.log(err);
-    process.exit(1);
   }
 };
 
