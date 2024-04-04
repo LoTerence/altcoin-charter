@@ -27,12 +27,12 @@
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "install-app": "concurrently \"npm:install:*\"",
-    "install:server": "npm install --prefix server",
-    "install:client": "npm install --prefix client",
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
     "uninstall": "npm run demolish && rm -rf node_modules",
     "build": "concurrently \"npm:build:*\"",
-    "build:server": "npm install --prefix server",
-    "build:client": "npm install --prefix client && npm run build --prefix client",
+    "build:server": "cd server && npm install",
+    "build:client": "cd client && npm install && npm run build",
     "demolish": "rimraf server/node_modules && rimraf client/dist && rimraf client/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,5 +40,9 @@
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "rimraf": "^5.0.5"
+  },
+  "engines": {
+    "npm": "^10.5.0",
+    "node": "^20.12.0"
   }
 }

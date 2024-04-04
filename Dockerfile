@@ -1,5 +1,5 @@
 # Use official Node.js 20 as base image
-FROM node:lts-alpine3.19
+FROM node:20.12-alpine3.18
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Install the client and server dependencies
-RUN npm run install-app
-
-# Build the client
-RUN npm run build --prefix client
+# Build the server and client
+RUN npm run build
 
 # Expose port 5000 for the server
 EXPOSE 5000
