@@ -16,5 +16,5 @@ COPY . .
 # Expose port 5000 for the server
 EXPOSE 5000
 
-# Start the server
+# Start the development server
 CMD ["npm", "run", "dev"]
