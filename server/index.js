@@ -39,6 +39,10 @@ app.use(apiRoutes);
 
 useStaticAssets(app);
 
+// app.get("/", (req, res) => {
+//   res.send("hello nodemon try again");
+// });
+
 app.listen(port, (error) => {
   error && console.error(error);
   console.log(

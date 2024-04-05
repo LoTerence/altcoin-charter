@@ -2,6 +2,7 @@
 FROM node:20.12-alpine3.18
 
 # Set working directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json

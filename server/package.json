@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "description": "altcoin-charter server",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "nodemon -L index.js",
     "start": "cross-env NODE_ENV=production node index.js"
   },
   "dependencies": {
