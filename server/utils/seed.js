@@ -1,6 +1,7 @@
 // TODO: eventually create a better seed script
 
-const connectDB = require("../config/database");
+const chalk = require("chalk");
+const connectDB = require("./db");
 const Watchlist = require("../models/Watchlist");
 
 // For now, all we need to do is create a public watchlist
