@@ -32,25 +32,16 @@ npm start
 
 ```
 
-<!-- ## Docker Instructions
+## Docker Guide
+
+Create a `.env.development` in `./server` folder, and a `.env.local` in the `./client` folder.
+
+Make sure they are both configured with the Docker variables from the `.env.example` files
+
+Then simply start the docker compose: 
 
 ```bash
-# Pull the prod image from docker hub
-docker pull loterence10/altcoin-charter
-
-# Run the image on your local machine
-docker run -p 8888:5000 loterence10/altcoin-charter
-http://localhost:8888
-``` -->
-
-## Docker Instructions
-
-First - make sure you have a `.env.development` in `./server` folder and a `.env.local` in the `./client` folder, configured with the Docker variables from the `.env.example` files
-
-Next - use `docker-compose` to run the development environment:
-
-```bash
-docker-compose up -d
+docker compose -f docker-compose.yml up -d
 ```
 
 ## App Info
