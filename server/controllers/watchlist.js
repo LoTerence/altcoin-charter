@@ -4,10 +4,23 @@ Controllers for managing the public list of coins
 const Coin = require("../models/Coin");
 const Watchlist = require("../models/Watchlist");
 
+const getPublicWatchlist = async () => {
+  let publicList = await Watchlist.findOne({ name: "PUBLIC" });
+
+  if (!publicList) {
+    publicList = new Watchlist({ name: "PUBLIC", coins: [] });
+    await publicList.save();
+    console.log(`Watchlist ${publicList.name} successfully created`);
+  }
+
+  return publicList;
+};
+
 const getPublicCoins = async (req, res) => {
   try {
-    const public = await Watchlist.findOne({ name: "PUBLIC" });
-    const coins = await Coin.find({ _id: public.coins });
+    const publicList = await getPublicWatchlist();
+
+    const coins = await Coin.find({ _id: publicList.coins });
 
     return res.status(200).json({
       data: coins,
