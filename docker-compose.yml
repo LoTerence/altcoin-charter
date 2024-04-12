@@ -1,0 +1,33 @@
+name: ac-composed
+
+services:
+  mongodb:
+    container_name: mongodb7
+    image: mongodb/mongodb-community-server:7.0.7-ubuntu2204
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_vol:/data/db
+
+  server:
+    build: server
+    container_name: ac-server
+    depends_on:
+      - mongodb
+    env_file:
+      - server/.env.development
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/usr/src/app
+
+  client:
+    build: client
+    container_name: ac-client
+    env_file:
+      - client/.env.local
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo_vol: {}
