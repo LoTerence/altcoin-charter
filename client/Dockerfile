@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of the client code
 COPY . .
 
-# Build the client for production
-RUN npm run build
-
 # Expose port 3000 for the client
 EXPOSE 3000
 
-# Start the React client
+# Start the Vite client in development mode
 CMD [ "npm", "start" ]
