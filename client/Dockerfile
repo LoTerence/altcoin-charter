@@ -16,8 +16,6 @@ COPY . .
 # Build the client for production
 RUN npm run build
 
-VOLUME [ "/usr/src/app/dist" ]
-
 # Expose port 3000 for the client
 EXPOSE 3000
 
