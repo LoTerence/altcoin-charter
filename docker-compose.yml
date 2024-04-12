@@ -28,6 +28,11 @@ services:
       - client/.env.local
     ports:
       - "3000:3000"
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /usr/src/app
 
 volumes:
   mongo_vol: {}
