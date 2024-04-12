@@ -1,7 +1,8 @@
 # Use official Node.js 20 as base image
-FROM node:lts-alpine3.19
+FROM node:20.12-alpine3.18
 
 # Set working directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
@@ -16,5 +17,5 @@ COPY . .
 # Expose port 5000 for the server
 EXPOSE 5000
 
-# Start the server
+# Start the development server
 CMD ["npm", "run", "dev"]
