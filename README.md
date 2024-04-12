@@ -45,8 +45,9 @@ http://localhost:8888
 
 ## Docker Instructions
 
-First, make sure you have a `.env.development` in `./server` folder and a `.env.local` in the `./client` folder
-Next, use docker-compose to run the development environment:
+First - make sure you have a `.env.development` in `./server` folder and a `.env.local` in the `./client` folder, configured with the Docker variables from the `.env.example` files
+
+Next - use `docker-compose` to run the development environment:
 
 ```bash
 docker-compose up -d
