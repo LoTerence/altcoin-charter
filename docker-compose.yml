@@ -18,8 +18,11 @@ services:
       - server/.env.development
     ports:
       - "5000:5000"
-    volumes:
-      - ./server:/usr/src/app
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /usr/src/app
 
   client:
     build: client
