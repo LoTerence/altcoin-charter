@@ -16,16 +16,26 @@ services:
       - mongodb
     env_file:
       - server/.env.development
+    environment:
+      - MONGO_URI=mongodb://mongodb7:27017/altcoin-charter
+      - SERVER_URL=ac-server://ac-server:5000
+      - CLIENT_URL=ac-client://ac-client:3000
     ports:
       - "5000:5000"
-    volumes:
-      - ./server:/usr/src/app
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /usr/src/app
 
   client:
     build: client
     container_name: ac-client
     env_file:
       - client/.env.local
+    environment:
+      - VITE_APP_SERVER_URL=ac-server://ac-server:5000
+      - VITE_APP_CLIENT_URL=ac-client://ac-client:3000
     ports:
       - "3000:3000"
     develop:
