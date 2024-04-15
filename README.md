@@ -27,7 +27,7 @@ docker compose -f docker-compose.yml up
 
 You should now be able to view the app on http://localhost:3000 in your browser.
 
-### With NPM
+### NPM
 
 Alternatively, run the app locally with npm:
 
