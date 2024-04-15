@@ -41,6 +41,12 @@ npm run install-app
 # Run the client & server in development mode
 npm run dev
 #Server runs on http://localhost:5000 and client on http://localhost:3000
+
+# Build the client
+npm run build:client
+
+# Run the app in production mode
+npm start
 ```
 
 ## App Info
