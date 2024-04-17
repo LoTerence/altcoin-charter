@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginOpenerPolicy: false,
   })
 );
 app.use(

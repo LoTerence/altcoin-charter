@@ -21,7 +21,7 @@ router.get(
   authenticateUserGoogle
 );
 
-// // ------------- login with Facebook ------------
+// ------------- login with Facebook OAuth ------------
 router.get(
   "/facebook",
   passport.authenticate("facebook", {
