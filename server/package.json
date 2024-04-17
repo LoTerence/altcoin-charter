@@ -4,7 +4,8 @@
   "description": "altcoin-charter server",
   "scripts": {
     "dev": "nodemon -L index.js",
-    "start": "cross-env NODE_ENV=production node index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "staging": "cross-env NODE_ENV=production TARGET_ENV=staging node index.js"
   },
   "dependencies": {
     "altcoin-charter": "file:..",
