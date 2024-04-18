@@ -7,10 +7,6 @@ import "./scss/App.scss";
 export default function App() {
   const dispatch = useDispatch();
 
-  console.log("Welcome to", import.meta.env.VITE_APP_TITLE);
-  console.log("server url:", import.meta.env.VITE_APP_SERVER_URL);
-  console.log("client url:", import.meta.env.VITE_APP_CLIENT_URL);
-
   if (localStorage.getItem("token")) {
     dispatch(fetchUser());
   }

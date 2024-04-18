@@ -16,6 +16,12 @@ import {
 } from "../_store/reducers/coinListSlice";
 import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 
+const logWelcomeMessage = () => {
+  console.log("Welcome to", import.meta.env.VITE_APP_TITLE);
+  console.log("server url:", import.meta.env.VITE_APP_SERVER_URL);
+  console.log("client url:", import.meta.env.VITE_APP_CLIENT_URL);
+};
+
 const Home = () => {
   const dispatch = useDispatch();
   const { coins, status, error } = useSelector(selectCoinList);
@@ -23,6 +29,7 @@ const Home = () => {
 
   useEffect(() => {
     if (status === "idle") {
+      logWelcomeMessage();
       dispatch(fetchCoins());
     }
   }, [dispatch, status]);
