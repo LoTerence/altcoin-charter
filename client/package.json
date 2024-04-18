@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "dev": "vite dev",
     "dev:staging": "vite dev --mode staging",
-    "staging": "vite build --mode staging && vite preview --mode staging",
+    "preview:staging": "vite build --mode staging && vite preview --mode staging",
     "clean": "rimraf dist"
   },
   "dependencies": {
