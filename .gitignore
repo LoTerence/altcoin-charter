@@ -11,8 +11,10 @@ package.json.bak
 
 # Environment config files
 .env
-.env.*
+.env.local
+.env.*.local
 !.env.example
+server/.env.*
 
 # VScode
 .vscode
