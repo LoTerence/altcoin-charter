@@ -1,8 +1,6 @@
 let windowObjectReference = null;
 let previousUrl = null;
-// const VITE_APP_CLIENT_URL = import.meta.env.VITE_APP_CLIENT_URL;
-const clientURL =
-  import.meta.env?.VITE_APP_CLIENT_URL || import.meta.env.BASE_URL;
+const VITE_APP_CLIENT_URL = import.meta.env.VITE_APP_CLIENT_URL;
 
 export const openSignInWindow = (url, name) => {
   // remove any existing event listeners
@@ -39,7 +37,7 @@ export const openSignInWindow = (url, name) => {
 
 const receiveMessage = (event) => {
   // Do we trust the sender of this message? (might be different from what we originally opened, for example).
-  if (event.origin !== clientURL) {
+  if (event.origin !== VITE_APP_CLIENT_URL) {
     return;
   }
 

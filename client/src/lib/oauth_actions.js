@@ -1,14 +1,10 @@
 import { openSignInWindow } from "./oauth_popup";
-const serverURL =
-  import.meta.env?.VITE_APP_SERVER_URL || import.meta.env.BASE_URL;
-
-console.log("BASE_URL:", import.meta.env.BASE_URL);
-console.log("serverURL:", serverURL);
+const VITE_APP_SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 
 export const fbSignInAction = () => {
-  openSignInWindow(`${serverURL}/oauth/facebook`, "SignIn");
+  openSignInWindow(`${VITE_APP_SERVER_URL}/oauth/facebook`, "SignIn");
 };
 
 export const googleSignInAction = () => {
-  openSignInWindow(`${serverURL}/oauth/google`, "SignIn");
+  openSignInWindow(`${VITE_APP_SERVER_URL}/oauth/google`, "SignIn");
 };

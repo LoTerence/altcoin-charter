@@ -8,8 +8,6 @@
     "build": "vite build",
     "preview": "vite preview",
     "dev": "vite dev",
-    "dev:staging": "vite dev --mode staging",
-    "build:staging": "vite build --mode staging",
     "clean": "rimraf dist"
   },
   "dependencies": {
