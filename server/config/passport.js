@@ -61,7 +61,7 @@ const googleAuth = async () => {
         {
           clientID: google.clientID,
           clientSecret: google.clientSecret,
-          callbackURL: app.serverURL + "/oauth/google/callback",
+          callbackURL: `${app.serverURL}/oauth/google/callback`,
         },
         (accessToken, refreshToken, profile, cb) => {
           User.findOrCreate(
@@ -89,7 +89,7 @@ const facebookAuth = async () => {
         {
           clientID: facebook.clientID,
           clientSecret: facebook.clientSecret,
-          callbackURL: app.serverURL + "/oauth/facebook/callback",
+          callbackURL: `${app.serverURL}/oauth/facebook/callback`,
           profileFields: ["id", "first_name", "email"],
         },
         (accessToken, refreshToken, profile, cb) => {

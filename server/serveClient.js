@@ -6,6 +6,9 @@ const path = require("path");
 module.exports = (app) => {
   // Express only serves static assets in production
   if (process.env.NODE_ENV !== "production") {
+    app.get("/", (req, res) => {
+      res.send("dev server successfully started");
+    });
     return;
   }
 

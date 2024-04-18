@@ -11,7 +11,25 @@ Built with the MERN stack
 Example of the app is deployed on:
 https://cryptocharts.koyomi-ai.com/
 
-## Quick Start
+## Quick Start 
+
+First, create a `.env.development` in `./server` folder, and a `.env.local` in the `./client` folder.
+
+Make sure they are both configured with the variables from the `.env.example` files.
+
+### Docker
+
+Simply start the app with docker compose:
+
+```bash
+docker compose -f docker-compose.yml up
+```
+
+You should now be able to view the app on http://localhost:3000 in your browser.
+
+### NPM
+
+Alternatively, run the app locally with npm:
 
 ```bash
 # Install dependencies
@@ -29,19 +47,6 @@ npm run build:client
 
 # Run the app in production mode
 npm start
-
-```
-
-## Docker Guide
-
-Create a `.env.development` in `./server` folder, and a `.env.local` in the `./client` folder.
-
-Make sure they are both configured with the Docker variables from the `.env.example` files
-
-Then simply start the docker compose: 
-
-```bash
-docker compose -f docker-compose.yml up -d
 ```
 
 ## App Info

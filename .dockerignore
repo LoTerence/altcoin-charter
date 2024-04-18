@@ -11,10 +11,12 @@ package.json.bak
 .aws
 **.sh
 
-# secrets
+# Environment config files
 **/.env
-**/.env.*
+**/.env.local
+**/.env.*.local
 !**/.env.example
+server/.env.*
 
 # VSCode
 .vscode

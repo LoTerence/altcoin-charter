@@ -1,6 +1,7 @@
 const path = require("path");
+const environment = process.env?.TARGET_ENV || process.env.NODE_ENV;
 require("dotenv").config({
-  path: path.join(__dirname, `.env.${process.env.NODE_ENV}`),
+  path: path.join(__dirname, `.env.${environment}`),
 });
 
 const express = require("express");
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginOpenerPolicy: false,
   })
 );
 app.use(

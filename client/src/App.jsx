@@ -5,6 +5,7 @@ import routes from "./routes";
 import "./scss/App.scss";
 
 export default function App() {
+  console.log("Welcome to", import.meta.env.VITE_APP_TITLE);
   const dispatch = useDispatch();
 
   if (localStorage.getItem("token")) {
