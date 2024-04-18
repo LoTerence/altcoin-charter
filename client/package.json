@@ -7,6 +7,8 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "build:staging": "vite build --mode staging",
+    "preview:staging": "vite preview --mode staging",
     "dev": "vite dev",
     "clean": "rimraf dist"
   },
