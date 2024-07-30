@@ -1,5 +1,6 @@
 {
   "name": "altcoin-charter",
+  "private": "true",
   "version": "1.5.0",
   "description": "MERN cryptocurrency charts",
   "main": "server/index.js",
