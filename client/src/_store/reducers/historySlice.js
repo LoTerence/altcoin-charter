@@ -63,6 +63,7 @@ export const historySlice = createSlice({
         state.historicalData = action.payload;
       })
       .addCase(fetchHistory.rejected, (state, action) => {
+        console.log(action);
         state.status = "failed";
         state.error = "Error: something went wrong, please try again later 😢";
       });
@@ -105,18 +106,22 @@ export const fetchHistory = createAsyncThunk(
 export const fetchCoinInfo = createAsyncThunk(
   "history/fetchCoinInfo",
   async (coinSymbol) => {
-    const cryptocompareRes = await axios.get(
+    const res = await axios.get(
       `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=CCCAGG`
     );
-    const data = cryptocompareRes.data.DISPLAY;
+    if (!res.data.DISPLAY) {
+      return { hasNoData: true };
+    }
+    const display = res.data.DISPLAY;
 
     const info = {
-      currentPrice: data.PRICE,
-      pctChange: data.CHANGEPCT24HOUR,
-      open: data.OPEN24HOUR,
-      high: data.HIGH24HOUR,
-      low: data.LOW24HOUR,
-      usdChange: data.CHANGE24HOUR,
+      currentPrice: display.PRICE,
+      pctChange: display.CHANGEPCT24HOUR,
+      open: display.OPEN24HOUR,
+      high: display.HIGH24HOUR,
+      low: display.LOW24HOUR,
+      usdChange: display.CHANGE24HOUR,
+      hasNoData: false,
     };
 
     return info;
