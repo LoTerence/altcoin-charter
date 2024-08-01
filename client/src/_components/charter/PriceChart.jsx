@@ -3,6 +3,7 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import {
@@ -37,11 +38,14 @@ export default function PriceChart() {
   const dataUnavailable =
     !historicalData || !activeCoinId || coinInfo?.hasNoData;
 
-  const formatXAxis = (tick) => {
-    const date = new Date(tick * 1000);
-    const tickDateString = getTickDateString(activeTimeframe, date);
-    return tickDateString;
-  };
+  const formatXAxis = useCallback(
+    (tick) => {
+      const date = new Date(tick * 1000);
+      const tickDateString = getTickDateString(activeTimeframe, date);
+      return tickDateString;
+    },
+    [activeTimeframe]
+  );
 
   if (dataUnavailable) {
     return <p>Please select a coin from the list below</p>;
