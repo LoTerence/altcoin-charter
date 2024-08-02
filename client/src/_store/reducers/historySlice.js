@@ -53,7 +53,9 @@ export const historySlice = createSlice({
       })
       .addCase(fetchCoinInfo.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Error: something went wrong, please try again later 😢";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
       })
       .addCase(fetchHistory.pending, (state, action) => {
         state.status = "loading";
@@ -63,9 +65,10 @@ export const historySlice = createSlice({
         state.historicalData = action.payload;
       })
       .addCase(fetchHistory.rejected, (state, action) => {
-        console.log(action);
         state.status = "failed";
-        state.error = "Error: something went wrong, please try again later 😢";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
       });
   },
 });
@@ -85,46 +88,63 @@ export const fetchHistory = createAsyncThunk(
   async ({ coinSymbol, timeframe }) => {
     const histo = getHisto(timeframe);
 
-    const cryptocompareRes = await axios.get(
+    const res = await fetch(
       `https://min-api.cryptocompare.com/data/${histo.timeUnit}?fsym=${coinSymbol}&tsym=USD&limit=${histo.limit}`
     );
-    const data = cryptocompareRes.data.Data;
-    const historicalData = [];
-    //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
-    for (let i = 0; i < data.length; i++) {
-      const coord = {
-        time: data[i].time,
-        price: data[i].close,
-      };
-      historicalData.push(coord);
+    if (!res.ok) {
+      console.log("!res.ok");
+      throw new Error("Error: something went wrong, please try again later 😢");
     }
-    return historicalData;
+
+    const data = await res.json();
+    if (data?.Response !== "Success" || !data?.Data) {
+      console.log('data?.Response !== "Success" || !data?.Data');
+      throw new Error("Sorry! No market data available for this coin 😢");
+    }
+    const DATA = data.Data;
+
+    // todo: refactor this calculation into its own specialized function in histo, so I can remove the below comment
+    //loop through the `data.Data` array from the json res and save its `time` property as the x coordinate and `close` property as the y coordinate.
+    const historicaData = DATA.map((timeUnitData) => {
+      return {
+        time: timeUnitData.time,
+        price: timeUnitData.close,
+      };
+    });
+    // todo: change `price` variable name to `close` - both here, and in price chart
+
+    return historicaData;
   }
 );
 
-// Get the coin data from the cryptocompare api and save it to coinInfo
+// GET the coin's daily trading average data from the cryptocompare api and save it to coinInfo state
 export const fetchCoinInfo = createAsyncThunk(
   "history/fetchCoinInfo",
   async (coinSymbol) => {
-    const res = await axios.get(
-      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=CCCAGG`
+    const res = await fetch(
+      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=Kraken`
     );
-    if (!res.data.DISPLAY) {
-      return { hasNoData: true };
-    }
-    const display = res.data.DISPLAY;
 
-    const info = {
-      currentPrice: display.PRICE,
-      pctChange: display.CHANGEPCT24HOUR,
-      open: display.OPEN24HOUR,
-      high: display.HIGH24HOUR,
-      low: display.LOW24HOUR,
-      usdChange: display.CHANGE24HOUR,
-      hasNoData: false,
+    if (!res.ok) {
+      throw new Error("Error: something went wrong, please try again later 😢");
+    }
+
+    const data = await res.json();
+    if ((data?.Response && data.Response === "Error") || !data?.DISPLAY) {
+      throw new Error("Sorry! No market data available for this coin 😢");
+    }
+    const { DISPLAY } = data;
+
+    const dailyAverage = {
+      currentPrice: DISPLAY.PRICE,
+      pctChange: DISPLAY.CHANGEPCT24HOUR,
+      open: DISPLAY.OPEN24HOUR,
+      high: DISPLAY.HIGH24HOUR,
+      low: DISPLAY.LOW24HOUR,
+      usdChange: DISPLAY.CHANGE24HOUR,
     };
 
-    return info;
+    return dailyAverage;
   }
 );
 

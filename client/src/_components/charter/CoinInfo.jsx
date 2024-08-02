@@ -23,15 +23,6 @@ const CoinInfo = () => {
     );
   }
 
-  if (coinInfo?.hasNoData) {
-    return (
-      <div className="alert alert-danger">
-        <Loading isLoading={isLoading} />
-        Sorry! No market data available for this coin
-      </div>
-    );
-  }
-
   if (!activeCoin || !coinInfo || !activeCoin.coinName) {
     return (
       <div className="alert alert-warning">
