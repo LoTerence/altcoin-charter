@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getAllCoins } from "../../lib/cryptocompareAPI";
 
 export const symbolsSlice = createSlice({
   name: "symbols",
@@ -37,14 +38,9 @@ export const { setSymbols, setStatus } = symbolsSlice.actions;
 export const fetchSymbols = createAsyncThunk(
   "symbols/fetchSymbols",
   async () => {
-    const res = await axios.get(
-      "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
-    );
-    if (!res.data?.Data) {
-      throw new Error("Something went wrong while getting symbol");
-    }
-    const initialSymbols = Object.values(res.data.Data);
-    return initialSymbols;
+    const allCoins = await getAllCoins();
+    const allCoinSymbols = Object.values(allCoins);
+    return allCoinSymbols;
   }
 );
 

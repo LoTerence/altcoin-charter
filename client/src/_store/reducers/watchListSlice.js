@@ -3,7 +3,7 @@ This is the Redux state slice for state related to the personal watchlist of a u
 */
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCoinSummary } from "../../lib/cryptocompareAPI";
+import { getCoinDetails } from "../../lib/cryptocompareAPI";
 
 const initialState = {
   coins: [],
@@ -65,12 +65,11 @@ export const fetchWatchlist = createAsyncThunk(
   }
 );
 
-// todo: refactor get call to https://min-api.cryptocompare.com/data/all/coinlist, its repeated a lot in the app
 export const addNewCoin = createAsyncThunk(
   "watchList/addNewCoin",
   async (newCoinSymbol) => {
     const SYM = newCoinSymbol.toUpperCase();
-    const coinFound = await getCoinSummary({ fromSymbol: SYM });
+    const coinFound = await getCoinDetails({ fromSymbol: SYM });
 
     const newCoin = {
       coinName: coinFound.CoinName,

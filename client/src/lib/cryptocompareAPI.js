@@ -34,7 +34,7 @@ export async function getAllCoins() {
     "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
   );
   if (!res.ok) {
-    throw new Error("Error: failed to fetch coins, please try again later");
+    throw new Error("Error: something went wrong, please try again later 😢");
   }
 
   const body = await res.json();
@@ -44,7 +44,7 @@ export async function getAllCoins() {
   return body.Data;
 }
 
-export async function getCoinSummary({ fromSymbol }) {
+export async function getCoinDetails({ fromSymbol }) {
   const res = await fetch(
     `https://min-api.cryptocompare.com/data/all/coinlist?fsym=${fromSymbol}`
   );
