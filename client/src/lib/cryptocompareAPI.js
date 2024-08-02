@@ -31,14 +31,34 @@ export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
 
 export async function getAllCoins() {
   const res = await fetch(
-    "https://min-api.cryptocompare.com/data/all/coinlist"
+    "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
   );
   if (!res.ok) {
     throw new Error("Error: failed to fetch coins, please try again later");
   }
+
   const body = await res.json();
   if (body?.Response !== "Success" || !body?.Data) {
     throw new Error("Error: failed to fetch coins, please try again later");
   }
   return body.Data;
+}
+
+export async function getCoinSummary({ fromSymbol }) {
+  const res = await fetch(
+    `https://min-api.cryptocompare.com/data/all/coinlist?fsym=${fromSymbol}`
+  );
+  if (!res.ok) {
+    throw new Error("Error: something went wrong, please try again later 😢");
+  }
+
+  const body = await res.json();
+  if (body?.Response !== "Success" || !body?.Data) {
+    throw new Error("Error: something went wrong, please try again later 😢");
+  }
+  if (!(fromSymbol in body.Data)) {
+    throw new Error("Error: something went wrong, please try again later 😢");
+  }
+
+  return body.Data[fromSymbol];
 }

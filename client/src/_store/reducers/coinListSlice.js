@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllCoins } from "../../lib/cryptocompareAPI";
+import { getCoinSummary } from "../../lib/cryptocompareAPI";
 
 // TODO: add ts types for status
 // initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -71,8 +71,7 @@ export const addNewCoin = createAsyncThunk(
   "coinList/addNewCoin",
   async (newCoinSymbol) => {
     const SYM = newCoinSymbol.toUpperCase();
-    const coins = await getAllCoins();
-    const coinFound = coins[SYM];
+    const coinFound = await getCoinSummary({ fromSymbol: SYM });
 
     if (!coinFound) {
       throw new Error("A coin with that symbol does not exist");
@@ -83,6 +82,7 @@ export const addNewCoin = createAsyncThunk(
       name: coinFound.Name,
       symbol: coinFound.Symbol,
     };
+
     const res = await axios.put("/api/watchlist/public", newCoin);
     if (!res.data.success) {
       throw new Error("There was an error posting new coin data");
