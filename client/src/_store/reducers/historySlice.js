@@ -5,10 +5,12 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
+import { getCoinDailyAverageData } from "../../lib/cryptocompareAPI";
 
-// TODO: implement typescript - would make it clear what each data field is supposed to be.
-//  - idk if activeTimeframe is supposed to be an obj or a str
-//  - status: "idle" | "loading" | "succeeded" | "failed",
+// TODO: implement typescript - this would make it clear what each data field is supposed to be.
+//  - ie. `activeTimeframe` should be a string
+//  - `coinInfo` should be null or an object
+//  - `status`: "idle" | "loading" | "succeeded" | "failed",
 
 const initialState = {
   activeCoinId: null,
@@ -117,25 +119,12 @@ export const fetchHistory = createAsyncThunk(
   }
 );
 
-// GET the coin's daily trading average data from the cryptocompare api and save it to coinInfo state
 export const fetchCoinInfo = createAsyncThunk(
   "history/fetchCoinInfo",
   async (coinSymbol) => {
-    const res = await fetch(
-      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=Kraken`
-    );
+    const { DISPLAY } = await getCoinDailyAverageData(coinSymbol);
 
-    if (!res.ok) {
-      throw new Error("Error: something went wrong, please try again later 😢");
-    }
-
-    const data = await res.json();
-    if ((data?.Response && data.Response === "Error") || !data?.DISPLAY) {
-      throw new Error("Sorry! No market data available for this coin 😢");
-    }
-    const { DISPLAY } = data;
-
-    const dailyAverage = {
+    const coinInfo = {
       currentPrice: DISPLAY.PRICE,
       pctChange: DISPLAY.CHANGEPCT24HOUR,
       open: DISPLAY.OPEN24HOUR,
@@ -143,8 +132,7 @@ export const fetchCoinInfo = createAsyncThunk(
       low: DISPLAY.LOW24HOUR,
       usdChange: DISPLAY.CHANGE24HOUR,
     };
-
-    return dailyAverage;
+    return coinInfo;
   }
 );
 
