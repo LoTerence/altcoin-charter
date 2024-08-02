@@ -53,7 +53,9 @@ export const historySlice = createSlice({
       })
       .addCase(fetchCoinInfo.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Error: something went wrong, please try again later 😢";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
       })
       .addCase(fetchHistory.pending, (state, action) => {
         state.status = "loading";
@@ -102,29 +104,34 @@ export const fetchHistory = createAsyncThunk(
   }
 );
 
-// Get the coin data from the cryptocompare api and save it to coinInfo
+// GET the coin's daily trading average data from the cryptocompare api and save it to coinInfo state
 export const fetchCoinInfo = createAsyncThunk(
   "history/fetchCoinInfo",
   async (coinSymbol) => {
-    const res = await axios.get(
-      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=CCCAGG`
+    const res = await fetch(
+      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=Kraken`
     );
-    if (!res.data.DISPLAY) {
-      return { hasNoData: true };
-    }
-    const display = res.data.DISPLAY;
 
-    const info = {
-      currentPrice: display.PRICE,
-      pctChange: display.CHANGEPCT24HOUR,
-      open: display.OPEN24HOUR,
-      high: display.HIGH24HOUR,
-      low: display.LOW24HOUR,
-      usdChange: display.CHANGE24HOUR,
-      hasNoData: false,
+    if (!res.ok) {
+      throw new Error("Error: something went wrong, please try again later 😢");
+    }
+
+    const data = await res.json();
+    if ((data?.Response && data.Response === "Error") || !data?.DISPLAY) {
+      throw new Error("Sorry! No market data available for this coin 😢");
+    }
+    const { DISPLAY } = data;
+
+    const dailyAverage = {
+      currentPrice: DISPLAY.PRICE,
+      pctChange: DISPLAY.CHANGEPCT24HOUR,
+      open: DISPLAY.OPEN24HOUR,
+      high: DISPLAY.HIGH24HOUR,
+      low: DISPLAY.LOW24HOUR,
+      usdChange: DISPLAY.CHANGE24HOUR,
     };
 
-    return info;
+    return dailyAverage;
   }
 );
 
