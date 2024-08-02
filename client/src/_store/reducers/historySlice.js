@@ -46,21 +46,6 @@ export const historySlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchCoinInfo.pending, (state, action) => {
-        state.error = null;
-        state.status = "loading";
-      })
-      .addCase(fetchCoinInfo.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
-        state.coinInfo = action.payload;
-      })
-      .addCase(fetchCoinInfo.rejected, (state, action) => {
-        state.status = "failed";
-        state.error =
-          action.error?.message ||
-          "Error: something went wrong, please try again later 😢";
-      })
       .addCase(fetchHistory.pending, (state, action) => {
         state.status = "loading";
       })
@@ -99,76 +84,59 @@ export const {
   setTimeFrame,
 } = historySlice.actions;
 
+/* Async thunks */
+export const fetchHistory = createAsyncThunk(
+  "history/fetchHistory",
+  async ({ coinSymbol, timeframe }) => {
+    const historicalData = await fetchHistoricalData({ coinSymbol, timeframe });
+    return historicalData;
+  }
+);
+
 export const fetchCharterData = createAsyncThunk(
   "history/fetchCharterData",
   async ({ coin, timeframe }) => {
-    const coinSymbol = coin.symbol;
-    const histo = getHisto(timeframe);
-
-    const [dailyAverageData, history] = await Promise.all([
-      getCoinDailyAverageData(coinSymbol),
-      getCoinHistory({
-        coinSymbol,
-        timeUnit: histo.timeUnit,
-        limit: histo.limit,
-      }),
+    const [coinInfo, historicalData] = await Promise.all([
+      fetchCoinInfo({ coin }),
+      fetchHistoricalData({ coinSymbol: coin.symbol, timeframe }),
     ]);
-
-    const { DISPLAY } = dailyAverageData;
-    const coinInfo = {
-      currentPrice: DISPLAY.PRICE,
-      pctChange: DISPLAY.CHANGEPCT24HOUR,
-      open: DISPLAY.OPEN24HOUR,
-      high: DISPLAY.HIGH24HOUR,
-      low: DISPLAY.LOW24HOUR,
-      usdChange: DISPLAY.CHANGE24HOUR,
-    };
-
-    const historicalData = history.Data.map((historicalPoint) => ({
-      time: historicalPoint.time,
-      price: historicalPoint.close,
-    }));
-    // todo: change `price` variable name to `close` - both here, and in price chart
 
     return { coinInfo, historicalData };
   }
 );
 
-/* Async thunks */
-export const fetchHistory = createAsyncThunk(
-  "history/fetchHistory",
-  async ({ coinSymbol, timeframe }) => {
-    const histo = getHisto(timeframe);
+async function fetchHistoricalData({ coinSymbol, timeframe }) {
+  const histo = getHisto(timeframe);
 
-    const history = await getCoinHistory({
-      coinSymbol,
-      timeUnit: histo.timeUnit,
-      limit: histo.limit,
-    });
+  const history = await getCoinHistory({
+    fromSymbol: coinSymbol,
+    timeUnit: histo.timeUnit,
+    limit: histo.limit,
+  });
 
-    return history.Data.map((historicalPoint) => ({
-      time: historicalPoint.time,
-      price: historicalPoint.close,
-    }));
-  }
-);
+  const historicalData = history.Data.map((historicalPoint) => ({
+    time: historicalPoint.time,
+    price: historicalPoint.close,
+  }));
+  // todo: change `price` variable name to `close` - both here, and in price chart
+  return historicalData;
+}
 
-export const fetchCoinInfo = createAsyncThunk(
-  "history/fetchCoinInfo",
-  async (coinSymbol) => {
-    const { DISPLAY } = await getCoinDailyAverageData(coinSymbol);
+async function fetchCoinInfo({ coin }) {
+  const { DISPLAY } = await getCoinDailyAverageData({
+    fromSymbol: coin.symbol,
+  });
 
-    const coinInfo = {
-      currentPrice: DISPLAY.PRICE,
-      pctChange: DISPLAY.CHANGEPCT24HOUR,
-      open: DISPLAY.OPEN24HOUR,
-      high: DISPLAY.HIGH24HOUR,
-      low: DISPLAY.LOW24HOUR,
-      usdChange: DISPLAY.CHANGE24HOUR,
-    };
-    return coinInfo;
-  }
-);
+  const coinInfo = {
+    currentPrice: DISPLAY.PRICE,
+    pctChange: DISPLAY.CHANGEPCT24HOUR,
+    open: DISPLAY.OPEN24HOUR,
+    high: DISPLAY.HIGH24HOUR,
+    low: DISPLAY.LOW24HOUR,
+    usdChange: DISPLAY.CHANGE24HOUR,
+  };
+  return coinInfo;
+}
 
 export const selectHistory = (state) => state.history;
 

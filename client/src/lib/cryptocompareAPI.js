@@ -1,6 +1,6 @@
-export async function getCoinDailyAverageData(coinSymbol) {
+export async function getCoinDailyAverageData({ fromSymbol }) {
   const res = await fetch(
-    `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=Kraken`
+    `https://min-api.cryptocompare.com/data/generateAvg?fsym=${fromSymbol}&tsym=USD&e=Kraken`
   );
   if (!res.ok) {
     throw new Error("Error: something went wrong, please try again later 😢");
@@ -14,9 +14,9 @@ export async function getCoinDailyAverageData(coinSymbol) {
   return data;
 }
 
-export async function getCoinHistory({ coinSymbol, timeUnit, limit }) {
+export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
   const res = await fetch(
-    `https://min-api.cryptocompare.com/data/${timeUnit}?fsym=${coinSymbol}&tsym=USD&limit=${limit}`
+    `https://min-api.cryptocompare.com/data/${timeUnit}?fsym=${fromSymbol}&tsym=USD&limit=${limit}`
   );
   if (!res.ok) {
     throw new Error("Error: something went wrong, please try again later 😢");
