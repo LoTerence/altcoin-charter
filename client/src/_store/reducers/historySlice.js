@@ -4,10 +4,11 @@
  */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
+import { getCoinDisplayData, getCoinHistory } from "../../lib/cryptocompareAPI";
 import {
-  getCoinDailyAverageData,
-  getCoinHistory,
-} from "../../lib/cryptocompareAPI";
+  parseCoinDisplayData,
+  parseHistoryIntoCoordinates,
+} from "../../lib/transformers";
 
 // TODO: implement typescript - this would make it clear what each data field is supposed to be.
 //  - ie. `activeTimeframe` should be a string
@@ -88,7 +89,15 @@ export const {
 export const fetchHistory = createAsyncThunk(
   "history/fetchHistory",
   async ({ coinSymbol, timeframe }) => {
-    const historicalData = await fetchHistoricalData({ coinSymbol, timeframe });
+    const histo = getHisto(timeframe);
+
+    const history = await getCoinHistory({
+      fromSymbol: coinSymbol,
+      timeUnit: histo.timeUnit,
+      limit: histo.limit,
+    });
+
+    const historicalData = parseHistoryIntoCoordinates(history);
     return historicalData;
   }
 );
@@ -96,47 +105,24 @@ export const fetchHistory = createAsyncThunk(
 export const fetchCharterData = createAsyncThunk(
   "history/fetchCharterData",
   async ({ coin, timeframe }) => {
-    const [coinInfo, historicalData] = await Promise.all([
-      fetchCoinInfo({ coin }),
-      fetchHistoricalData({ coinSymbol: coin.symbol, timeframe }),
+    const histo = getHisto(timeframe);
+
+    const [coinDisplayData, history] = await Promise.all([
+      getCoinDisplayData({
+        fromSymbol: coin.symbol,
+      }),
+      getCoinHistory({
+        fromSymbol: coin.symbol,
+        timeUnit: histo.timeUnit,
+        limit: histo.limit,
+      }),
     ]);
 
+    const coinInfo = parseCoinDisplayData(coinDisplayData);
+    const historicalData = parseHistoryIntoCoordinates(history);
     return { coinInfo, historicalData };
   }
 );
-
-async function fetchHistoricalData({ coinSymbol, timeframe }) {
-  const histo = getHisto(timeframe);
-
-  const history = await getCoinHistory({
-    fromSymbol: coinSymbol,
-    timeUnit: histo.timeUnit,
-    limit: histo.limit,
-  });
-
-  const historicalData = history.Data.map((historicalPoint) => ({
-    time: historicalPoint.time,
-    price: historicalPoint.close,
-  }));
-  // todo: change `price` variable name to `close` - both here, and in price chart
-  return historicalData;
-}
-
-async function fetchCoinInfo({ coin }) {
-  const { DISPLAY } = await getCoinDailyAverageData({
-    fromSymbol: coin.symbol,
-  });
-
-  const coinInfo = {
-    currentPrice: DISPLAY.PRICE,
-    pctChange: DISPLAY.CHANGEPCT24HOUR,
-    open: DISPLAY.OPEN24HOUR,
-    high: DISPLAY.HIGH24HOUR,
-    low: DISPLAY.LOW24HOUR,
-    usdChange: DISPLAY.CHANGE24HOUR,
-  };
-  return coinInfo;
-}
 
 export const selectHistory = (state) => state.history;
 

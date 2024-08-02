@@ -1,17 +1,17 @@
-export async function getCoinDailyAverageData({ fromSymbol }) {
+export async function getCoinDisplayData({ fromSymbol }) {
   const res = await fetch(
-    `https://min-api.cryptocompare.com/data/generateAvg?fsym=${fromSymbol}&tsym=USD&e=Kraken`
+    `https://min-api.cryptocompare.com/data/generateAvg?fsym=${fromSymbol}&tsym=USD&e=CCCAGG`
   );
   if (!res.ok) {
     throw new Error("Error: something went wrong, please try again later 😢");
   }
 
-  const data = await res.json();
-  if ((data?.Response && data.Response === "Error") || !data?.DISPLAY) {
+  const body = await res.json();
+  if ((body?.Response && body.Response === "Error") || !body?.DISPLAY) {
     throw new Error("Sorry! No market data available for this coin 😢");
   }
 
-  return data;
+  return body.DISPLAY;
 }
 
 export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
@@ -22,9 +22,9 @@ export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
     throw new Error("Error: something went wrong, please try again later 😢");
   }
 
-  const data = await res.json();
-  if (data?.Response !== "Success" || !data?.Data) {
+  const body = await res.json();
+  if (body?.Response !== "Success" || !body?.Data) {
     throw new Error("Sorry! No market data available for this coin 😢");
   }
-  return data;
+  return body.Data;
 }
