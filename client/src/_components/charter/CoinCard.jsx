@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchCoinInfo,
-  fetchHistory,
+  fetchCharterData,
   setActiveCoinId,
   selectHistory,
 } from "../../_store/reducers/historySlice";
@@ -31,10 +30,7 @@ const CoinCard = ({ coin, deleteCoin, setError }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
-    dispatch(fetchCoinInfo(coin.symbol));
-    dispatch(
-      fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
-    );
+    dispatch(fetchCharterData({ coin, timeframe: activeTimeframe }));
   };
 
   return (
