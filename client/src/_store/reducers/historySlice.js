@@ -2,10 +2,12 @@
  * historySlice -
  * redux slice for storing the cryptocoin chart's historical data
  */
-import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
-import { getCoinDailyAverageData } from "../../lib/cryptocompareAPI";
+import {
+  getCoinDailyAverageData,
+  getCoinHistory,
+} from "../../lib/cryptocompareAPI";
 
 // TODO: implement typescript - this would make it clear what each data field is supposed to be.
 //  - ie. `activeTimeframe` should be a string
@@ -83,39 +85,27 @@ export const {
   setTimeFrame,
 } = historySlice.actions;
 
-// Async thunks
-// get the historical data from the cryptocompare api and save it to historicalData
+/* Async thunks */
 export const fetchHistory = createAsyncThunk(
   "history/fetchHistory",
   async ({ coinSymbol, timeframe }) => {
     const histo = getHisto(timeframe);
 
-    const res = await fetch(
-      `https://min-api.cryptocompare.com/data/${histo.timeUnit}?fsym=${coinSymbol}&tsym=USD&limit=${histo.limit}`
-    );
-    if (!res.ok) {
-      console.log("!res.ok");
-      throw new Error("Error: something went wrong, please try again later 😢");
-    }
+    const data = await getCoinHistory({
+      coinSymbol,
+      timeUnit: histo.timeUnit,
+      limit: histo.limit,
+    });
 
-    const data = await res.json();
-    if (data?.Response !== "Success" || !data?.Data) {
-      console.log('data?.Response !== "Success" || !data?.Data');
-      throw new Error("Sorry! No market data available for this coin 😢");
-    }
-    const DATA = data.Data;
-
-    // todo: refactor this calculation into its own specialized function in histo, so I can remove the below comment
-    //loop through the `data.Data` array from the json res and save its `time` property as the x coordinate and `close` property as the y coordinate.
-    const historicaData = DATA.map((timeUnitData) => {
+    const historicalData = data.Data.map((historicalPoint) => {
       return {
-        time: timeUnitData.time,
-        price: timeUnitData.close,
+        time: historicalPoint.time,
+        price: historicalPoint.close,
       };
     });
     // todo: change `price` variable name to `close` - both here, and in price chart
 
-    return historicaData;
+    return historicalData;
   }
 );
 
