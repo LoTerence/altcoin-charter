@@ -53,6 +53,9 @@ export async function getCoinSummary({ fromSymbol }) {
   }
 
   const body = await res.json();
+  if (body?.Response !== "Error" && body?.ParamWithError === "fsym") {
+    throw new Error("A coin with that symbol does not exist");
+  }
   if (body?.Response !== "Success" || !body?.Data) {
     throw new Error("Error: something went wrong, please try again later 😢");
   }

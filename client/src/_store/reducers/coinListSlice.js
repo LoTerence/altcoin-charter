@@ -73,9 +73,6 @@ export const addNewCoin = createAsyncThunk(
     const SYM = newCoinSymbol.toUpperCase();
     const coinFound = await getCoinSummary({ fromSymbol: SYM });
 
-    if (!coinFound) {
-      throw new Error("A coin with that symbol does not exist");
-    }
     const newCoin = {
       coinName: coinFound.CoinName,
       cryptoCompareId: coinFound.Id,
@@ -87,6 +84,7 @@ export const addNewCoin = createAsyncThunk(
     if (!res.data.success) {
       throw new Error("There was an error posting new coin data");
     }
+
     const coin = res.data.data;
     return coin;
   }
