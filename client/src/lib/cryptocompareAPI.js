@@ -2,7 +2,6 @@ export async function getCoinDailyAverageData(coinSymbol) {
   const res = await fetch(
     `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=Kraken`
   );
-
   if (!res.ok) {
     throw new Error("Error: something went wrong, please try again later 😢");
   }
@@ -27,6 +26,5 @@ export async function getCoinHistory({ coinSymbol, timeUnit, limit }) {
   if (data?.Response !== "Success" || !data?.Data) {
     throw new Error("Sorry! No market data available for this coin 😢");
   }
-
   return data;
 }

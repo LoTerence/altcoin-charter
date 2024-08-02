@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fetchCharterData,
   fetchCoinInfo,
   fetchHistory,
   setActiveCoinId,
@@ -31,10 +32,15 @@ const CoinCard = ({ coin, deleteCoin, setError }) => {
     e.stopPropagation();
     if (isActive) return;
     dispatch(setActiveCoinId(coin._id));
+    /* 
     dispatch(fetchCoinInfo(coin.symbol));
     dispatch(
       fetchHistory({ coinSymbol: coin.symbol, timeframe: activeTimeframe })
     );
+    */
+
+    // TODO: fetchCharterData should fetch both info and history
+    dispatch(fetchCharterData({ coin, timeframe: activeTimeframe }));
   };
 
   return (

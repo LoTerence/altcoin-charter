@@ -73,6 +73,20 @@ export const historySlice = createSlice({
         state.error =
           action.error?.message ||
           "Error: something went wrong, please try again later 😢";
+      })
+      .addCase(fetchCharterData.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCharterData.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.historicalData = action.payload.historicalData;
+        state.coinInfo = action.payload.coinInfo;
+      })
+      .addCase(fetchCharterData.rejected, (state, action) => {
+        state.status = "failed";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
       });
   },
 });
@@ -85,27 +99,57 @@ export const {
   setTimeFrame,
 } = historySlice.actions;
 
+export const fetchCharterData = createAsyncThunk(
+  "history/fetchCharterData",
+  async ({ coin, timeframe }) => {
+    const coinSymbol = coin.symbol;
+    const histo = getHisto(timeframe);
+
+    const [dailyAverageData, history] = await Promise.all([
+      getCoinDailyAverageData(coinSymbol),
+      getCoinHistory({
+        coinSymbol,
+        timeUnit: histo.timeUnit,
+        limit: histo.limit,
+      }),
+    ]);
+
+    const { DISPLAY } = dailyAverageData;
+    const coinInfo = {
+      currentPrice: DISPLAY.PRICE,
+      pctChange: DISPLAY.CHANGEPCT24HOUR,
+      open: DISPLAY.OPEN24HOUR,
+      high: DISPLAY.HIGH24HOUR,
+      low: DISPLAY.LOW24HOUR,
+      usdChange: DISPLAY.CHANGE24HOUR,
+    };
+
+    const historicalData = history.Data.map((historicalPoint) => ({
+      time: historicalPoint.time,
+      price: historicalPoint.close,
+    }));
+    // todo: change `price` variable name to `close` - both here, and in price chart
+
+    return { coinInfo, historicalData };
+  }
+);
+
 /* Async thunks */
 export const fetchHistory = createAsyncThunk(
   "history/fetchHistory",
   async ({ coinSymbol, timeframe }) => {
     const histo = getHisto(timeframe);
 
-    const data = await getCoinHistory({
+    const history = await getCoinHistory({
       coinSymbol,
       timeUnit: histo.timeUnit,
       limit: histo.limit,
     });
 
-    const historicalData = data.Data.map((historicalPoint) => {
-      return {
-        time: historicalPoint.time,
-        price: historicalPoint.close,
-      };
-    });
-    // todo: change `price` variable name to `close` - both here, and in price chart
-
-    return historicalData;
+    return history.Data.map((historicalPoint) => ({
+      time: historicalPoint.time,
+      price: historicalPoint.close,
+    }));
   }
 );
 
