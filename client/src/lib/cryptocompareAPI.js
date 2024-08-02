@@ -28,3 +28,17 @@ export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
   }
   return body.Data;
 }
+
+export async function getAllCoins() {
+  const res = await fetch(
+    "https://min-api.cryptocompare.com/data/all/coinlist"
+  );
+  if (!res.ok) {
+    throw new Error("Error: failed to fetch coins, please try again later");
+  }
+  const body = await res.json();
+  if (body?.Response !== "Success" || !body?.Data) {
+    throw new Error("Error: failed to fetch coins, please try again later");
+  }
+  return body.Data;
+}
