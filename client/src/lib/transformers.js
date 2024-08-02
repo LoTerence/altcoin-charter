@@ -23,3 +23,7 @@ export function parseHistoryIntoCoordinates(history) {
     price: historicalPoint.close,
   }));
 }
+
+export function parseAllCoinSymbols(allCoins) {
+  return Object.values(allCoins);
+}

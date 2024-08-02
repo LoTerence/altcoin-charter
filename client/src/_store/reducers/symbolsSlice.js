@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllCoins } from "../../lib/cryptocompareAPI";
+import { parseAllCoinSymbols } from "../../lib/transformers";
 
 export const symbolsSlice = createSlice({
   name: "symbols",
@@ -39,8 +40,7 @@ export const fetchSymbols = createAsyncThunk(
   "symbols/fetchSymbols",
   async () => {
     const allCoins = await getAllCoins();
-    const allCoinSymbols = Object.values(allCoins);
-    return allCoinSymbols;
+    return parseAllCoinSymbols(allCoins);
   }
 );
 
