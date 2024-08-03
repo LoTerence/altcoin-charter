@@ -57,7 +57,7 @@ const timeframes = [
   },
 ];
 
-export const initTimeframeOpts = () => {
+export const initTimeframeBtnOptions = () => {
   return timeframes.map((tf) => {
     return {
       id: tf.id,
