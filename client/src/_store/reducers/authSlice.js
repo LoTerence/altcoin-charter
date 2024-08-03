@@ -54,7 +54,7 @@ export const authSlice = createSlice({
         const { email } = action.payload;
         state.userProfile.email = email;
       })
-      .addCase(deleteAccount.fulfilled, (state, action) => {
+      .addCase(deleteAccount.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.userProfile = {
           name: "",

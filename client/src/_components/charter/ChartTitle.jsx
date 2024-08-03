@@ -1,4 +1,4 @@
-// Component that displays the name and symbol of the active COIN
+/* ChartTitle: displays the name and symbol of the active COIN */
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import { useActiveCoin } from "../hooks";

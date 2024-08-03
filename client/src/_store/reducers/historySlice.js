@@ -2,13 +2,18 @@
  * historySlice -
  * redux slice for storing the cryptocoin chart's historical data
  */
-import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
+import { getCoinDisplayData, getCoinHistory } from "../../lib/cryptocompareAPI";
+import {
+  parseCoinDisplayData,
+  parseHistoryIntoCoordinates,
+} from "../../lib/transformers";
 
-// TODO: implement typescript - would make it clear what each data field is supposed to be.
-//  - idk if activeTimeframe is supposed to be an obj or a str
-//  - status: "idle" | "loading" | "succeeded" | "failed",
+// TODO: implement typescript - this would make it clear what each data field is supposed to be.
+//  - ie. `activeTimeframe` should be a string
+//  - `coinInfo` should be null or an object
+//  - `status`: "idle" | "loading" | "succeeded" | "failed",
 
 const initialState = {
   activeCoinId: null,
@@ -42,29 +47,36 @@ export const historySlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchCoinInfo.pending, (state, action) => {
-        state.error = null;
+      .addCase(fetchHistory.pending, (state) => {
         state.status = "loading";
-      })
-      .addCase(fetchCoinInfo.fulfilled, (state, action) => {
         state.error = null;
-        state.status = "succeeded";
-        state.coinInfo = action.payload;
-      })
-      .addCase(fetchCoinInfo.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = "Error: something went wrong, please try again later 😢";
-      })
-      .addCase(fetchHistory.pending, (state, action) => {
-        state.status = "loading";
       })
       .addCase(fetchHistory.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.error = null;
         state.historicalData = action.payload;
       })
       .addCase(fetchHistory.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Error: something went wrong, please try again later 😢";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
+      })
+      .addCase(fetchCharterData.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchCharterData.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        state.historicalData = action.payload.historicalData;
+        state.coinInfo = action.payload.coinInfo;
+      })
+      .addCase(fetchCharterData.rejected, (state, action) => {
+        state.status = "failed";
+        state.error =
+          action.error?.message ||
+          "Error: something went wrong, please try again later 😢";
       });
   },
 });
@@ -77,49 +89,42 @@ export const {
   setTimeFrame,
 } = historySlice.actions;
 
-// Async thunks
-// get the historical data from the cryptocompare api and save it to historicalData
+/* Async thunks */
 export const fetchHistory = createAsyncThunk(
   "history/fetchHistory",
   async ({ coinSymbol, timeframe }) => {
     const histo = getHisto(timeframe);
 
-    const cryptocompareRes = await axios.get(
-      `https://min-api.cryptocompare.com/data/${histo.timeUnit}?fsym=${coinSymbol}&tsym=USD&limit=${histo.limit}`
-    );
-    const data = cryptocompareRes.data.Data;
-    const historicalData = [];
-    //loop through the "Data" array from the json res and save its time property as the x coordinate and close property as the y coordinate
-    for (let i = 0; i < data.length; i++) {
-      const coord = {
-        time: data[i].time,
-        price: data[i].close,
-      };
-      historicalData.push(coord);
-    }
+    const history = await getCoinHistory({
+      fromSymbol: coinSymbol,
+      timeUnit: histo.timeUnit,
+      limit: histo.limit,
+    });
+
+    const historicalData = parseHistoryIntoCoordinates(history);
     return historicalData;
   }
 );
 
-// Get the coin data from the cryptocompare api and save it to coinInfo
-export const fetchCoinInfo = createAsyncThunk(
-  "history/fetchCoinInfo",
-  async (coinSymbol) => {
-    const cryptocompareRes = await axios.get(
-      `https://min-api.cryptocompare.com/data/generateAvg?fsym=${coinSymbol}&tsym=USD&e=CCCAGG`
-    );
-    const data = cryptocompareRes.data.DISPLAY;
+export const fetchCharterData = createAsyncThunk(
+  "history/fetchCharterData",
+  async ({ coin, timeframe }) => {
+    const histo = getHisto(timeframe);
 
-    const info = {
-      currentPrice: data.PRICE,
-      pctChange: data.CHANGEPCT24HOUR,
-      open: data.OPEN24HOUR,
-      high: data.HIGH24HOUR,
-      low: data.LOW24HOUR,
-      usdChange: data.CHANGE24HOUR,
-    };
+    const [coinDisplayData, history] = await Promise.all([
+      getCoinDisplayData({
+        fromSymbol: coin.symbol,
+      }),
+      getCoinHistory({
+        fromSymbol: coin.symbol,
+        timeUnit: histo.timeUnit,
+        limit: histo.limit,
+      }),
+    ]);
 
-    return info;
+    const coinInfo = parseCoinDisplayData(coinDisplayData);
+    const historicalData = parseHistoryIntoCoordinates(history);
+    return { coinInfo, historicalData };
   }
 );
 

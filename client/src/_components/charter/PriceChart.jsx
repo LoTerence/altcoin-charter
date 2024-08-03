@@ -3,6 +3,7 @@
 This component uses Uber's react-vis library for data visualization / programming the chart
 */
 
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { selectHistory } from "../../_store/reducers/historySlice";
 import {
@@ -18,30 +19,35 @@ import {
 import { getTickDateString } from "../../lib/timeframe";
 import formatterUSD from "../../lib/formatterUSD";
 
-const PriceChart = () => {
-  const { activeCoinId, activeTimeframe, historicalData } =
+const formatYAxis = (tick) => {
+  return formatterUSD.format(tick);
+};
+
+const formatToolTipX = (label) => {
+  const d = new Date(label * 1000);
+  return d.toLocaleString();
+};
+
+const formatToolTipY = (val) => {
+  return formatterUSD.format(val);
+};
+
+export default function PriceChart() {
+  const { activeCoinId, activeTimeframe, coinInfo, historicalData } =
     useSelector(selectHistory);
+  const dataUnavailable =
+    !historicalData || !activeCoinId || coinInfo?.hasNoData;
 
-  const formatXAxis = (tick) => {
-    const date = new Date(tick * 1000);
-    const tickDateString = getTickDateString(activeTimeframe, date);
-    return tickDateString;
-  };
+  const formatXAxis = useCallback(
+    (tick) => {
+      const date = new Date(tick * 1000);
+      const tickDateString = getTickDateString(activeTimeframe, date);
+      return tickDateString;
+    },
+    [activeTimeframe]
+  );
 
-  const formatYAxis = (tick) => {
-    return formatterUSD.format(tick);
-  };
-
-  const formatToolTipX = (label) => {
-    const d = new Date(label * 1000);
-    return d.toLocaleString();
-  };
-
-  const formatToolTipY = (val) => {
-    return formatterUSD.format(val);
-  };
-
-  if (!historicalData || !activeCoinId) {
+  if (dataUnavailable) {
     return <p>Please select a coin from the list below</p>;
   }
 
@@ -87,6 +93,4 @@ const PriceChart = () => {
       </ResponsiveContainer>
     </div>
   );
-};
-
-export default PriceChart;
+}

@@ -3,6 +3,7 @@ This is the Redux state slice for state related to the personal watchlist of a u
 */
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getCoinDetails } from "../../lib/cryptocompareAPI";
 
 const initialState = {
   coins: [],
@@ -23,14 +24,14 @@ export const watchListSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchWatchlist.pending, (state, action) => {
+      .addCase(fetchWatchlist.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchWatchlist.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.coins = action.payload;
       })
-      .addCase(fetchWatchlist.rejected, (state, action) => {
+      .addCase(fetchWatchlist.rejected, (state) => {
         state.status = "failed";
         state.error = "Something went wrong while getting personal watch list";
       })
@@ -64,37 +65,27 @@ export const fetchWatchlist = createAsyncThunk(
   }
 );
 
-// todo: refactor get call to https://min-api.cryptocompare.com/data/all/coinlist, its repeated a lot in the app
 export const addNewCoin = createAsyncThunk(
   "watchList/addNewCoin",
   async (newCoinSymbol) => {
-    const sym = newCoinSymbol.toUpperCase();
-    let cryptocompareRes;
-    try {
-      cryptocompareRes = await axios.get(
-        "https://min-api.cryptocompare.com/data/all/coinlist"
-      );
-    } catch (err) {
-      console.error(err);
-      throw new Error("Error: failed to save new coin, please try again later");
-    }
-    const cryptoData = cryptocompareRes?.data?.Data[sym];
-    if (!cryptoData) {
-      throw new Error("A coin with that symbol does not exist");
-    }
-    const data = {
-      coinName: cryptoData.CoinName,
-      cryptoCompareId: cryptoData.Id,
-      name: cryptoData.Name,
-      symbol: cryptoData.Symbol,
+    const SYM = newCoinSymbol.toUpperCase();
+    const coinFound = await getCoinDetails({ fromSymbol: SYM });
+
+    const newCoin = {
+      coinName: coinFound.CoinName,
+      cryptoCompareId: coinFound.Id,
+      name: coinFound.Name,
+      symbol: coinFound.Symbol,
     };
     const config = {
       headers: { authorization: localStorage.getItem("token") },
     };
-    const res = await axios.put("/api/users/watchlist/add", data, config);
+
+    const res = await axios.put("/api/users/watchlist/add", newCoin, config);
     if (!res.data.success) {
       throw new Error(res.data.error);
     }
+
     const coin = res.data.data;
     return coin;
   }
