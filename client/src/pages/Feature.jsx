@@ -12,7 +12,6 @@ import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
 import Loading from "../_components/universal/Loading";
 import { selectAuth } from "../_store/reducers/authSlice";
-import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 import {
   addNewCoin,
   deleteCoin,
@@ -32,11 +31,6 @@ const Feature = () => {
       dispatch(fetchWatchlist());
     }
   }, [dispatch, status]);
-
-  useEffect(() => {
-    dispatch(setActiveCoinId(null));
-    dispatch(setTimeFrame("1day"));
-  }, [dispatch]);
 
   return (
     <>
