@@ -47,7 +47,7 @@ export const historySlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchHistory.pending, (state, action) => {
+      .addCase(fetchHistory.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
@@ -62,7 +62,7 @@ export const historySlice = createSlice({
           action.error?.message ||
           "Error: something went wrong, please try again later 😢";
       })
-      .addCase(fetchCharterData.pending, (state, action) => {
+      .addCase(fetchCharterData.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllCoins } from "../../lib/cryptocompareAPI";
 import { parseAllCoinSymbols } from "../../lib/transformers";
@@ -20,14 +19,14 @@ export const symbolsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchSymbols.pending, (state, action) => {
+      .addCase(fetchSymbols.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchSymbols.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.symbols = action.payload;
       })
-      .addCase(fetchSymbols.rejected, (state, action) => {
+      .addCase(fetchSymbols.rejected, (state) => {
         state.status = "failed";
         state.error = "Something went wrong while getting symbols";
       });
