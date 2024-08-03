@@ -49,9 +49,11 @@ export const historySlice = createSlice({
     builder
       .addCase(fetchHistory.pending, (state, action) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(fetchHistory.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.error = null;
         state.historicalData = action.payload;
       })
       .addCase(fetchHistory.rejected, (state, action) => {
@@ -62,9 +64,11 @@ export const historySlice = createSlice({
       })
       .addCase(fetchCharterData.pending, (state, action) => {
         state.status = "loading";
+        state.error = null;
       })
       .addCase(fetchCharterData.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.error = null;
         state.historicalData = action.payload.historicalData;
         state.coinInfo = action.payload.coinInfo;
       })
