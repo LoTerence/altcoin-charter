@@ -27,7 +27,7 @@ export const coinListSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchCoins.pending, (state, action) => {
+      .addCase(fetchCoins.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchCoins.fulfilled, (state, action) => {

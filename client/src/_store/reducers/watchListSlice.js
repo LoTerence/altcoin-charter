@@ -24,14 +24,14 @@ export const watchListSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchWatchlist.pending, (state, action) => {
+      .addCase(fetchWatchlist.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchWatchlist.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.coins = action.payload;
       })
-      .addCase(fetchWatchlist.rejected, (state, action) => {
+      .addCase(fetchWatchlist.rejected, (state) => {
         state.status = "failed";
         state.error = "Something went wrong while getting personal watch list";
       })

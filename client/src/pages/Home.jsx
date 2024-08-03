@@ -14,7 +14,6 @@ import {
   selectCoinList,
   setError,
 } from "../_store/reducers/coinListSlice";
-import { setActiveCoinId, setTimeFrame } from "../_store/reducers/historySlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -26,11 +25,6 @@ const Home = () => {
       dispatch(fetchCoins());
     }
   }, [dispatch, status]);
-
-  useEffect(() => {
-    dispatch(setActiveCoinId(null));
-    dispatch(setTimeFrame("1day"));
-  }, [dispatch]);
 
   return (
     <>

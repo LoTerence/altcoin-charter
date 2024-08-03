@@ -10,11 +10,11 @@ import {
 } from "../../_store/reducers/historySlice";
 import { selectDarkMode } from "../../_store/reducers/darkModeSlice";
 import { useActiveCoin } from "../hooks";
-import { initTimeframeOpts } from "../../lib/timeframe";
+import { initTimeframeBtnOptions } from "../../lib/timeframe";
 
-const timeframeOpts = initTimeframeOpts();
+const timeframeOptions = initTimeframeBtnOptions();
 
-const TimeFrameList = () => {
+export default function TimeFrameList() {
   const dispatch = useDispatch();
   const activeCoin = useActiveCoin();
   const { activeTimeframe } = useSelector(selectHistory);
@@ -36,7 +36,7 @@ const TimeFrameList = () => {
       role="group"
       aria-label="Timeframes button group"
     >
-      {timeframeOpts.map((opt) => {
+      {timeframeOptions.map((opt) => {
         const { id, text, value } = opt;
         const isActive = activeTimeframe === value;
         return (
@@ -59,6 +59,4 @@ const TimeFrameList = () => {
       })}
     </div>
   );
-};
-
-export default TimeFrameList;
+}
