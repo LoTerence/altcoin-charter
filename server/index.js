@@ -13,7 +13,7 @@ const session = require("express-session");
 const apiRoutes = require("./routes");
 const connectDB = require("./utils/db");
 const keys = require("./config/keys");
-const useStaticAssets = require("./serveClient");
+const serveStaticAssets = require("./serve-static-assets");
 
 const { port } = keys;
 
@@ -44,7 +44,7 @@ app.use(
 require("./config/passport")(app);
 app.use(apiRoutes);
 
-useStaticAssets(app);
+serveStaticAssets(app);
 
 app.listen(port, (error) => {
   error && console.error(error);
