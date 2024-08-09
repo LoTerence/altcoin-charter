@@ -69,6 +69,7 @@ const googleAuth = async () => {
               email: profile.emails[0].value,
               name: profile.displayName,
               googleid: profile.id,
+              username: email,
             },
             function (err, user) {
               return cb(err, user);
@@ -98,6 +99,7 @@ const facebookAuth = async () => {
               email: profile.emails[0].value,
               name: profile.name.givenName,
               facebookid: profile.id,
+              username: email,
             },
             function (err, user) {
               return cb(err, user);
