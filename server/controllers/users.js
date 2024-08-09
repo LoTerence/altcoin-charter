@@ -22,6 +22,7 @@ const registerUser = async (req, res) => {
       email,
       password,
       watchlist: [],
+      username: email,
     });
     const user = await User.addUser(newUser);
     const token = createToken({ _id: user._id });
