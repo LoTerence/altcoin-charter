@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { SpinnerIcon } from "../icons";
-import useSymbols from "../hooks/useSymbols";
+import useFetchSymbols from "../hooks/useFetchSymbols";
 
 const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const [symbol, setSymbol] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const isLoading = addRequestStatus === "pending";
-  const symbols = useSymbols();
+  const symbols = useFetchSymbols();
 
   const handleInputChange = (e) => {
     const text = e.target.value;
