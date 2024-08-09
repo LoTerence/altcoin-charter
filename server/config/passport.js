@@ -64,9 +64,10 @@ const googleAuth = async () => {
           callbackURL: `${app.serverURL}/oauth/google/callback`,
         },
         (accessToken, refreshToken, profile, cb) => {
+          const email = profile.emails[0].value;
           User.findOrCreate(
             {
-              email: profile.emails[0].value,
+              email,
               name: profile.displayName,
               googleid: profile.id,
               username: email,
@@ -94,9 +95,10 @@ const facebookAuth = async () => {
           profileFields: ["id", "first_name", "email"],
         },
         (accessToken, refreshToken, profile, cb) => {
+          const email = profile.emails[0].value;
           User.findOrCreate(
             {
-              email: profile.emails[0].value,
+              email,
               name: profile.name.givenName,
               facebookid: profile.id,
               username: email,
