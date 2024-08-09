@@ -3,7 +3,7 @@ name: ac-composed
 services:
   mongodb:
     container_name: mongodb7
-    image: mongodb/mongodb-community-server:7.0.7-ubuntu2204
+    image: mongodb/mongodb-community-server:7.0-ubi9
     ports:
       - "27017:27017"
     volumes:
