@@ -1,27 +1,18 @@
 /*
  * The block that lets the user add a new AltCoin
  */
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { SpinnerIcon } from "../icons";
-import {
-  fetchSymbols,
-  selectSymbols,
-} from "../../_store/reducers/symbolsSlice";
+import useFetchSymbols from "../hooks/useFetchSymbols";
 
 const CoinAdder = ({ addNewCoin, coins, error, setError }) => {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [symbol, setSymbol] = useState("");
-  const { status, symbols } = useSelector(selectSymbols);
   const [suggestions, setSuggestions] = useState([]);
   const isLoading = addRequestStatus === "pending";
-
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchSymbols());
-    }
-  }, [dispatch, status]);
+  const symbols = useFetchSymbols();
 
   const handleInputChange = (e) => {
     const text = e.target.value;
