@@ -1,5 +1,5 @@
 # this docker-compose is for running a dev environment with live reloads enabled
-name: ac-composed
+name: altcoin-charter
 
 services:
   mongodb:
