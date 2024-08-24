@@ -1,3 +1,4 @@
+# Dockerfile.railway - for deploying the prod image on railway
 # Use official Node.js 20 as base image
 FROM node:20.12-alpine3.18
 
@@ -17,7 +18,7 @@ COPY . .
 RUN npm run install-app
 
 # Build the client
-# RAILWAY_ENVIRONMENT_NAME = "staging" or "production"
+# RAILWAY_ENVIRONMENT_NAME = either "staging" or "production"
 ARG RAILWAY_ENVIRONMENT_NAME
 RUN cd client && npx vite build --mode $RAILWAY_ENVIRONMENT_NAME && cd ..
 
