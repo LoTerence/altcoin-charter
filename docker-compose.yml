@@ -1,3 +1,4 @@
+# this docker-compose is for running a dev environment with live reloads enabled
 name: ac-composed
 
 services:
@@ -10,7 +11,9 @@ services:
       - mongo_vol:/data/db
 
   server:
-    build: server
+    build:
+      context: server
+      dockerfile: dev.Dockerfile
     container_name: ac-server
     depends_on:
       - mongodb
@@ -29,7 +32,9 @@ services:
           target: /usr/src/app
 
   client:
-    build: client
+    build: 
+      context: client
+      dockerfile: dev.Dockerfile
     container_name: ac-client
     env_file:
       - client/.env.local
