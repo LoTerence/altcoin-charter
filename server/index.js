@@ -22,11 +22,14 @@ const app = express();
 
 app.use(express.json());
 app.use(
-  // helmet({
-  //   contentSecurityPolicy: false,
-  //   crossOriginOpenerPolicy: false,
-  // })
-  helmet()
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: ["'self'"],
+      },
+    },
+    // crossOriginOpenerPolicy: false,
+  })
 );
 app.use(
   session({
