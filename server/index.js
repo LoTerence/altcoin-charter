@@ -27,7 +27,7 @@ app.use(
       directives: {
         "script-src": ["'self'"],
         // TODO: move CC API calls from the client to the server
-        "connect-src": ["min-api.cryptocompare.com"],
+        "connect-src": ["'self'", "min-api.cryptocompare.com"],
       },
     },
     // enable popups for google and fb oauth login
