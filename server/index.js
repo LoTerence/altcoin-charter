@@ -25,10 +25,22 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        scriptSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          // TODO: move CC API calls from the client to the server
+          "min-api.cryptocompare.com",
+        ],
       },
     },
-    // crossOriginOpenerPolicy: false,
+    // enable popups for google and fb oauth login
+    crossOriginOpenerPolicy: "same-origin-allow-popups",
+    // CORS policy is handled by cors()
+    crossOriginResourcePolicy: false,
+  })
+);
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL],
   })
 );
 app.use(
@@ -36,11 +48,6 @@ app.use(
     secret: keys.session.secret,
     resave: true,
     saveUninitialized: true,
-  })
-);
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL],
   })
 );
 
