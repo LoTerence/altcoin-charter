@@ -13,7 +13,7 @@ const session = require("express-session");
 const apiRoutes = require("./routes");
 const connectDB = require("./utils/db");
 const keys = require("./config/keys");
-const serveStaticAssets = require("./serve-static-assets");
+const serveStaticAssets = require("./utils/serve-static-assets");
 
 const { port } = keys;
 
