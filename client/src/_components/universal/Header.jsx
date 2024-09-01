@@ -53,7 +53,7 @@ function Header() {
                 aria-haspopup="true"
                 aria-expanded="false"
                 className="nav-link dropdown-toggle"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 id="accountDropdown"
                 type="button"
               >

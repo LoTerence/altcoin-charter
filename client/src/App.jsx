@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { fetchUser } from "./_store/reducers/authSlice";
 import routes from "./routes";
 import "./scss/App.scss";
-import * as bootstrap from "bootstrap";
 
 export default function App() {
   console.log("Welcome to", import.meta.env.VITE_APP_TITLE);
