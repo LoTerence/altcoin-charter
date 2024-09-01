@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectDarkMode, setIsDark } from "../../_store/reducers/darkModeSlice";
 import { CircleHalfIcon, DarkIcon, LightIcon } from "../icons";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 const DarkModeToggler = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const DarkModeToggler = () => {
         aria-haspopup="true"
         aria-label="Toggle theme"
         className="nav-link dropdown-toggle d-flex align-items-center"
-        data-toggle="dropdown"
+        data-bs-toggle="dropdown"
         id="bd-theme"
         type="button"
       >

@@ -13,7 +13,7 @@ const session = require("express-session");
 const apiRoutes = require("./routes");
 const connectDB = require("./utils/db");
 const keys = require("./config/keys");
-const useStaticAssets = require("./serveClient");
+const serveStaticAssets = require("./utils/serve-static-assets");
 
 const { port } = keys;
 
@@ -23,8 +23,27 @@ const app = express();
 app.use(express.json());
 app.use(
   helmet({
-    contentSecurityPolicy: false,
-    crossOriginOpenerPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": [
+          "'self'",
+          "'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN'",
+          "'sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q'",
+          "'sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl'",
+        ],
+        // TODO: move CC API calls from the client to the server
+        "connect-src": ["'self'", "min-api.cryptocompare.com"],
+      },
+    },
+    // enable popups for google and fb oauth login
+    crossOriginOpenerPolicy: "same-origin-allow-popups",
+    // CORS policy is handled by cors()
+    crossOriginResourcePolicy: false,
+  })
+);
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL],
   })
 );
 app.use(
@@ -34,12 +53,11 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(cors());
 
 require("./config/passport")(app);
 app.use(apiRoutes);
 
-useStaticAssets(app);
+serveStaticAssets(app);
 
 app.listen(port, (error) => {
   error && console.error(error);

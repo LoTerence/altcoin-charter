@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../../_store/reducers/authSlice";
 import DarkModeToggler from "./DarkModeToggler";
+import Collapse from "bootstrap/js/dist/collapse";
 
 const authNavs = [
   { id: 0, text: "Profile", linkTo: "/profile" },
@@ -27,8 +28,8 @@ function Header() {
         <button
           className="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarCollapse"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
           aria-controls="navbarCollapse"
           aria-expanded="false"
           aria-label="Toggle navigation"
@@ -52,7 +53,7 @@ function Header() {
                 aria-haspopup="true"
                 aria-expanded="false"
                 className="nav-link dropdown-toggle"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 id="accountDropdown"
                 type="button"
               >
