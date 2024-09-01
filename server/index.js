@@ -34,7 +34,7 @@ app.use(
         // TODO: move CC API calls from the client to the server
         "connect-src": ["'self'", "min-api.cryptocompare.com"],
         "img-src": [
-          "'self'",
+          "'strict-dynamic'",
           "data:",
           "'sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN'",
         ],
