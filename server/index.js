@@ -10,6 +10,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 
+const { logError, isOperationalError } = require("./middleware/error-handler");
 const apiRoutes = require("./routes");
 const connectDB = require("./utils/db");
 const keys = require("./config/keys");
@@ -72,3 +73,14 @@ app.listen(port, (error) => {
     )}`
   );
 });
+
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.error(reason, "Unhandled Rejection at Promise", p);
+  })
+  .on("uncaughtException", (err) => {
+    logError(error);
+    if (!isOperationalError(error)) {
+      process.exit(1);
+    }
+  });

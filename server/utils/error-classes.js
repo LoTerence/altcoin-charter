@@ -1,11 +1,11 @@
 const httpStatusCodes = require("./http-status-codes");
 
 class BaseError extends Error {
-  constructor(name, statusCode, isOperational, description) {
-    super(description);
+  constructor(message, statusCode, isOperational) {
+    super(message);
 
-    Object.setPrototypeOf(this, new.target.prototype);
-    this.name = name;
+    // Object.setPrototypeOf(this, new.target.prototype);
+    this.name = this.constructor.name;
     this.statusCode = statusCode;
     this.isOperational = isOperational;
     Error.captureStackTrace(this);
@@ -14,34 +14,31 @@ class BaseError extends Error {
 
 class Api404Error extends BaseError {
   constructor(
-    name,
+    message = "Not found.",
     statusCode = httpStatusCodes.NOT_FOUND,
-    description = "Not found.",
     isOperational = true
   ) {
-    super(name, statusCode, isOperational, description);
+    super(message, statusCode, isOperational);
   }
 }
 
 class Api500Error extends BaseError {
   constructor(
-    name,
+    message = "Server error.",
     statusCode = httpStatusCodes.INTERNAL_SERVER,
-    description = "Server error.",
     isOperational = true
   ) {
-    super(name, statusCode, isOperational, description);
+    super(message, statusCode, isOperational);
   }
 }
 
 class Api400Error extends BaseError {
   constructor(
-    name,
+    message = "Bad request.",
     statusCode = httpStatusCodes.BAD_REQUEST,
-    description = "Bad request.",
     isOperational = true
   ) {
-    super(name, statusCode, isOperational, description);
+    super(message, statusCode, isOperational);
   }
 }
 

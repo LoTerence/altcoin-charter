@@ -1,4 +1,5 @@
 const Coin = require("../models/Coin");
+const { Api404Error } = require("../utils/error-classes");
 
 const getCoinList = async (req, res) => {
   try {
@@ -18,10 +19,13 @@ const getCoinList = async (req, res) => {
   }
 };
 
-const getCoinById = async (req, res) => {
+const getCoinById = async (req, res, next) => {
   const oid = req.params.oid;
   try {
     const coin = await Coin.findOne({ _id: oid });
+    if (coin === null) {
+      throw new Api404Error(`Coin ${oid} not found`);
+    }
 
     return res.status(200).json({
       success: true,
@@ -29,11 +33,7 @@ const getCoinById = async (req, res) => {
       data: coin,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    next(err);
   }
 };
 
