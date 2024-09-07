@@ -16,7 +16,9 @@ module.exports = (app) => {
   const compress = require("compression");
   app.use(compress());
 
-  const buildDirectory = path.resolve(__dirname, "..", "client/dist");
+  // In production, make sure to run the build and start commands from the project root directory,
+  // not the '/server' folder - otherwise `process.cwd` will not work
+  const buildDirectory = path.resolve(process.cwd(), "client", "dist");
 
   if (fs.existsSync(buildDirectory)) {
     app.use(express.static(buildDirectory));
