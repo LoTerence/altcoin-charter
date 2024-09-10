@@ -4,21 +4,19 @@ Controllers for managing the public list of coins
 const Coin = require("../models/Coin");
 const Watchlist = require("../models/Watchlist");
 
-const getPublicWatchlist = async () => {
-  let publicList = await Watchlist.findOne({ name: "PUBLIC" });
-
-  if (!publicList) {
-    publicList = new Watchlist({ name: "PUBLIC", coins: [] });
-    await publicList.save();
-    console.log(`Watchlist ${publicList.name} successfully created`);
-  }
-
+const createPublicWatchlist = async () => {
+  const publicList = new Watchlist({ name: "PUBLIC", coins: [] });
+  await publicList.save();
+  console.log(`Watchlist ${publicList.name} successfully created`);
   return publicList;
 };
 
 const getPublicCoins = async (req, res) => {
   try {
-    const publicList = await getPublicWatchlist();
+    let publicList = await Watchlist.findOne({ name: "PUBLIC" });
+    if (!publicList) {
+      publicList = await createPublicWatchlist();
+    }
 
     const coins = await Coin.find({ _id: publicList.coins });
 
@@ -28,11 +26,7 @@ const getPublicCoins = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      error: "Failed to fetch data",
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -62,11 +56,7 @@ const addCoin = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      error: "Failed to fetch data",
-      success: false,
-    });
+    next(err);
   }
 };
 
@@ -82,11 +72,7 @@ const removeCoinById = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      error: "Failed to delete coin",
-      success: false,
-    });
+    next(err);
   }
 };
 
