@@ -1,4 +1,5 @@
 const Coin = require("../models/Coin");
+const { Api404Error } = require("../utils/error-classes");
 
 const getCoinList = async (req, res) => {
   try {
@@ -6,34 +7,29 @@ const getCoinList = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "List of coins successfully found",
+      message: "List of coins successfully found.",
       data: coins,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    next(err);
   }
 };
 
-const getCoinById = async (req, res) => {
+const getCoinById = async (req, res, next) => {
   const oid = req.params.oid;
   try {
     const coin = await Coin.findOne({ _id: oid });
+    if (!coin) {
+      throw new Api404Error(`Coin ${oid} not found.`);
+    }
 
     return res.status(200).json({
       success: true,
-      message: "Coin successfully found",
+      message: "Coin successfully found.",
       data: coin,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    next(err);
   }
 };
 
@@ -44,21 +40,17 @@ const addCoin = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Coin was successfully added",
+      message: "Coin was successfully added.",
       data: newCoin,
     });
   } catch (err) {
-    console.error(err);
     if (err.name === "ValidationError") {
       return res.status(200).json({
         success: false,
-        error: "There is already a coin with this symbol: " + data.symbol,
+        error: `There is already a coin with this symbol: ${data.symbol}`,
       });
     }
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    next(err);
   }
 };
 
@@ -66,25 +58,17 @@ const deleteCoinById = async (req, res) => {
   const oid = req.params.oid;
   try {
     const coin = await Coin.Coin.deleteOne({ _id: oid });
-
     if (!coin) {
-      return res.status(404).json({
-        success: false,
-        error: "No coin with that id found",
-      });
+      throw new Api404Error(`Failed to delete coin. Coin ${oid} not found.`);
     }
 
     return res.status(200).json({
       success: true,
-      message: "Coin was successfully deleted",
+      message: "Coin was successfully deleted.",
       data: {},
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
+    next(err);
   }
 };
 
