@@ -246,7 +246,7 @@ const addCoinToWatchlist = async (req, res, next) => {
 // @desc Delete a coin from the user's watchlist by _id
 // @route PUT /users/watchlist/delete
 // @access private - only the client can access
-const removeCoinFromWatchlist = async (req, res) => {
+const removeCoinFromWatchlist = async (req, res, next) => {
   const oid = req.body.id;
   const user = req.user;
   user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
@@ -258,11 +258,7 @@ const removeCoinFromWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      error: "Failed to delete coin from user watchlist",
-      success: false,
-    });
+    next(err);
   }
 };
 
