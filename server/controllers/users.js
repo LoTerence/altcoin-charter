@@ -264,32 +264,30 @@ const removeCoinFromWatchlist = async (req, res, next) => {
 
 // <-------------------- OAuth2.0 controllers ------------------------>
 // Google login controller
-const authenticateUserGoogle = async (req, res) => {
+const authenticateUserGoogle = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.json({ message: "User not found", success: false });
+      throw new Api401Error("User not found");
     }
     const token = createToken({ _id: user._id });
     return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Auth failed", success: false });
+    next(err);
   }
 };
 
 // Facebook login controller
-const authenticateUserFacebook = async (req, res) => {
+const authenticateUserFacebook = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.json({ message: "User not found", success: false });
+      throw new Api401Error("User not found");
     }
     const token = createToken({ _id: user._id });
     return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Auth failed", success: false });
+    next(err);
   }
 };
 
