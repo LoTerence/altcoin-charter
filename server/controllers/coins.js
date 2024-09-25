@@ -1,7 +1,7 @@
 const Coin = require("../models/Coin");
 const { Api404Error } = require("../utils/error-classes");
 
-const getCoinList = async (req, res) => {
+const getCoinList = async (req, res, next) => {
   try {
     const coins = await Coin.find({});
 
@@ -33,7 +33,7 @@ const getCoinById = async (req, res, next) => {
   }
 };
 
-const addCoin = async (req, res) => {
+const addCoin = async (req, res, next) => {
   const data = req.body;
   try {
     const newCoin = await Coin.create(data);
@@ -54,7 +54,7 @@ const addCoin = async (req, res) => {
   }
 };
 
-const deleteCoinById = async (req, res) => {
+const deleteCoinById = async (req, res, next) => {
   const oid = req.params.oid;
   try {
     const coin = await Coin.Coin.deleteOne({ _id: oid });

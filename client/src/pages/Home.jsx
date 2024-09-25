@@ -7,6 +7,7 @@ import CoinInfo from "../_components/charter/CoinInfo";
 import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
 import Loading from "../_components/universal/Loading";
+import { setActiveCoinId } from "../_store/reducers/historySlice";
 import {
   addNewCoin,
   deleteCoin,
@@ -19,6 +20,10 @@ const Home = () => {
   const dispatch = useDispatch();
   const { coins, status, error } = useSelector(selectCoinList);
   const isLoading = status === "loading";
+
+  useEffect(() => {
+    dispatch(setActiveCoinId(null));
+  }, [dispatch]);
 
   useEffect(() => {
     if (status === "idle") {
