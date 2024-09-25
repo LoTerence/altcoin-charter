@@ -82,11 +82,7 @@ async function loginUser(req, res) {
 const logOutUser = (req, res) => {
   req.logout((err) => {
     if (err) {
-      console.error(err);
-      return res.json({
-        message: "Failed to log user out",
-        success: false,
-      });
+      next(err);
     }
   });
   return res.json({
