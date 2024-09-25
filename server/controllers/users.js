@@ -102,7 +102,7 @@ const getUserProfile = async (req, res) => {
 // @desc Edit the user's name
 // @route PUT /users/profile/name
 // @access private - only the client can access
-const editUserName = async (req, res) => {
+const editUserName = async (req, res, next) => {
   const { newName } = req.body;
   try {
     const user = req.user;
@@ -116,18 +116,14 @@ const editUserName = async (req, res) => {
     await user.save();
     return res.json({ message: null, name: user.name, success: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Edit the user's email
 // @route PUT /users/profile/email
 // @access private - only the client can access
-const editUserEmail = async (req, res) => {
+const editUserEmail = async (req, res, next) => {
   if (!req.body?.password) {
     return res.json({ message: "No password!", success: false });
   }
@@ -148,18 +144,14 @@ const editUserEmail = async (req, res) => {
     await user.save();
     return res.json({ email: user.email, message: null, success: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Edit the user's password
 // @route PUT /users/password
 // @access private - only the client can access
-const editUserPassword = async (req, res) => {
+const editUserPassword = async (req, res, next) => {
   const { password, newPassword } = req.body;
   if (!password) {
     return res.json({ message: "No password!", success: false });
@@ -176,18 +168,14 @@ const editUserPassword = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Delete the user account by deleting the user document by id
 // @route DELETE /users/delete
 // @access private - only the client can access
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   const password = req.body?.password;
   if (!password) {
     return res.json({ message: "No password!", success: false });
@@ -205,18 +193,14 @@ const deleteUser = async (req, res) => {
       message: "User successfully deleted",
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Failed to delete user",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Get the user's watchlist
 // @route GET /users/watchlist
 // @access private - only the client can access
-const getUserWatchlist = async (req, res) => {
+const getUserWatchlist = async (req, res, next) => {
   try {
     const coins = await Coin.find({ _id: req.user.watchlist });
     return res.json({
@@ -225,11 +209,7 @@ const getUserWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      error: "Failed to fetch data",
-      success: false,
-    });
+    next(err);
   }
 };
 

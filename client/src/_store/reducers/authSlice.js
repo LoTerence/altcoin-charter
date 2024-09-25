@@ -152,7 +152,7 @@ export const changeEmail = createAsyncThunk(
         },
       }
     );
-    if (!res.data.success) {
+    if (!res.data?.success) {
       throw new Error(
         res?.data?.message || "Something went wrong, please try again later"
       );
