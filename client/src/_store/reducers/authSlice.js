@@ -72,8 +72,11 @@ export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password }) => {
     const res = await axios.post("/api/users/register", { email, password });
-    const { message, profile, success, token } = res.data;
-    if (!success) throw new Error(message);
+    if (!res.data?.success) {
+      throw new Error("Failed to register new user, please try again later.");
+    }
+
+    const { profile, token } = res.data;
     localStorage.setItem("token", token);
     const { _id, email: userEmail, name } = profile;
     return { _id, email: userEmail, name };
@@ -84,10 +87,11 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }) => {
     const res = await axios.post("/api/users/login", { email, password });
-    const { profile, success, token } = res.data;
-    if (!success) {
-      throw new Error("Log in failed");
+    if (!res.data?.success) {
+      throw new Error("Invalid login, please try again");
     }
+
+    const { profile, token } = res.data;
     localStorage.setItem("token", token);
     const { _id, email: userEmail, name } = profile;
     return { _id, email: userEmail, name };
@@ -148,7 +152,7 @@ export const changeEmail = createAsyncThunk(
         },
       }
     );
-    if (!res.data.success) {
+    if (!res.data?.success) {
       throw new Error(
         res?.data?.message || "Something went wrong, please try again later"
       );

@@ -13,8 +13,6 @@ const {
   getUserWatchlist,
   addCoinToWatchlist,
   removeCoinFromWatchlist,
-  authenticateUserGoogle,
-  authenticateUserFacebook,
 } = require("../../controllers/users");
 
 // passport middleware
