@@ -42,4 +42,20 @@ class Api400Error extends BaseError {
   }
 }
 
-module.exports = { BaseError, Api400Error, Api404Error, Api500Error };
+class Api401Error extends BaseError {
+  constructor(
+    message = "Invalid Login.",
+    statusCode = httpStatusCodes.UNAUTHORIZED,
+    isOperational = true
+  ) {
+    super(message, statusCode, isOperational);
+  }
+}
+
+module.exports = {
+  BaseError,
+  Api400Error,
+  Api401Error,
+  Api404Error,
+  Api500Error,
+};
