@@ -216,7 +216,7 @@ const getUserWatchlist = async (req, res, next) => {
 // @desc Add a coin to the user's watchlist
 // @route PUT /users/watchlist/add
 // @access private - only the client can access
-const addCoinToWatchlist = async (req, res) => {
+const addCoinToWatchlist = async (req, res, next) => {
   const data = req.body;
   const user = req.user;
   try {
@@ -227,7 +227,7 @@ const addCoinToWatchlist = async (req, res) => {
     const isListed = user.watchlist.some((oid) => oid.equals(coin._id));
     if (isListed) {
       return res.json({
-        error: "That coin is already on the list",
+        message: "That coin is already on the list",
         success: false,
       });
     }
@@ -239,11 +239,7 @@ const addCoinToWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      error: "Failed to save new coin to user watchlist",
-      success: false,
-    });
+    next(err);
   }
 };
 
