@@ -11,7 +11,7 @@ const createPublicWatchlist = async () => {
   return publicList;
 };
 
-const getPublicCoins = async (req, res) => {
+const getPublicCoins = async (req, res, next) => {
   try {
     let publicList = await Watchlist.findOne({ name: "PUBLIC" });
     if (!publicList) {
@@ -30,7 +30,7 @@ const getPublicCoins = async (req, res) => {
   }
 };
 
-const addCoin = async (req, res) => {
+const addCoin = async (req, res, next) => {
   const data = req.body;
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });
@@ -60,7 +60,7 @@ const addCoin = async (req, res) => {
   }
 };
 
-const removeCoinById = async (req, res) => {
+const removeCoinById = async (req, res, next) => {
   const oid = req.params.id;
   try {
     const public = await Watchlist.findOne({ name: "PUBLIC" });

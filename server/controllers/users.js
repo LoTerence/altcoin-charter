@@ -16,7 +16,7 @@ function createToken(data) {
 // @desc Register a new user
 // @route POST /users/register
 // @access private - only the client can access
-async function registerUser(req, res) {
+async function registerUser(req, res, next) {
   const { email, password } = req.body;
   try {
     const newUser = new User({
@@ -48,7 +48,7 @@ async function registerUser(req, res) {
 // @desc Log in a new user
 // @route POST /users/login
 // @access private - only the client can access
-async function loginUser(req, res) {
+async function loginUser(req, res, next) {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -79,7 +79,7 @@ async function loginUser(req, res) {
   }
 }
 
-const logOutUser = (req, res) => {
+const logOutUser = (req, res, next) => {
   req.logout((err) => {
     if (err) {
       next(err);
