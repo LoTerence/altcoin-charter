@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Coin = require("../models/Coin");
 const User = require("../models/User");
 const keys = require("../config/keys");
+const { Api401Error } = require("../utils/error-classes");
 
 const clientURL = keys.app.clientURL;
 const { secret, tokenLife } = keys.jwt;
@@ -15,7 +16,7 @@ function createToken(data) {
 // @desc Register a new user
 // @route POST /users/register
 // @access private - only the client can access
-const registerUser = async (req, res) => {
+async function registerUser(req, res) {
   const { email, password } = req.body;
   try {
     const newUser = new User({
@@ -25,12 +26,14 @@ const registerUser = async (req, res) => {
       username: email,
     });
     const user = await User.addUser(newUser);
+
     const token = createToken({ _id: user._id });
     const profile = {
       _id: user._id,
       email: user.email,
       name: "",
     };
+
     return res.json({
       message: "User registered",
       profile,
@@ -38,36 +41,33 @@ const registerUser = async (req, res) => {
       token: `JWT ${token}`,
     });
   } catch (err) {
-    console.error(err);
-    return res.json({
-      message: "Failed to register new user",
-      profile: null,
-      success: false,
-      token: null,
-    });
+    next(err);
   }
-};
+}
 
 // @desc Log in a new user
 // @route POST /users/login
 // @access private - only the client can access
-const loginUser = async (req, res) => {
+async function loginUser(req, res) {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ message: "Log in failed", success: false });
+      throw new Api401Error("Log in failed");
     }
+
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
-      return res.json({ message: "Log in failed", success: false });
+      throw new Api401Error("Log in failed");
     }
+
     const token = createToken({ _id: user._id });
     const profile = {
       _id: user._id,
       email: user.email,
-      name: "",
+      name: user?.name || "",
     };
+
     return res.json({
       message: "User logged in",
       profile,
@@ -75,15 +75,9 @@ const loginUser = async (req, res) => {
       token: `JWT ${token}`,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Failed to authenticate user",
-      profile: null,
-      success: false,
-      token: null,
-    });
+    next(err);
   }
-};
+}
 
 const logOutUser = (req, res) => {
   req.logout((err) => {
