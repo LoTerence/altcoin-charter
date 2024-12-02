@@ -82,8 +82,10 @@ export const addNewCoin = createAsyncThunk(
     };
 
     const res = await axios.put("/api/users/watchlist/add", newCoin, config);
-    if (!res.data.success) {
-      throw new Error(res.data.error);
+    if (!res.data?.success) {
+      throw new Error(
+        res.data?.message || "Failed to save new coin, please try again later"
+      );
     }
 
     const coin = res.data.data;
