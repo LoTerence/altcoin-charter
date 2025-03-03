@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Coin = require("../models/Coin");
 const User = require("../models/User");
 const keys = require("../config/keys");
+const { Api401Error } = require("../utils/error-classes");
 
 const clientURL = keys.app.clientURL;
 const { secret, tokenLife } = keys.jwt;
@@ -15,7 +16,7 @@ function createToken(data) {
 // @desc Register a new user
 // @route POST /users/register
 // @access private - only the client can access
-const registerUser = async (req, res) => {
+async function registerUser(req, res, next) {
   const { email, password } = req.body;
   try {
     const newUser = new User({
@@ -25,12 +26,14 @@ const registerUser = async (req, res) => {
       username: email,
     });
     const user = await User.addUser(newUser);
+
     const token = createToken({ _id: user._id });
     const profile = {
       _id: user._id,
       email: user.email,
       name: "",
     };
+
     return res.json({
       message: "User registered",
       profile,
@@ -38,36 +41,33 @@ const registerUser = async (req, res) => {
       token: `JWT ${token}`,
     });
   } catch (err) {
-    console.error(err);
-    return res.json({
-      message: "Failed to register new user",
-      profile: null,
-      success: false,
-      token: null,
-    });
+    next(err);
   }
-};
+}
 
 // @desc Log in a new user
 // @route POST /users/login
 // @access private - only the client can access
-const loginUser = async (req, res) => {
+async function loginUser(req, res, next) {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ message: "Log in failed", success: false });
+      throw new Api401Error("Log in failed");
     }
+
     const isMatch = user.validatePassword(password);
     if (!isMatch) {
-      return res.json({ message: "Log in failed", success: false });
+      throw new Api401Error("Log in failed");
     }
+
     const token = createToken({ _id: user._id });
     const profile = {
       _id: user._id,
       email: user.email,
-      name: "",
+      name: user?.name || "",
     };
+
     return res.json({
       message: "User logged in",
       profile,
@@ -75,24 +75,14 @@ const loginUser = async (req, res) => {
       token: `JWT ${token}`,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Failed to authenticate user",
-      profile: null,
-      success: false,
-      token: null,
-    });
+    next(err);
   }
-};
+}
 
-const logOutUser = (req, res) => {
+const logOutUser = (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      console.error(err);
-      return res.json({
-        message: "Failed to log user out",
-        success: false,
-      });
+      next(err);
     }
   });
   return res.json({
@@ -112,7 +102,7 @@ const getUserProfile = async (req, res) => {
 // @desc Edit the user's name
 // @route PUT /users/profile/name
 // @access private - only the client can access
-const editUserName = async (req, res) => {
+const editUserName = async (req, res, next) => {
   const { newName } = req.body;
   try {
     const user = req.user;
@@ -126,18 +116,14 @@ const editUserName = async (req, res) => {
     await user.save();
     return res.json({ message: null, name: user.name, success: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Edit the user's email
 // @route PUT /users/profile/email
 // @access private - only the client can access
-const editUserEmail = async (req, res) => {
+const editUserEmail = async (req, res, next) => {
   if (!req.body?.password) {
     return res.json({ message: "No password!", success: false });
   }
@@ -158,18 +144,14 @@ const editUserEmail = async (req, res) => {
     await user.save();
     return res.json({ email: user.email, message: null, success: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Edit the user's password
 // @route PUT /users/password
 // @access private - only the client can access
-const editUserPassword = async (req, res) => {
+const editUserPassword = async (req, res, next) => {
   const { password, newPassword } = req.body;
   if (!password) {
     return res.json({ message: "No password!", success: false });
@@ -186,18 +168,14 @@ const editUserPassword = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Something went wrong, please try again later",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Delete the user account by deleting the user document by id
 // @route DELETE /users/delete
 // @access private - only the client can access
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   const password = req.body?.password;
   if (!password) {
     return res.json({ message: "No password!", success: false });
@@ -215,18 +193,14 @@ const deleteUser = async (req, res) => {
       message: "User successfully deleted",
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      message: "Failed to delete user",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Get the user's watchlist
 // @route GET /users/watchlist
 // @access private - only the client can access
-const getUserWatchlist = async (req, res) => {
+const getUserWatchlist = async (req, res, next) => {
   try {
     const coins = await Coin.find({ _id: req.user.watchlist });
     return res.json({
@@ -235,18 +209,14 @@ const getUserWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      error: "Failed to fetch data",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Add a coin to the user's watchlist
 // @route PUT /users/watchlist/add
 // @access private - only the client can access
-const addCoinToWatchlist = async (req, res) => {
+const addCoinToWatchlist = async (req, res, next) => {
   const data = req.body;
   const user = req.user;
   try {
@@ -257,7 +227,7 @@ const addCoinToWatchlist = async (req, res) => {
     const isListed = user.watchlist.some((oid) => oid.equals(coin._id));
     if (isListed) {
       return res.json({
-        error: "That coin is already on the list",
+        message: "That coin is already on the list",
         success: false,
       });
     }
@@ -269,18 +239,14 @@ const addCoinToWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      error: "Failed to save new coin to user watchlist",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // @desc Delete a coin from the user's watchlist by _id
 // @route PUT /users/watchlist/delete
 // @access private - only the client can access
-const removeCoinFromWatchlist = async (req, res) => {
+const removeCoinFromWatchlist = async (req, res, next) => {
   const oid = req.body.id;
   const user = req.user;
   user.watchlist = user.watchlist.filter((id) => !id.equals(oid));
@@ -292,42 +258,36 @@ const removeCoinFromWatchlist = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({
-      error: "Failed to delete coin from user watchlist",
-      success: false,
-    });
+    next(err);
   }
 };
 
 // <-------------------- OAuth2.0 controllers ------------------------>
 // Google login controller
-const authenticateUserGoogle = async (req, res) => {
+const authenticateUserGoogle = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.json({ message: "User not found", success: false });
+      throw new Api401Error("User not found");
     }
     const token = createToken({ _id: user._id });
     return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Auth failed", success: false });
+    next(err);
   }
 };
 
 // Facebook login controller
-const authenticateUserFacebook = async (req, res) => {
+const authenticateUserFacebook = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.json({ message: "User not found", success: false });
+      throw new Api401Error("User not found");
     }
     const token = createToken({ _id: user._id });
     return res.redirect(`${clientURL}/oauthcallback?token=${token}`);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Auth failed", success: false });
+    next(err);
   }
 };
 

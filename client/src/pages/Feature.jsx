@@ -12,6 +12,7 @@ import PriceChart from "../_components/charter/PriceChart";
 import TimeFrameList from "../_components/charter/TimeFrameList";
 import Loading from "../_components/universal/Loading";
 import { selectAuth } from "../_store/reducers/authSlice";
+import { setActiveCoinId } from "../_store/reducers/historySlice";
 import {
   addNewCoin,
   deleteCoin,
@@ -25,6 +26,10 @@ const Feature = () => {
   const { userProfile } = useSelector(selectAuth);
   const { coins, status, error } = useSelector(selectWatchList);
   const isLoading = status === "loading";
+
+  useEffect(() => {
+    dispatch(setActiveCoinId(null));
+  }, [dispatch]);
 
   useEffect(() => {
     if (status === "idle") {
