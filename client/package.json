@@ -20,7 +20,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@vitejs/plugin-react": "^4.3.4",
     "altcoin-charter": "file:..",
-    "axios": "^1.7.4",
+    "axios": "^1.8.2",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.3.1",
     "email-validator": "^2.0.4",
