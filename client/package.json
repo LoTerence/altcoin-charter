@@ -14,7 +14,8 @@
     "clean": "rimraf dist",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -33,6 +34,7 @@
     "vite": "^6.2.5"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^3.1.1",
     "eslint": "^8.54.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.33.2",

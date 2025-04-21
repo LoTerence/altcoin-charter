@@ -27,3 +27,12 @@ export function parseHistoryIntoCoordinates(history) {
 export function parseAllCoinSymbols(allCoins) {
   return Object.values(allCoins);
 }
+
+const formatterUSD = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+export function formatToUSD(val) {
+  return formatterUSD.format(val);
+}
