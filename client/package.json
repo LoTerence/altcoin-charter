@@ -13,7 +13,8 @@
     "preview:staging": "vite build --mode staging && vite preview --mode staging",
     "clean": "rimraf dist",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
-    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix"
+    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
@@ -37,7 +38,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "rimraf": "^5.0.5",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "vitest": "^3.1.1"
   },
   "browserslist": {
     "production": [
