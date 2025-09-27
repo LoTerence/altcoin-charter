@@ -1,5 +1,5 @@
 # Use official Node.js 20 as base image
-FROM node:20-alpine3.19
+FROM node:20-alpine3.20
 
 # Set working directory
 WORKDIR /usr/src/app
