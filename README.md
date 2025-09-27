@@ -6,11 +6,14 @@ Built with the MERN stack:
 - React + Redux front end 
 - Node.js, Express, and MongoDB (noSQL) back end
 - Bootstrap 5 for the UI components
-- Includes JWT authentication with Passport.js - OAuth2.0 with google and facebook
+
+Technical features:
+- JWT authentication with Passport.js
+- OAuth2.0 authorization with google and facebook
 - Secured with CSP and CORS
 
 Example of the app is deployed on:
-https://cryptocharts.koyomi-ai.com/
+- https://cryptocharts.koyomi-ai.com/
 
 ## Quick Start 
 
