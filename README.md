@@ -1,12 +1,13 @@
 # CryptoCharts
 
-See the histories of cryptocurrencies you saved
+A fintech application that allows users explore and track the historical price data of any cryptocurrency. Users can view interactive charts, analyze trends over different timeframes, and compare performance to make informed investment decisions.
 
-Built with the MERN stack
+Built with the MERN stack:
 - React + Redux front end 
-- Node.js, Express, and MongoDB backend
-- Includes authentication with Passport.js - OAuth2.0 with google and facebook
+- Node.js, Express, and MongoDB (noSQL) back end
 - Bootstrap 5 for the UI components
+- Includes JWT authentication with Passport.js - OAuth2.0 with google and facebook
+- Secured with CSP and CORS
 
 Example of the app is deployed on:
 https://cryptocharts.koyomi-ai.com/
