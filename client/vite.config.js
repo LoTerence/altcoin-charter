@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     test: {
-      exclude: [...configDefaults.exclude, "**/App.test.js"],
+      exclude: [...configDefaults.exclude],
     },
   };
 });
