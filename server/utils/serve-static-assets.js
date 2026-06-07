@@ -1,9 +1,8 @@
-const e = require("express");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 
-module.exports = (app) => {
+function serveStaticAssets(app) {
   // Express only serves static assets in production
   if (process.env.NODE_ENV !== "production") {
     app.get("/", (req, res) => {
@@ -31,7 +30,9 @@ module.exports = (app) => {
       `❌ Server ERROR: 
   - The client build path (${buildDirectory}) does not exist. 
   - The application will not be able to serve static assets
-  - Please make sure to build the client with \`$ vite build\``
+  - Please make sure to build the client with \`$ vite build\``,
     );
   }
-};
+}
+
+module.exports = serveStaticAssets;
