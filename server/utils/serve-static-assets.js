@@ -22,7 +22,7 @@ function serveStaticAssets(app) {
   if (fs.existsSync(buildDirectory)) {
     app.use(express.static(buildDirectory));
 
-    app.get("*", (req, res) => {
+    app.get("/*", (req, res) => {
       res.sendFile(`${buildDirectory}/index.html`);
     });
   } else {
