@@ -31,6 +31,13 @@ docker compose -f docker-compose.yml up
 
 You should now be able to view the app on http://localhost:3000 in your browser.
 
+To initialize the DB, make sure docker compose is up with the mongodb container running, then execute the following command:
+
+```
+cd server && npm run seed:db
+```
+
+
 ### NPM
 
 Alternatively, run the app locally with npm:
