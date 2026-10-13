@@ -24,6 +24,7 @@ const connectDB = async () => {
       }`
     );
     console.log(err);
+    throw err;
   }
 };
 

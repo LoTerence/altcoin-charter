@@ -1,4 +1,11 @@
+const path = require("path");
+const environment = process.env.TARGET_ENV || process.env.NODE_ENV || "development";
+require("dotenv").config({
+  path: path.join(__dirname, "..", `.env.${environment}`),
+});
+
 const chalk = require("chalk");
+const mongoose = require("mongoose");
 const connectDB = require("./db");
 const Watchlist = require("../models/Watchlist");
 
@@ -26,7 +33,7 @@ const seedDB = async () => {
       `${chalk.red("x")} ${chalk.blue("Error occurred while seeding database")}`
     );
     console.error(error);
-    return null;
+    throw error;
   }
 
   console.log(
@@ -37,7 +44,12 @@ const seedDB = async () => {
 };
 
 (async () => {
-  await connectDB();
-  await seedDB();
-  process.exit(0);
+  try {
+    await connectDB();
+    await seedDB();
+  } catch (error) {
+    process.exitCode = 1;
+  } finally {
+    await mongoose.disconnect();
+  }
 })();

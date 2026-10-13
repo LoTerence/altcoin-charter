@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development node --watch --watch-preserve-output index.js",
     "dev:docker": "cross-env NODE_ENV=development node index.js",
     "start": "cross-env NODE_ENV=production node index.js",
-    "staging": "cross-env NODE_ENV=production TARGET_ENV=staging node index.js"
+    "staging": "cross-env NODE_ENV=production TARGET_ENV=staging node index.js",
+    "seed:db": "cross-env NODE_ENV=development node ./utils/seed.js"
   },
   "dependencies": {
     "altcoin-charter": "file:..",
