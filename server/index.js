@@ -27,7 +27,6 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "script-src": ["'self'"],
-        // TODO: move CC API calls from the client to the server
         "connect-src": ["'self'", "min-api.cryptocompare.com"],
       },
     },
