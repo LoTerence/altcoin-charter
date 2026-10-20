@@ -1,67 +1,47 @@
-export async function getCoinDisplayData({ fromSymbol }) {
-  const res = await fetch(
-    `https://min-api.cryptocompare.com/data/generateAvg?fsym=${fromSymbol}&tsym=USD&e=CCCAGG`
-  );
+const GENERIC_ERROR = "Error: something went wrong, please try again later 😢";
+
+async function getMarketData(url, notFoundMessage) {
+  const res = await fetch(url);
+  if (res.status === 404) {
+    throw new Error(notFoundMessage);
+  }
   if (!res.ok) {
-    throw new Error("Error: something went wrong, please try again later 😢");
+    throw new Error(GENERIC_ERROR);
   }
 
   const body = await res.json();
-  if ((body?.Response && body.Response === "Error") || !body?.DISPLAY) {
-    throw new Error("Sorry! No market data available for this coin 😢");
+  if (!body?.success || !body?.data) {
+    throw new Error(GENERIC_ERROR);
   }
-
-  return body.DISPLAY;
+  return body.data;
 }
 
-export async function getCoinHistory({ fromSymbol, timeUnit, limit }) {
-  const res = await fetch(
-    `https://min-api.cryptocompare.com/data/${timeUnit}?fsym=${fromSymbol}&tsym=USD&limit=${limit}`
+export async function getCoinDisplayData({ fromSymbol }) {
+  return getMarketData(
+    `/api/market/price/${encodeURIComponent(fromSymbol)}`,
+    "Sorry! No market data available for this coin 😢"
   );
-  if (!res.ok) {
-    throw new Error("Error: something went wrong, please try again later 😢");
-  }
+}
 
-  const body = await res.json();
-  if (body?.Response !== "Success" || !body?.Data) {
-    throw new Error("Sorry! No market data available for this coin 😢");
-  }
-  return body.Data;
+export async function getCoinHistory({ fromSymbol, interval, limit }) {
+  return getMarketData(
+    `/api/market/history/${encodeURIComponent(
+      fromSymbol
+    )}?interval=${interval}&limit=${limit}`,
+    "Sorry! No market data available for this coin 😢"
+  );
 }
 
 export async function getAllCoins() {
-  const res = await fetch(
-    "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
+  return getMarketData(
+    "/api/market/coins",
+    "Error: failed to fetch coins, please try again later"
   );
-  if (!res.ok) {
-    throw new Error("Error: something went wrong, please try again later 😢");
-  }
-
-  const body = await res.json();
-  if (body?.Response !== "Success" || !body?.Data) {
-    throw new Error("Error: failed to fetch coins, please try again later");
-  }
-  return body.Data;
 }
 
 export async function getCoinDetails({ fromSymbol }) {
-  const res = await fetch(
-    `https://min-api.cryptocompare.com/data/all/coinlist?fsym=${fromSymbol}`
+  return getMarketData(
+    `/api/market/coins/${encodeURIComponent(fromSymbol)}`,
+    "That coin is not available on Binance.US"
   );
-  if (!res.ok) {
-    throw new Error("Error: something went wrong, please try again later 😢");
-  }
-
-  const body = await res.json();
-  if (body?.Response !== "Error" && body?.ParamWithError === "fsym") {
-    throw new Error("A coin with that symbol does not exist");
-  }
-  if (body?.Response !== "Success" || !body?.Data) {
-    throw new Error("Error: something went wrong, please try again later 😢");
-  }
-  if (!(fromSymbol in body.Data)) {
-    throw new Error("Error: something went wrong, please try again later 😢");
-  }
-
-  return body.Data[fromSymbol];
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCoinDetails } from "../../lib/cryptocompareAPI";
+import { getCoinDetails } from "../../lib/marketAPI";
 
 // TODO: add ts types for status
 // initialState.status options: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -74,10 +74,9 @@ export const addNewCoin = createAsyncThunk(
     const coinFound = await getCoinDetails({ fromSymbol: SYM });
 
     const newCoin = {
-      coinName: coinFound.CoinName,
-      cryptoCompareId: coinFound.Id,
-      name: coinFound.Name,
-      symbol: coinFound.Symbol,
+      coinName: coinFound.name,
+      name: coinFound.symbol,
+      symbol: coinFound.symbol,
     };
 
     const res = await axios.put("/api/watchlist/public", newCoin);

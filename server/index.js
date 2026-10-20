@@ -19,6 +19,11 @@ const serveStaticAssets = require("./utils/serve-static-assets");
 const { port } = keys;
 
 connectDB();
+if (!keys.binance.apiKey || !keys.binance.secretKey) {
+  console.warn(
+    `${chalk.red("✗")} BINANCE_API_KEY or BINANCE_SECRET_KEY is not set. New coins will be named by their ticker symbol.`
+  );
+}
 const app = express();
 
 app.use(express.json());
@@ -27,7 +32,6 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "script-src": ["'self'"],
-        "connect-src": ["'self'", "min-api.cryptocompare.com"],
       },
     },
     // enable popups for google and fb oauth login

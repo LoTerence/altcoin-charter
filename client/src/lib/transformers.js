@@ -1,19 +1,14 @@
+import { formatPriceUSD } from "./formatterUSD";
+
 export function parseCoinDisplayData(coinDisplayData) {
-  const {
-    PRICE,
-    CHANGEPCT24HOUR,
-    OPEN24HOUR,
-    HIGH24HOUR,
-    LOW24HOUR,
-    CHANGE24HOUR,
-  } = coinDisplayData;
+  const { price, changePct, open, high, low, change } = coinDisplayData;
   return {
-    currentPrice: PRICE,
-    pctChange: CHANGEPCT24HOUR,
-    open: OPEN24HOUR,
-    high: HIGH24HOUR,
-    low: LOW24HOUR,
-    usdChange: CHANGE24HOUR,
+    currentPrice: formatPriceUSD(price),
+    pctChange: changePct.toFixed(2),
+    open: formatPriceUSD(open),
+    high: formatPriceUSD(high),
+    low: formatPriceUSD(low),
+    usdChange: formatPriceUSD(change),
   };
 }
 
