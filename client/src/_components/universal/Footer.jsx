@@ -24,11 +24,11 @@ export default function Footer() {
         <p>
           Credit for cryptocoin data goes to:{" "}
           <a
-            href="https://www.cryptocompare.com/api/"
+            href="https://docs.binance.us/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            cryptocompare.com/api
+            binance.us
           </a>
         </p>
       </div>

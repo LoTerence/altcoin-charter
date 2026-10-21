@@ -17,10 +17,10 @@ import {
   YAxis,
 } from "recharts";
 import { getTickDateString } from "../../lib/timeframe";
-import formatterUSD from "../../lib/formatterUSD";
+import { formatPriceUSD } from "../../lib/formatterUSD";
 
 const formatYAxis = (tick) => {
-  return formatterUSD.format(tick);
+  return formatPriceUSD(tick);
 };
 
 const formatToolTipX = (label) => {
@@ -29,7 +29,7 @@ const formatToolTipX = (label) => {
 };
 
 const formatToolTipY = (val) => {
-  return formatterUSD.format(val);
+  return formatPriceUSD(val);
 };
 
 export default function PriceChart() {

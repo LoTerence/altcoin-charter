@@ -3,6 +3,7 @@ const chalk = require("chalk");
 const mongoose = require("mongoose");
 
 const keys = require("../config/keys");
+const Coin = require("../models/Coin");
 const { database } = keys;
 
 const connectDB = async () => {
@@ -15,13 +16,13 @@ const connectDB = async () => {
     console.log(
       `${chalk.green("✓")} ${chalk.blue("MongoDB Connected:")} ${
         conn.connection.host
-      }`
+      }`,
     );
   } catch (err) {
     console.error(
       `${chalk.red("❌ SERVER ERROR -")} MongoDB Connection Error: ${
         err.message
-      }`
+      }`,
     );
     console.log(err);
     throw err;

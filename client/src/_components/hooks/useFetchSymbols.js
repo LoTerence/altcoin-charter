@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllCoins } from "../../lib/cryptocompareAPI";
+import { getAllCoins } from "../../lib/marketAPI";
 import { parseAllCoinSymbols } from "../../lib/transformers";
 
 export default function useFetchSymbols() {

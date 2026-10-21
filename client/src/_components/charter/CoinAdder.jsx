@@ -118,11 +118,11 @@ const SuggestionsDropdown = ({ suggestions, onClick }) => {
           {suggestions.map((s) => (
             <option
               className="suggestion"
-              key={s.Id}
+              key={s.symbol}
               onClick={(e) => onClick(e)}
-              value={s.Symbol}
+              value={s.symbol}
             >
-              {s.FullName}
+              {s.name} ({s.symbol})
             </option>
           ))}
         </div>
@@ -148,8 +148,8 @@ const deriveSuggestions = (text, symbols) => {
   if (text.length === 0) return [];
   const regex = new RegExp(`^${text}`, "gi");
   const matches = symbols
-    .filter((s) => s.Symbol.match(regex))
-    .sort((a, b) => a.Symbol.localeCompare(b.Symbol))
+    .filter((s) => s.symbol.match(regex))
+    .sort((a, b) => a.symbol.localeCompare(b.symbol))
     .slice(0, 10);
   return matches;
 };

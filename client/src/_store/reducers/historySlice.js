@@ -4,7 +4,7 @@
  */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getHisto } from "../../lib/timeframe";
-import { getCoinDisplayData, getCoinHistory } from "../../lib/cryptocompareAPI";
+import { getCoinDisplayData, getCoinHistory } from "../../lib/marketAPI";
 import {
   parseCoinDisplayData,
   parseHistoryIntoCoordinates,
@@ -97,7 +97,7 @@ export const fetchHistory = createAsyncThunk(
 
     const history = await getCoinHistory({
       fromSymbol: coinSymbol,
-      timeUnit: histo.timeUnit,
+      interval: histo.interval,
       limit: histo.limit,
     });
 
@@ -117,7 +117,7 @@ export const fetchCharterData = createAsyncThunk(
       }),
       getCoinHistory({
         fromSymbol: coin.symbol,
-        timeUnit: histo.timeUnit,
+        interval: histo.interval,
         limit: histo.limit,
       }),
     ]);

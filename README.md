@@ -26,7 +26,7 @@ Make sure they are both configured with the variables from the `.env.example` fi
 Simply start the app with docker compose:
 
 ```bash
-docker compose -f docker-compose.yml up
+docker compose --file docker-compose.yml up
 ```
 
 You should now be able to view the app on http://localhost:3000 in your browser.

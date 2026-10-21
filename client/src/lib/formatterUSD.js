@@ -1,6 +1,16 @@
-const formatterUSD = new Intl.NumberFormat("en-US", {
+export const formatterUSD = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
-export default formatterUSD;
+// sub-dollar prices (ie. memecoins) need more than 2 decimal places
+export const formatterUSDSmall = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumSignificantDigits: 4,
+});
+
+export const formatPriceUSD = (price) =>
+  Math.abs(price) >= 1
+    ? formatterUSD.format(price)
+    : formatterUSDSmall.format(price);

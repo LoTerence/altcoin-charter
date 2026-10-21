@@ -24,4 +24,8 @@ module.exports = {
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   },
+  binance: {
+    apiKey: process.env.BINANCE_API_KEY,
+    secretKey: process.env.BINANCE_SECRET_KEY,
+  },
 };
